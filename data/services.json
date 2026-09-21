@@ -1,0 +1,26 @@
+{
+    "Enterprise AI Transformation": {
+        "description": "Enterprise-scale AI transformation covering strategy, data, AI engineering and operational deployment.",
+        "scope": [
+            "AI strategy",
+            "Data platform modernization",
+            "AI solution engineering",
+            "Production deployment",
+            "Change management"
+        ],
+        "complexity": 0.82,
+        "estimated_duration_months": 18,
+        "resource_requirements": {
+            "solution_architects": 4,
+            "data_engineers": 8,
+            "ai_engineers": 10,
+            "project_managers": 3
+        },
+        "value_drivers": [
+            "Operational efficiency",
+            "Decision automation",
+            "Revenue growth",
+            "Legacy modernization"
+        ]
+    }
+}

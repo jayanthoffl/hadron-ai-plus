@@ -1,0 +1,9 @@
+{
+    "Enterprise AI Transformation": {
+        "base_delivery_cost": 9200000,
+        "infrastructure_cost": 1100000,
+        "resource_cost": 6800000,
+        "target_margin": 0.32,
+        "available_capacity": 0.74
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "Acme Corporation": {
+        "industry": "Industrial Technology",
+        "revenue": 4200000000,
+        "employee_count": 18500,
+        "strategic_importance": "High",
+        "existing_relationship": "Existing enterprise customer",
+        "active_projects": [
+            "Cloud modernization",
+            "Enterprise analytics",
+            "Digital operations transformation"
+        ],
+        "known_needs": [
+            "Reduce operational cost",
+            "Modernize legacy platforms",
+            "Improve decision intelligence"
+        ]
+    }
+}

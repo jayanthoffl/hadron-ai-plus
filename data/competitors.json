@@ -1,0 +1,21 @@
+{
+    "Enterprise AI Transformation": {
+        "competitors": [
+            {
+                "name": "Competitor A",
+                "positioning": "Premium transformation partner",
+                "price_signal": 14500000
+            },
+            {
+                "name": "Competitor B",
+                "positioning": "Low-cost implementation provider",
+                "price_signal": 9800000
+            },
+            {
+                "name": "Competitor C",
+                "positioning": "Specialized AI consultancy",
+                "price_signal": 12700000
+            }
+        ]
+    }
+}

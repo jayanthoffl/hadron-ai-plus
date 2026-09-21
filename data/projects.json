@@ -1,0 +1,11 @@
+{
+    "Acme Corporation": {
+        "active_budget": 18500000,
+        "active_programs": 3,
+        "capacity_pressure": 0.62,
+        "strategic_programs": [
+            "Cloud modernization",
+            "AI transformation"
+        ]
+    }
+}
