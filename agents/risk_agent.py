@@ -200,6 +200,32 @@ class RiskAgent:
                 })
 
         # =========================================================
+        # PROJECT BUDGET
+        # Only compare when the requester explicitly supplied one.
+        # =========================================================
+
+        project_budget = self._get_numeric(economics, "project_budget")
+        estimated_cost = self._get_numeric(economics, "estimated_cost")
+        if project_budget is not None and estimated_cost is not None and project_budget > 0:
+            if project_budget < estimated_cost:
+                risks.append({
+                    "type": "PROJECT_BUDGET_GAP",
+                    "severity": "HIGH",
+                    "title": "Estimated delivery cost exceeds stated project budget",
+                    "description": (
+                        "The request context contains an explicit project budget below "
+                        "the modeled delivery cost. Validate scope, funding, or delivery "
+                        "assumptions before presenting a commercial offer."
+                    ),
+                    "metric": {
+                        "project_budget": round(project_budget, 2),
+                        "estimated_cost": round(estimated_cost, 2),
+                        "shortfall": round(estimated_cost - project_budget, 2),
+                    },
+                    "mitigation": "Confirm whether the stated budget is a hard cap and re-scope the work if necessary.",
+                })
+
+        # =========================================================
         # 4. CAPACITY RISK
         # =========================================================
 
@@ -269,6 +295,19 @@ class RiskAgent:
                         "phasing before committing."
                     )
                 })
+
+        elif required_capacity is None:
+            risks.append({
+                "type": "CAPACITY_DATA_GAP",
+                "severity": "MEDIUM",
+                "title": "Staffing demand is not estimated",
+                "description": (
+                    "No usable role-by-role staffing estimate was extracted, so available "
+                    "capacity cannot yet be compared with delivery demand."
+                ),
+                "metric": {"capacity_available_fte": available_capacity},
+                "mitigation": "Confirm the delivery team and role allocation before committing to dates or price.",
+            })
 
         # =========================================================
         # 5. COMPETITIVE PRESSURE
@@ -447,24 +486,27 @@ class RiskAgent:
         service_avail = getattr(service, "data_availability", None)
         economics_source = getattr(economics, "economics_source", None)
 
-        if service_avail == "NOT_FOUND" or economics_source == "PARAMETRIC_BASELINE":
+        if service_avail != "FOUND" or economics_source == "PARAMETRIC_BASELINE":
+            insufficient_scope = economics_source == "INSUFFICIENT_SCOPE"
             risks.append({
                 "type": "DATA_COMPLETENESS",
                 "severity": "HIGH",
-                "title": "Service not in internal delivery catalog — parametric economics applied",
+                "title": (
+                    "Insufficient scope to produce a defensible price"
+                    if insufficient_scope else
+                    "Service not in internal delivery catalog — provisional economics applied"
+                ),
                 "description": (
-                    "The requested service has no historical delivery evidence in the "
-                    "internal catalog. Economics are based on a deterministic parametric "
-                    "baseline (complexity x duration x burn rate), not verified "
-                    "historical delivery cost data."
+                    "The service is not in the internal catalog and no usable scope or staffing estimate was extracted. HADRON withheld the quote instead of substituting a generic price."
+                    if insufficient_scope else
+                    "The requested service has no verified historical delivery evidence. Economics use a provisional rate-card model based on the extracted scope estimate."
                 ),
                 "metric": {
                     "service_evidence": service_avail or "UNKNOWN",
                     "economics_source": economics_source or "UNKNOWN",
                 },
                 "mitigation": (
-                    "Review delivery requirements, obtain comparable historical estimates, "
-                    "and validate the parametric cost baseline before commercial commitment."
+                    "Provide the service scope, delivery duration, and expected role mix; then validate the estimate against comparable historical work."
                 ),
             })
 

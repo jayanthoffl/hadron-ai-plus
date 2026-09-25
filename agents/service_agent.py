@@ -4,9 +4,8 @@ ServiceAgent — Pure Python catalog retrieval. No Gemini.
 Uses the service_catalog_key resolved by ExtractionAgent (Gemini already
 did the semantic matching at extraction time).
 
-Returns:
-  data_availability = FOUND        → full ServiceIntelligence from catalog
-  data_availability = NOT_FOUND    → CUSTOM_SERVICE baseline (parametric)
+Returns FOUND for catalog services, INFERRED for a service with extracted
+planning inputs, or NOT_FOUND when there is not enough evidence to estimate.
 """
 
 import json
@@ -51,29 +50,41 @@ class ServiceAgent:
                 ],
             )
 
-        # CUSTOM_SERVICE — no catalog match.
-        # Use inferred service name from intent.
-        # Parametric economics will apply in EconomicsEngine.
+        # CUSTOM_SERVICE — use extraction estimates only as provisional
+        # planning inputs. Missing estimates stay visibly unknown.
         raw_name = intent.service_name or catalog_key
+        estimated_complexity = intent.estimated_complexity
+        estimated_duration = intent.estimated_duration_months
+        estimated_resources = intent.estimated_resource_requirements or {}
+        has_estimate = any((estimated_complexity is not None, estimated_duration, estimated_resources))
+        estimate_notes = intent.service_estimate_notes or "No service-specific estimate was available."
+        estimation_status = "INFERRED" if has_estimate else "NOT_FOUND"
+        estimate_statement = (
+            f"Provisional extraction estimate: {estimate_notes}"
+            if has_estimate else
+            "No reliable complexity, duration, or staffing estimate is available; pricing is withheld pending scope clarification."
+        )
         return ServiceIntelligence(
             service_name=raw_name,
-            data_availability="NOT_FOUND",
-            description="Service not found in internal delivery catalog. Parametric baseline applied.",
-            scope=["Custom requirements discovery", "Tailored delivery"],
-            complexity=0.75,
-            estimated_duration_months=9,
-            resource_requirements={},
+            data_availability=estimation_status,
+            description=(
+                "Service is not in the internal delivery catalog. "
+                f"{estimate_statement}"
+            ),
+            scope=intent.key_requirements or ["Custom requirements discovery", "Tailored delivery"],
+            complexity=(max(0.1, min(1.0, estimated_complexity)) if estimated_complexity is not None else None),
+            estimated_duration_months=(max(1, estimated_duration) if estimated_duration else None),
+            resource_requirements=estimated_resources,
             value_drivers=[],
             evidence=[
                 Evidence(
-                    source="Internal Service Catalog",
-                    evidence_type="internal_evidence",
+                    source="Gemini service planning estimate" if has_estimate else "Internal Service Catalog",
+                    evidence_type="model_inference" if has_estimate else "internal_evidence",
                     statement=(
                         f"'{raw_name}' does not match any internal catalog service. "
-                        f"No historical delivery data available. "
-                        f"Parametric cost baseline will be applied."
+                        f"No verified delivery history is available. {estimate_statement}"
                     ),
-                    confidence=0.0,
+                    confidence=(max(0.0, min(1.0, intent.service_estimate_confidence)) if has_estimate else 0.0),
                 )
             ],
         )

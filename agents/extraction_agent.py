@@ -68,7 +68,7 @@ class ExtractionAgent:
     # ------------------------------------------------------------------
 
     def _build_prompt(self, request) -> str:
-        return f"""
+        prompt = f"""
 You are the HADRON request extraction agent.
 
 Your ONLY job is to understand and structure the inbound pricing request.
@@ -78,6 +78,9 @@ Rules:
 - Do NOT invent facts about the customer.
 - Do NOT browse the internet.
 - Mark any inference clearly.
+- Do not treat missing scope, staffing, or duration as known facts.
+- For an unmatched service, provide provisional planning estimates for complexity (0–1), duration (months), and role headcount only when the service description gives enough basis. Mark these as estimates in service_estimate_notes. Use only these role names: Solution Architect, AI Engineer, Data Engineer, Project Manager, Business Analyst, QA / Test Engineer, Delivery Lead.
+- If there is not enough information for a useful estimate, return null/empty values rather than inventing precision.
 
 ServiceNow Pricing Request:
   Customer Name: {request.customer_name}
@@ -86,7 +89,7 @@ ServiceNow Pricing Request:
   Additional Context: {request.additional_context}
 """
         if request.document_text:
-            prompt += f"\nExtracted Document Content:\n{request.document_text}\n"
+            prompt += f"\nExtracted Document Content:\n{request.document_text[:30000]}\n"
 
         prompt += f"""
 Internal service catalog keys:
@@ -111,12 +114,18 @@ Return ONLY valid JSON, no markdown:
   "objective_summary": "...",
   "context_summary": "...",
   "inferred_industry": "...",
+  "estimated_complexity": null,
+  "estimated_duration_months": null,
+  "estimated_resource_requirements": {{}},
+  "service_estimate_notes": "...",
+  "service_estimate_confidence": 0.0,
   "key_requirements": ["..."],
   "ambiguities": ["..."],
   "extraction_confidence": 0.0,
   "extraction_notes": "..."
 }}
 """
+        return prompt
 
     def _deterministic_fallback(self, request) -> HadronIntent:
         """
@@ -143,6 +152,11 @@ Return ONLY valid JSON, no markdown:
             objective_summary=(request.commercial_objective or "").strip(),
             context_summary=(request.additional_context or "").strip(),
             inferred_industry="",
+            estimated_complexity=None,
+            estimated_duration_months=None,
+            estimated_resource_requirements={},
+            service_estimate_notes="No service scope or staffing estimate was derived; a conservative parametric baseline will be used.",
+            service_estimate_confidence=0.0,
             key_requirements=[],
             ambiguities=["Gemini extraction unavailable — intent derived from raw request fields only."],
             extraction_confidence=0.60,

@@ -22,12 +22,16 @@ class ScenarioGenerator:
     ) -> List[Scenario]:
 
         mvp = economics.minimum_viable_price
+        if mvp <= 0:
+            return []
+        if economics.project_budget is not None and economics.project_budget < mvp:
+            return []
 
         # ----------------------------------------------------------------
         # Commercial context modifiers
         # ----------------------------------------------------------------
         # These affect scenario PRICING STRATEGY — not delivery cost.
-        # The underlying cost ($17.1M) remains deterministic from the catalog.
+        # Delivery cost comes from catalog data or the explicitly labelled parametric estimate.
         # ----------------------------------------------------------------
 
         if context:
@@ -72,18 +76,35 @@ class ScenarioGenerator:
         # Scenario price envelope (derived from MVP + context signals)
         # ----------------------------------------------------------------
 
+        # A market reference can move the envelope, but the internal
+        # minimum viable price remains a hard floor.
+        market_reference = market.market_reference_price
+        reference_factors = []
+        if market_reference and mvp > 0:
+            reference_factors.append(market_reference / mvp)
+        if economics.historical_average_deal_value and mvp > 0:
+            reference_factors.append(economics.historical_average_deal_value / mvp)
+        market_factor = max(0.85, min(1.25, sum(reference_factors) / len(reference_factors))) if reference_factors else 1.0
+
         prices = [
-            mvp * floor_multiplier * 1.05,
-            mvp * floor_multiplier * 1.15,
-            mvp * floor_multiplier * 1.30,
-            mvp * floor_multiplier * premium_ceiling,
+            max(mvp, mvp * floor_multiplier * 1.05 * market_factor),
+            max(mvp, mvp * floor_multiplier * 1.15 * market_factor),
+            max(mvp, mvp * floor_multiplier * 1.30 * market_factor),
+            max(mvp, mvp * floor_multiplier * premium_ceiling * market_factor),
         ]
+        if economics.project_budget is not None:
+            prices = [min(price, economics.project_budget) for price in prices]
 
         names = ["Entry", "Balanced", "Strategic", "Premium"]
 
         scenarios = []
 
+        seen_prices = set()
         for name, price in zip(names, prices):
+            price = round(price, 2)
+            if price in seen_prices:
+                continue
+            seen_prices.add(price)
 
             margin = (
                 (price - economics.estimated_cost) / price

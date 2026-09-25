@@ -14,6 +14,7 @@ from pathlib import Path
 from schemas import CustomerIntelligence, Evidence
 
 _DATA_FILE = Path(__file__).parent.parent / "data" / "customer.json"
+_PROJECTS_FILE = Path(__file__).parent.parent / "data" / "projects.json"
 
 
 class CustomerAgent:
@@ -21,12 +22,18 @@ class CustomerAgent:
     def __init__(self):
         with open(_DATA_FILE, "r", encoding="utf-8") as f:
             self._customers = json.load(f)
+        try:
+            with open(_PROJECTS_FILE, "r", encoding="utf-8") as f:
+                self._projects = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            self._projects = {}
 
     def analyze(self, intent) -> CustomerIntelligence:
         name = intent.customer_name.strip() if intent.customer_name else ""
         data = self._customers.get(name)
 
         if data:
+            project_data = self._projects.get(name, {})
             return CustomerIntelligence(
                 customer_name=name,
                 data_availability="FOUND",
@@ -37,6 +44,8 @@ class CustomerAgent:
                 active_projects=data.get("active_projects", []),
                 existing_relationship=data.get("existing_relationship", ""),
                 known_needs=data.get("known_needs", []),
+                active_budget=project_data.get("active_budget"),
+                capacity_pressure=project_data.get("capacity_pressure"),
                 evidence=[
                     Evidence(
                         source="Internal CRM",

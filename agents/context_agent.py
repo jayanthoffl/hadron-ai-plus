@@ -61,7 +61,7 @@ class ContextAgent:
             urgency = "NORMAL"
 
         # ---- Scope complexity ----
-        scope_complexity = service.complexity if service_found else 0.75
+        scope_complexity = service.complexity if service.data_availability != "NOT_FOUND" else 0.75
 
         return CommercialContext(
             strategic_importance_signal=strategic,

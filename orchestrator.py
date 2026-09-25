@@ -162,7 +162,7 @@ class HadronOrchestrator:
         # =================================================
 
         print("[HADRON] Step 5: Economics calculation")
-        economics = self.economics.calculate(customer, service)
+        economics = self.economics.calculate(customer, service, request)
         print(
             f"[HADRON]   source={economics.economics_source} "
             f"  cost=${economics.estimated_cost:,.0f} "
@@ -186,11 +186,9 @@ class HadronOrchestrator:
 
         scenarios = self.classical.optimize(scenarios)
 
-        # =================================================
-        # STEP 8 — QUANTUM EXPLORATION
-        # =================================================
-
-        scenarios = self.quantum.optimize(scenarios)
+        # The current quantum module samples a uniform circuit without
+        # encoding the pricing objective. Keep it out of the decision path
+        # until it can produce a validated optimization signal.
 
         # =================================================
         # STEP 9 — OFFER GENERATION
@@ -264,6 +262,8 @@ class HadronOrchestrator:
             "evidence": executive.get("evidence", []),
 
             "confidence": executive.get("confidence", 0.5),
+
+            "synthesis_mode": executive.get("synthesis_mode", "gemini"),
 
             "run_id": request.record_sys_id,
         }

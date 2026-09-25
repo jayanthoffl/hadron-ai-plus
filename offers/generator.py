@@ -73,6 +73,10 @@ class OfferGenerator:
                         scenario.expected_margin,
                         4
                     ),
+                    win_signal=round(scenario.win_signal, 4),
+                    strategic_value=round(scenario.strategic_value, 4),
+                    risk_score=round(scenario.risk, 4),
+                    objective_score=round(scenario.objective_score, 4),
                     strategic_rationale=rationale,
                     negotiation_levers=levers,
                     risks=[

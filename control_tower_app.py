@@ -22,6 +22,19 @@ app.register_blueprint(intel_bp)
 HADRON_API = os.getenv("HADRON_API_URL", "http://127.0.0.1:5000")
 TIMEOUT = int(os.getenv("HADRON_API_TIMEOUT", "120"))
 
+
+def _set_service_now_status(sys_id, status):
+    if not sys_id or sys_id.startswith("LOCAL-"):
+        return
+    try:
+        ServiceNowClient().update_record(
+            table="x_2216687_optimu_0_pricing_request",
+            sys_id=sys_id,
+            payload={"intelligence_status": str(status)},
+        )
+    except Exception as exc:
+        print(f"[ControlTower] Could not set ServiceNow status={status}: {exc}")
+
 @app.get("/")
 def index():
     return render_template("index.html", api=HADRON_API)
@@ -140,39 +153,35 @@ def analyze():
         return jsonify({"error": f"Missing fields: {', '.join(missing)}"}), 400
 
     try:
+        sys_id = payload.get("record_sys_id", "")
+        _set_service_now_status(sys_id, "1")  # Analyzing
         response = requests.post(
             f"{HADRON_API.rstrip('/')}/hadron/analyze",
             json=payload,
             timeout=TIMEOUT,
         )
+
+        if response.status_code != 200:
+            _set_service_now_status(sys_id, "6")  # Failed
+            return (response.content, response.status_code,
+                    {"Content-Type": response.headers.get("Content-Type", "application/json")})
         
-        # Write back to ServiceNow
-        if response.status_code == 200:
-            sys_id = payload.get("record_sys_id")
-            if sys_id and not sys_id.startswith("LOCAL-"):
+        # Best-effort ServiceNow writeback; never discard a successful analysis response.
+        sys_id = payload.get("record_sys_id", "")
+        if sys_id and not sys_id.startswith("LOCAL-"):
+            try:
                 import json as _json
                 data = response.json()
-                client = ServiceNowClient()
-
-                # Extract the recommended price from the top-ranked offer
-                _recommend_price = ""
-                _ai_justification = data.get("executive_summary", "")
-                try:
-                    offers = data.get("offer_set", [])
-                    if isinstance(offers, str):
-                        offers = _json.loads(offers)
-                    if isinstance(offers, list) and offers:
-                        # Pick the offer whose name contains "Balanced" or just the first one
-                        primary = next(
-                            (o for o in offers if "balanced" in o.get("name","").lower()),
-                            offers[0]
-                        )
-                        _recommend_price = str(int(round(float(primary.get("price", 0)))))
-                except Exception as _e:
-                    print(f"[ControlTower] Could not extract recommend_price: {_e}")
-
-                # intelligence_status choice values:
-                # 0=Draft, 1=Analyzing, 2=Intelligence Ready, 3=Executive Review
+                offers = data.get("offer_set", [])
+                if isinstance(offers, str):
+                    offers = _json.loads(offers)
+                balanced = next(
+                    (o for o in offers if "balanced" in o.get("name", "").lower()),
+                    offers[0] if offers else None,
+                )
+                balanced_price = (
+                    str(int(round(float(balanced.get("price", 0))))) if balanced else ""
+                )
                 sn_payload = {
                     "executive_summary": data.get("executive_summary", ""),
                     "internal_economics": data.get("internal_economics", ""),
@@ -184,28 +193,26 @@ def analyze():
                     "risks": _json.dumps(data.get("risks", [])),
                     "confidence": str(data.get("confidence", "")),
                     "evidence": _json.dumps(data.get("evidence", [])),
-                    "intelligence_status": "2",   # 2 = Intelligence Ready
-                    # Legacy UI-facing fields — try both common naming conventions
-                    # (ServiceNow may use recommend_price or u_recommend_price)
-                    "recommend_price": _recommend_price,
-                    "recommended_price": _recommend_price,
-                    "ai_justification": _ai_justification,
-                    "u_ai_justification": _ai_justification,
+                    "intelligence_status": "2",
+                    # Legacy field names still used by the ServiceNow form.
+                    "recommend_price": balanced_price,
+                    "recommended_price": balanced_price,
+                    "ai_justification": data.get("executive_summary", ""),
+                    "u_ai_justification": data.get("executive_summary", ""),
                 }
-
-                try:
-                    client.update_record(
-                        table="x_2216687_optimu_0_pricing_request",
-                        sys_id=sys_id,
-                        payload=sn_payload,
-                    )
-                    print(f"[ControlTower] SN write-back OK → {sys_id} | price={_recommend_price}")
-                except Exception as sn_exc:
-                    print(f"[ControlTower] SN write-back failed: {sn_exc}")
+                ServiceNowClient().update_record(
+                    table="x_2216687_optimu_0_pricing_request",
+                    sys_id=sys_id,
+                    payload=sn_payload,
+                )
+                print(f"[ControlTower] SN write-back OK → {sys_id}")
+            except Exception as sn_exc:
+                print(f"[ControlTower] SN write-back failed: {sn_exc}")
 
         return (response.content, response.status_code,
                 {"Content-Type": response.headers.get("Content-Type", "application/json")})
     except requests.RequestException as exc:
+        _set_service_now_status(payload.get("record_sys_id", ""), "6")
         return jsonify({
             "error": "HADRON API unavailable",
             "detail": str(exc),

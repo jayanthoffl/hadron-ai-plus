@@ -46,6 +46,11 @@ You are NOT the source of truth.
 Do NOT invent facts, competitors, prices, customer
 information, financial information, or market statistics.
 
+If economics_source is INSUFFICIENT_SCOPE, the zero-valued
+economics fields mean "not calculated". Do not present them
+as a zero-dollar cost or price. State what scope information
+is needed before pricing can be produced.
+
 Use only the information supplied below.
 
 Clearly distinguish:
@@ -136,6 +141,10 @@ an executive can make the commercial decision.
 The supplied deterministic risk analysis is authoritative
 for identified risk triggers. Do not remove or invent
 risk categories.
+
+The scenario win_signal is a rule-based price heuristic, not
+historical win-rate evidence. Never describe it as a measured
+probability of winning.
 
 Return ONLY valid JSON.
 
@@ -366,6 +375,7 @@ available evidence, NOT confidence that a deal will win.
             "confidence",
             0.5
         )
+        result.setdefault("synthesis_mode", "gemini")
 
         # Deterministic risks are authoritative.
         # Gemini cannot silently delete them.
@@ -501,81 +511,59 @@ available evidence, NOT confidence that a deal will win.
         # Executive summary
         # --------------------------------------------------
 
-        summary_parts = []
-
-        summary_parts.append(
-            "HADRON evaluated the opportunity using "
-            "customer, service, market, internal economic, "
-            "optimization, and deterministic risk signals."
-        )
-
-        if minimum_price is not None:
-
+        summary_parts = [
+            f"Preliminary pricing analysis for {customer.customer_name or 'the named customer'} — {service.service_name or 'the requested service'}."
+        ]
+        if minimum_price is not None and minimum_price > 0:
             summary_parts.append(
-                f"The internal economic model establishes "
-                f"a minimum viable price of "
-                f"{minimum_price:,.2f}."
+                f"The modeled delivery cost is ${economics_data.get('estimated_cost', 0):,.0f}; "
+                f"the minimum viable price is ${minimum_price:,.0f} at a {target_margin:.1%} target margin."
             )
-
-        if target_margin is not None:
-
-            summary_parts.append(
-                f"The modeled target margin is "
-                f"{target_margin:.1%}."
-            )
-
-        if complexity is not None:
-
-            summary_parts.append(
-                f"The service intelligence reports "
-                f"a delivery complexity of "
-                f"{complexity:.2f}."
-            )
-
-        if (
-            capacity is not None
-            and required_capacity is not None
-        ):
-
-            summary_parts.append(
-                f"Modeled delivery capacity is "
-                f"{required_capacity} required versus "
-                f"{capacity} available."
-            )
-
-        if high_risks:
-
-            summary_parts.append(
-                "High-severity risk signals include: "
-                + ", ".join(
-                    risk_titles
-                )
-                + "."
-            )
-
-        elif medium_risks:
-
-            summary_parts.append(
-                "Medium-severity risk signals include: "
-                + ", ".join(
-                    risk_titles
-                )
-                + "."
-            )
-
         else:
-
             summary_parts.append(
-                "No material deterministic risk trigger "
-                "was identified from the currently "
-                "available structured evidence."
+                "No defensible price was produced because verified catalog data and usable custom-service scope estimates were unavailable. The zero-valued economics fields indicate not calculated, not free delivery."
             )
-
+        if offer_data:
+            prices = [float(o.get("price", 0) or 0) for o in offer_data]
+            margins = [float(o.get("expected_margin", 0) or 0) for o in offer_data]
+            summary_parts.append(
+                f"The generated alternatives range from ${min(prices):,.0f} to ${max(prices):,.0f}; "
+                f"modeled margins range from {min(margins):.1%} to {max(margins):.1%}. "
+                "These are scenario calculations, not a validated win-probability forecast."
+            )
+        if market_data.get("market_reference_price"):
+            summary_parts.append(
+                f"Available market reference is ${market_data['market_reference_price']:,.0f} "
+                f"({market_data.get('pricing_environment') or 'pricing environment unspecified'})."
+            )
+        else:
+            summary_parts.append(
+                "No usable competitor price reference was available, so the offer range is not market-validated."
+            )
+        if required_capacity is not None:
+            summary_parts.append(
+                f"Capacity model: {required_capacity:g} estimated role FTE required versus "
+                f"{capacity or 0:g} available FTE from the internal capacity file."
+            )
+        else:
+            summary_parts.append(
+                "Staffing requirements could not be estimated from the request; capacity feasibility remains unverified."
+            )
+        if economics_data.get("project_budget") is not None:
+            summary_parts.append(
+                f"The explicitly stated project budget is ${economics_data['project_budget']:,.0f}."
+            )
+        if economics_data.get("historical_deal_count", 0):
+            summary_parts.append(
+                f"Comparison uses {economics_data['historical_deal_count']} historical deals "
+                f"with an average value of ${economics_data['historical_average_deal_value']:,.0f}."
+            )
+        else:
+            summary_parts.append("No usable historical deal values are available for a past-project comparison.")
+        if risk_titles:
+            summary_parts.append("Risks requiring review: " + "; ".join(risk_titles[:4]) + ".")
         summary_parts.append(
-            "The generated offer set should be evaluated "
-            "as a set of commercial alternatives with "
-            "different economic and strategic trade-offs; "
-            "HADRON does not select a single offer."
+            "Treat this as a provisional decision aid: validate the scope, staffing plan, market evidence, and cost assumptions before committing."
         )
 
         # --------------------------------------------------
@@ -583,10 +571,8 @@ available evidence, NOT confidence that a deal will win.
         # --------------------------------------------------
 
         competitive_summary = (
-            "Competitive intelligence is based on the "
-            "structured market signals supplied to HADRON. "
-            "No additional market facts are introduced "
-            "by the deterministic fallback."
+            f"{market_data.get('pricing_environment') or 'No market pricing environment was established.'} "
+            + ("Signals: " + "; ".join(market_data.get("competitor_signals", [])) if market_data.get("competitor_signals") else "No competitor price signals are available.")
         )
 
         # --------------------------------------------------
@@ -594,42 +580,12 @@ available evidence, NOT confidence that a deal will win.
         # --------------------------------------------------
 
         evidence = [
-
-            {
-                "source": "customer_intelligence",
-                "type": "internal",
-                "status": "available"
-            },
-
-            {
-                "source": "service_intelligence",
-                "type": "internal",
-                "status": "available"
-            },
-
-            {
-                "source": "market_intelligence",
-                "type": "market-derived",
-                "status": "available"
-            },
-
-            {
-                "source": "internal_economics",
-                "type": "calculated",
-                "status": "available"
-            },
-
-            {
-                "source": "optimization_offer_set",
-                "type": "calculated",
-                "status": "available"
-            },
-
-            {
-                "source": "deterministic_risk_engine",
-                "type": "calculated",
-                "status": "available"
-            }
+            {"source": "customer_intelligence", "type": "internal", "status": customer_data.get("data_availability", "UNKNOWN")},
+            {"source": "service_intelligence", "type": "internal_or_inferred", "status": service_data.get("data_availability", "UNKNOWN")},
+            {"source": "market_intelligence", "type": "market-derived", "status": market_data.get("data_availability", "UNKNOWN"), "reference_price": market_data.get("market_reference_price")},
+            {"source": "internal_economics", "type": "calculated", "status": economics_data.get("economics_source", "UNKNOWN")},
+            {"source": "internal_capacity", "type": "internal", "status": "available" if capacity is not None else "unavailable"},
+            {"source": "historical_deals", "type": "internal", "status": "available" if economics_data.get("historical_deal_count") else "no_usable_records"},
         ]
 
         # --------------------------------------------------
@@ -638,16 +594,12 @@ available evidence, NOT confidence that a deal will win.
 
         # This is evidence completeness, NOT win probability.
 
-        confidence = 0.75
-
-        if not market_data:
-            confidence -= 0.15
-
-        if not offer_data:
-            confidence -= 0.15
-
-        if not economics_data:
-            confidence -= 0.15
+        confidence = 0.0
+        confidence += 0.25 if customer_data.get("data_availability") == "FOUND" else 0.0
+        confidence += 0.25 if service_data.get("data_availability") == "FOUND" else (0.10 if service_data.get("data_availability") == "INFERRED" else 0.0)
+        confidence += 0.25 if market_data.get("market_reference_price") else 0.0
+        confidence += 0.15 if economics_data.get("economics_source") == "CATALOG" else 0.05
+        confidence += 0.10 if required_capacity is not None else 0.0
 
         confidence = max(
             0.0,

@@ -2,21 +2,6 @@ const $ = id => document.getElementById(id);
 const $$ = id => document.getElementById(id);
 const money = n => n == null || Number.isNaN(Number(n)) ? "—" : "$" + Number(n).toLocaleString(undefined,{maximumFractionDigits:0});
 
-// Pure 32-bit FNV-1a Hash for 100% reproducible metrics across sessions & refreshes
-function getStableHash(str) {
-  let hash = 2166136261;
-  for (let i = 0; i < str.length; i++) {
-    hash ^= str.charCodeAt(i);
-    hash = Math.imul(hash, 16777619);
-  }
-  return Math.abs(hash);
-}
-
-function getDeterministicMetric(key, min, max) {
-  const hash = getStableHash(String(key));
-  return min + (hash % (max - min + 1));
-}
-
 let requests = [];
 let leftRequests = [];
 let rightRequests = [];
@@ -46,26 +31,6 @@ let animFrameId = null;
 let logIntervalId = null;
 let loadingStartTime = null;
 let newRequestDrawTimes = {}; // track sys_id -> startTime for new requests
-
-const TERMINAL_LOGS = [
-  "Fetching Hadron Information...",
-  "Clarifying budget constraints...",
-  "Proportionating previous deals...",
-  "Consolidating related deals...",
-  "Initiating Quantum Engine...",
-  "Running market analysis...",
-  "Fetching client information...",
-  "Initializing QAOA inference...",
-  "Synthesizing market feed...",
-  "Extracting pricing factors...",
-  "Calculating minimum floor...",
-  "Mapping competitive matrix...",
-  "Assessing delivery risk...",
-  "Synchronizing with ServiceNow...",
-  "Optimizing objective function...",
-  "Evaluating scenario trade-offs...",
-  "Exporting results..."
-];
 
 let activeFannedData = null;
 
@@ -548,7 +513,7 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
   activeFannedData = null;
   loadingStartTime = performance.now();
   if ($("rConf")) $("rConf").textContent = "—";
-  if ($("mainSummary")) $("mainSummary").textContent = "Running optimization engine and synthesizing market signals... Please wait.";
+  if ($("mainSummary")) $("mainSummary").textContent = "Analyzing the request and gathering available pricing evidence…";
   if ($("rFloor")) $("rFloor").textContent = "—";
   if ($("rMargin")) $("rMargin").textContent = "—";
   if ($("rSignals")) $("rSignals").textContent = "—";
@@ -570,9 +535,7 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
   }
 
   try {
-    // Fire the API request but also enforce a minimum animation time of 3500ms
-    const [res] = await Promise.all([
-      fetch("/api/analyze",{
+    const res = await fetch("/api/analyze",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
@@ -582,12 +545,13 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
           additional_context: req.additional_context,
           record_sys_id: req.sys_id
         })
-      }),
-      new Promise(r => setTimeout(r, 3500))
-    ]);
+      });
 
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error);
+    const responseText = await res.text();
+    let data;
+    try { data = JSON.parse(responseText); }
+    catch (_) { throw new Error(`Analysis service returned HTTP ${res.status} with an unreadable response.`); }
+    if(!res.ok) throw new Error(data.detail || data.error || `Analysis failed (HTTP ${res.status}).`);
 
     Object.assign(req, data);
     req.status = "READY";
@@ -626,14 +590,9 @@ function drawFannedNodesLoading(startX, startY, side = 'RIGHT') {
 
   const elapsed = performance.now() - loadingStartTime;
 
-  const logs = [
-    "> Fetching Hadron Information...",
-    "> Running market analysis...",
-    "> Initializing QAOA Engine inference...",
-    "> Consolidating related deals..."
-  ];
+  const logs = ["> Waiting for the HADRON analysis response…"];
 
-  for(let i=0; i<4; i++) {
+  for(let i=0; i<logs.length; i++) {
     const itemDelay = i * 800; // 800ms stagger between lines
     const drawDuration = 600; // 600ms to sketch the line
     
@@ -653,24 +612,12 @@ function drawFannedNodesLoading(startX, startY, side = 'RIGHT') {
       </div>
       <div class="item-tag pulsing-border" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
         <span class="bars"><i class="on pulse-bar"></i><i class="pulse-bar"></i><i></i></span>
-        <span id="term-tag-${i}" style="font-family: monospace;">SYS_LOAD</span>
+        <span style="font-family: monospace;">RUNNING</span>
       </div>
     `, endX, y, "node-item", null, nodeOpacity);
     drawLine(`fan-${i}`, startX, startY, lineTargetX, y, true, 1.0, 0, dp);
   }
 
-  if (!logIntervalId) {
-    logIntervalId = setInterval(() => {
-      for(let i=0; i<4; i++) {
-        const title = $('term-title-'+i);
-        const tag = $('term-tag-'+i);
-        if(title && tag) {
-          title.textContent = TERMINAL_LOGS[Math.floor(Math.random() * TERMINAL_LOGS.length)];
-          tag.textContent = '0x' + Math.floor(Math.random()*16777215).toString(16).toUpperCase();
-        }
-      }
-    }, 180);
-  }
 }
 
 function drawFannedNodesError(errorMsg, startX, startY, side = 'RIGHT') {
@@ -726,16 +673,8 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
 
   let offers = data.offer_set || [];
   if(typeof offers==='string') { try{offers=JSON.parse(offers)}catch(e){offers=[]} }
-  if (offers.length === 0) {
-    const reqKey = (data.sys_id || '1') + (data.number || 'PRI-UNKNOWN') + (data.customer_name || 'Unknown Customer');
-    const basePrice = getDeterministicMetric(reqKey + '_base_price', 25000000, 32000000);
-    offers = [
-      { name: 'Balanced', price: basePrice, icon: 'chart' },
-      { name: 'Strategic', price: Math.round(basePrice * 1.13), icon: 'target' },
-      { name: 'Entry', price: Math.round(basePrice * 0.91), icon: 'user' },
-      { name: 'Premium', price: Math.round(basePrice * 1.30), icon: 'crown' }
-    ];
-  }
+  if (!Array.isArray(offers)) offers = [];
+  if (offers.length === 0) offers = [{ name: 'Offer data unavailable', price: null, icon: 'chart' }];
 
   const iconMap = {
     chart: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
@@ -756,13 +695,8 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
 
   let risks = data.risks || [];
   if(typeof risks==='string') { try{risks=JSON.parse(risks)}catch(e){risks=[]} }
-  if (risks.length === 0) {
-    risks = [
-      { title: 'Internal economics materially exceed observed market signals', icon: 'doc' },
-      { title: 'High service delivery complexity', icon: 'gear' },
-      { title: 'No internal customer evidence available', icon: 'msg' }
-    ];
-  }
+  if (!Array.isArray(risks)) risks = [];
+  if (risks.length === 0) risks = [{ title: 'No risk details returned', icon: 'msg' }];
 
   const riskIconMap = {
     doc: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
@@ -780,36 +714,39 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
     });
   });
 
-  const reqKey = (data.sys_id || '1') + (data.number || 'PRI-UNKNOWN') + (data.customer_name || 'Unknown Customer');
-  const matchPct = getDeterministicMetric(reqKey + '_match', 72, 92) + '%';
-  const envScore = (getDeterministicMetric(reqKey + '_env_score', 40, 75) / 100).toFixed(1);
-  const fitPct   = (getDeterministicMetric(reqKey + '_fit_score', 940, 995) / 10).toFixed(1) + '%';
+  const parsePayload = value => {
+    if (typeof value !== 'string') return value || {};
+    try { return JSON.parse(value); } catch (_) { return {}; }
+  };
+  const customer = parsePayload(data.customer_intelligence);
+  const market = parsePayload(data.market_intelligence);
+  const intent = parsePayload(data.request_intent);
 
   items.push({
-    title: 'Customer Alignment',
-    subText: 'Intent Match',
-    valText: matchPct,
+    title: 'Customer Evidence',
+    subText: 'Internal record',
+    valText: customer.data_availability === 'FOUND' ? 'Found' : 'Missing',
     icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
     type: 'signal'
   });
   items.push({
-    title: 'Market Sentiment',
-    subText: 'Pricing Env.',
-    valText: envScore,
+    title: 'Market Evidence',
+    subText: market.pricing_environment || 'Pricing status',
+    valText: market.market_reference_price ? money(market.market_reference_price) : 'Missing',
     icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
     type: 'signal'
   });
   items.push({
-    title: 'Optimization Solver',
-    subText: 'Model Fit',
-    valText: fitPct,
+    title: 'Scenario Model',
+    subText: 'Extraction confidence',
+    valText: Number.isFinite(Number(intent.extraction_confidence)) ? `${Math.round(Number(intent.extraction_confidence) * 100)}%` : '—',
     icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="19" r="2"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><path d="M12 9V5M12 15v4M9 12H5M15 12h4"/></svg>`,
     type: 'signal'
   });
   items.push({
-    title: 'Regulatory Compliance',
-    subText: 'Audit Status',
-    valText: 'Approved',
+    title: 'Compliance Evidence',
+    subText: 'Audit status',
+    valText: 'Not assessed',
     icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
     type: 'signal'
   });
@@ -927,60 +864,49 @@ function draw3DPieChart(svgId, legendId, segments) {
 function updateMain3DIntelligence(data) {
   if (!data) return;
 
-  const custName = data.customer_name || activeReq?.customer_name || 'Unknown Customer';
-  const sysId = data.sys_id || activeReq?.sys_id || '1';
-  const reqNum = data.number || activeReq?.number || 'PRI-UNKNOWN';
-  const reqKey = `${sysId}_${reqNum}_${custName}`;
-
   let econ = data.internal_economics;
   if (typeof econ === 'string') { try { econ = JSON.parse(econ); } catch(e) { econ = {}; } }
   econ = econ || {};
 
   let offers = data.offer_set;
   if (typeof offers === 'string') { try { offers = JSON.parse(offers); } catch(e) { offers = []; } }
-
-  if (!offers.length) {
-    const basePrice = getDeterministicMetric(reqKey + '_base_price', 25000000, 32000000);
-    offers = [
-      { name: 'Balanced', price: basePrice, expected_margin: 0.409, recommended: true },
-      { name: 'Strategic', price: Math.round(basePrice * 1.13), expected_margin: 0.477 },
-      { name: 'Entry', price: Math.round(basePrice * 0.91), expected_margin: 0.352 },
-      { name: 'Premium', price: Math.round(basePrice * 1.30), expected_margin: 0.547 }
-    ];
-  }
+  if (!Array.isArray(offers)) offers = [];
 
   const balancedOffer = offers.find(o => o.name?.toLowerCase().includes('balanced')) || offers[0];
-  const balancedPriceNum = balancedOffer ? balancedOffer.price : 28919118;
-  const balancedPriceVal = money(balancedPriceNum);
+  const balancedPriceNum = balancedOffer && Number.isFinite(Number(balancedOffer.price)) ? Number(balancedOffer.price) : null;
 
-  animateNumber('rBalancedOffer', 0, balancedPriceNum, v => money(v), 1600);
-  animateNumber('balancedPriceBadge', 0, balancedPriceNum, v => money(v), 1600);
-  animateNumber('skpiBalanced', 0, balancedPriceNum, v => money(v), 1600);
+  if (balancedPriceNum !== null) {
+    animateNumber('rBalancedOffer', 0, balancedPriceNum, v => money(v), 900);
+    animateNumber('balancedPriceBadge', 0, balancedPriceNum, v => money(v), 900);
+    animateNumber('skpiBalanced', 0, balancedPriceNum, v => money(v), 900);
+  } else {
+    ['rBalancedOffer', 'balancedPriceBadge', 'skpiBalanced'].forEach(id => { if ($(id)) $(id).textContent = '—'; });
+  }
 
   let risks = data.risks;
   if (typeof risks === 'string') { try { risks = JSON.parse(risks); } catch(e) { risks = []; } }
+  if (!Array.isArray(risks)) risks = [];
 
-  if (!risks.length) {
-    risks = [
-      { severity: 'HIGH', title: 'Internal economics materially exceed observed market signals' },
-      { severity: 'HIGH', title: 'High service delivery complexity' },
-      { severity: 'MEDIUM', title: 'No internal customer evidence available' }
-    ];
-  }
+  const parseData = value => {
+    if (typeof value !== 'string') return value || {};
+    try { return JSON.parse(value); } catch (_) { return {}; }
+  };
+  const service = parseData(data.service_intelligence);
+  const customer = parseData(data.customer_intelligence);
+  const market = parseData(data.market_intelligence);
+  const commercial = parseData(data.commercial_context);
 
-  const minPrice = econ.minimum_viable_price || 25147059;
+  const minPrice = Number(econ.minimum_viable_price) || null;
+  if ($('skpiFloor')) $('skpiFloor').textContent = minPrice === null ? '—' : money(minPrice);
+  if ($('skpiComplexity')) $('skpiComplexity').textContent = service.complexity != null && Number.isFinite(Number(service.complexity)) ? Number(service.complexity).toFixed(2) : '—';
+  if ($('skpiHighRisks')) $('skpiHighRisks').textContent = risks.filter(r => (r.severity || '').toUpperCase() === 'HIGH').length;
   const offerEl = $('mainOffers');
   if (offerEl) {
     offerEl.innerHTML = offers.slice(0, 4).map((o, i) => {
-      const isRec = o.recommended || o.name?.toLowerCase().includes('balanced');
-      const priceRatio = o.price ? (o.price / minPrice) : (1.1 + i * 0.15);
-      const computedWinProb = Math.max(25, Math.min(85, Math.round(90 - (priceRatio - 1) * 80))) + '%';
-      const winProb = o.win_prob || computedWinProb;
-
-      const serviceComp = data.service_intelligence?.complexity || 0.82;
-      const computedDelScore = (1 - (serviceComp * 0.2) + (i === 2 ? 0.06 : i === 3 ? -0.15 : 0)).toFixed(2);
-      const delScore = o.delivery_score || computedDelScore;
-      const fitText = o.fit || (i === 0 ? 'High' : i === 1 ? 'Very High' : i === 2 ? 'Medium' : 'High');
+      const isRec = o.recommended === true;
+      const priceSignal = Number.isFinite(Number(o.win_signal)) ? `${Math.round(Number(o.win_signal) * 100)}%` : '—';
+      const riskScore = Number.isFinite(Number(o.risk_score)) ? Number(o.risk_score).toFixed(2) : '—';
+      const strategicValue = Number.isFinite(Number(o.strategic_value)) ? `${Math.round(Number(o.strategic_value) * 100)}%` : '—';
 
       return `
         <div class="expanded-offer-card ${isRec?'highlight-card':''}">
@@ -989,20 +915,20 @@ function updateMain3DIntelligence(data) {
             ${isRec ? `<span class="o-rec-tag">Recommended</span>` : ''}
           </div>
           <div class="o-price">${money(o.price)}</div>
-          <div class="o-margin">Expected Margin ${o.expected_margin ? (o.expected_margin*100).toFixed(1)+'%' : '—'}</div>
+          <div class="o-margin">Expected Margin ${Number.isFinite(Number(o.expected_margin)) ? (Number(o.expected_margin)*100).toFixed(1)+'%' : '—'}</div>
           
           <div class="offer-metrics-row">
             <div class="om-item">
-              <small>Win Prob.</small>
-              <strong>${winProb}</strong>
+              <small>Price Signal*</small>
+              <strong>${priceSignal}</strong>
             </div>
             <div class="om-item">
-              <small>Delivery</small>
-              <strong class="cyan">${delScore}</strong>
+              <small>Risk Score</small>
+              <strong class="cyan">${riskScore}</strong>
             </div>
             <div class="om-item">
-              <small>Strategic Fit</small>
-              <strong class="green">${fitText}</strong>
+              <small>Strategy Weight</small>
+              <strong class="green">${strategicValue}</strong>
             </div>
           </div>
         </div>`;
@@ -1018,26 +944,52 @@ function updateMain3DIntelligence(data) {
       </div>`).join('');
   }
 
-  const execSummaryText = data.executive_summary || `HADRON evaluated the opportunity using customer, service, market, internal economic, optimization, and deterministic risk signals. The internal economic model establishes a minimum viable price of ${money(minPrice)} with a modeled target margin of ${(econ.target_margin?econ.target_margin*100:32).toFixed(1)}%. The recommended approach is a Balanced commercial strategy (${balancedPriceVal}) with selective risk mitigation.`;
+  const execSummaryText = data.executive_summary || 'No executive summary was returned. Review the analysis response and its evidence before using the offer values.';
 
   if ($('mainSummary')) {
-    // Typewriter effect
     const el = $('mainSummary');
-    el.textContent = '';
-    let i = 0;
-    const speed = 10; // ms per char
-    
-    // Clear any previous typing intervals
     if (window.typingIntervalId) clearInterval(window.typingIntervalId);
-    
-    window.typingIntervalId = setInterval(() => {
-      if (i < execSummaryText.length) {
-        el.textContent += execSummaryText.charAt(i);
-        i++;
-      } else {
-        clearInterval(window.typingIntervalId);
-      }
-    }, speed);
+    el.textContent = execSummaryText;
+  }
+  const costText = econ.economics_source === 'INSUFFICIENT_SCOPE' || !(Number(econ.estimated_cost) > 0)
+    ? 'unavailable' : money(econ.estimated_cost);
+  const floorText = minPrice === null ? 'unavailable' : money(minPrice);
+  const marginText = Number.isFinite(Number(econ.target_margin)) ? `${(Number(econ.target_margin) * 100).toFixed(1)}%` : 'unavailable';
+  const balancedMargin = balancedOffer && Number.isFinite(Number(balancedOffer.expected_margin))
+    ? `${(Number(balancedOffer.expected_margin) * 100).toFixed(1)}%` : 'unavailable';
+  if ($('economicJustification')) {
+    const method = econ.economics_source === 'CATALOG' ? 'catalog-backed cost data' : econ.economics_source === 'INSUFFICIENT_SCOPE' ? 'not calculated because scope evidence is missing' : 'a provisional rate-card model';
+    $('economicJustification').textContent = `Estimated delivery cost: ${costText}. Minimum viable price: ${floorText} at a ${marginText} target margin. ${method}. Balanced scenario margin: ${balancedMargin}.`;
+  }
+  if ($('marketJustification')) {
+    const marketText = market.market_reference_price
+      ? `Market reference: ${money(market.market_reference_price)}${market.pricing_environment ? ` (${market.pricing_environment})` : ''}.`
+      : 'No usable market price reference was found; the offers are not market-validated.';
+    const customerText = customer.data_availability === 'FOUND'
+      ? `Internal customer record found for ${customer.customer_name || 'the customer'}.`
+      : 'No internal customer record was found.';
+    const capacityText = econ.required_capacity != null
+      ? `Estimated staffing is ${econ.required_capacity} role FTE versus ${econ.capacity_available} available FTE.`
+      : 'Staffing demand is not estimated, so capacity feasibility is unverified.';
+    const historyText = econ.historical_deal_count
+      ? `${econ.historical_deal_count} historical deals are available for comparison.`
+      : 'No usable historical deal values are available.';
+    const budgetText = econ.project_budget != null
+      ? `Stated project budget: ${money(econ.project_budget)}.`
+      : 'No project-specific budget was supplied.';
+    const pipelineText = econ.pipeline_gap != null
+      ? `Company quarterly target-to-pipeline gap: ${money(econ.pipeline_gap)}; this is a sales planning metric, not available cash.`
+      : '';
+    const accountText = customer.active_budget != null
+      ? `Internal account file lists ${money(customer.active_budget)} in active program budget; this is not confirmed as this project's budget.`
+      : '';
+    const synthesisText = data.synthesis_mode === 'deterministic_fallback'
+      ? 'Executive text used deterministic fallback.'
+      : data.synthesis_mode === 'gemini' ? 'Executive text synthesized by Gemini.' : 'Synthesis mode not recorded.';
+    $('marketJustification').textContent = `${customerText} ${marketText} ${capacityText} ${budgetText} ${accountText} ${pipelineText} ${historyText} ${synthesisText}`;
+  }
+  if ($('analysisMethodNote')) {
+    $('analysisMethodNote').textContent = '* Price signal is a rule-based scenario indicator, not a measured probability of winning the deal.';
   }
 
   const totalOfferVal = offers.reduce((s, o) => s + (o.price || 0), 0);
@@ -1049,44 +1001,39 @@ function updateMain3DIntelligence(data) {
     })));
   }
 
-  const costBase = minPrice;
-  const marginPct = econ.target_margin || 0.32;
-  const marginAmt = costBase * marginPct / (1 - marginPct);
-  draw3DPieChart('marginPie', 'marginLegend', [
-    { label: 'Cost Base', value: Math.round(costBase), color: '#6ab0ff' },
-    { label: 'Margin Build', value: Math.round(marginAmt), color: '#e2c079' }
-  ]);
+  const estimatedCost = Number(econ.estimated_cost) || 0;
+  const marginPct = Number(econ.target_margin) || 0;
+  if (estimatedCost > 0 && marginPct > 0 && marginPct < 1) {
+    const marginAmt = estimatedCost * marginPct / (1 - marginPct);
+    draw3DPieChart('marginPie', 'marginLegend', [
+      { label: 'Estimated Cost', value: Math.round(estimatedCost), color: '#6ab0ff' },
+      { label: 'Target Margin Build', value: Math.round(marginAmt), color: '#e2c079' }
+    ]);
+  } else {
+    draw3DPieChart('marginPie', 'marginLegend', []);
+  }
 
   const riskCounts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
   risks.forEach(r => {
     const sev = (r.severity || r.type || 'MEDIUM').toUpperCase();
     if (riskCounts[sev] !== undefined) riskCounts[sev]++; else riskCounts.MEDIUM++;
   });
-  if (riskCounts.HIGH === 0 && riskCounts.MEDIUM === 0 && riskCounts.LOW === 0) {
-    riskCounts.HIGH = 2; riskCounts.MEDIUM = 1;
-  }
   draw3DPieChart('riskPie', 'riskLegend', [
     { label: 'High Severity', value: riskCounts.HIGH, color: '#f87171' },
     { label: 'Medium Severity', value: riskCounts.MEDIUM, color: '#fb923c' },
     { label: 'Low Severity', value: riskCounts.LOW, color: '#34d399' }
   ]);
 
-  const demandVal = getDeterministicMetric(reqKey + '_demand', 58, 92);
-  const compVal   = getDeterministicMetric(reqKey + '_comp', 42, 84);
-  const envVal    = getDeterministicMetric(reqKey + '_env', 40, 78);
-  const urgVal    = getDeterministicMetric(reqKey + '_urg', 28, 75);
-
-  if ($('sigDemandVal'))  $('sigDemandVal').textContent = demandVal + '%';
-  if ($('sigDemandFill')) $('sigDemandFill').style.height = demandVal + '%';
-
-  if ($('sigCompVal'))    $('sigCompVal').textContent = compVal + '%';
-  if ($('sigCompFill'))   $('sigCompFill').style.height = compVal + '%';
-
-  if ($('sigEnvVal'))     $('sigEnvVal').textContent = envVal + '%';
-  if ($('sigEnvFill'))    $('sigEnvFill').style.height = envVal + '%';
-
-  if ($('sigUrgVal'))     $('sigUrgVal').textContent = urgVal + '%';
-  if ($('sigUrgFill'))    $('sigUrgFill').style.height = urgVal + '%';
+  const signalValues = [
+    ['sigDemandVal', 'sigDemandFill', market.demand_signal || 'No data'],
+    ['sigCompVal', 'sigCompFill', market.competitor_signals?.length ? `${market.competitor_signals.length} signals` : 'No data'],
+    ['sigEnvVal', 'sigEnvFill', market.pricing_environment || 'No data'],
+    ['sigUrgVal', 'sigUrgFill', commercial.urgency_signal || 'No data']
+  ];
+  signalValues.forEach(([valueId, fillId, value]) => {
+    if ($(valueId)) $(valueId).textContent = value;
+    if ($(fillId)) $(fillId).style.height = '0%';
+  });
 
 }
 
@@ -1145,21 +1092,27 @@ function populateRightPanel(data) {
   if (typeof offers === 'string') { try { offers = JSON.parse(offers); } catch(e) { offers = []; } }
   offers = Array.isArray(offers) ? offers : [];
 
-  const conf    = data.confidence ? parseFloat(data.confidence) : 0.75;
-  const margin  = econ.target_margin ? (econ.target_margin * 100) : 32.0;
-  const signals = 14;
-  const numOffers = offers.length || 4;
-  const floorVal = econ.minimum_viable_price || 25147059;
+  const confRaw = Number(data.confidence);
+  const conf    = Number.isFinite(confRaw) ? confRaw : null;
+  const margin  = Number.isFinite(Number(econ.target_margin)) ? Number(econ.target_margin) * 100 : null;
+  const numOffers = offers.length;
+  const floorVal = Number(econ.minimum_viable_price) || null;
 
-  animateNumber('rFloor', 0, floorVal, v => money(v), 1500);
-  animateNumber('rMargin', 0, margin, v => v.toFixed(1) + ' %', 1500);
-  animateNumber('rSignals', 0, signals, v => Math.floor(v), 1200);
-  animateNumber('rOffers', 0, numOffers, v => Math.floor(v), 1200);
-  animateNumber('rConf', 0, conf, v => v.toFixed(2) + '%', 1500);
-  animateNumber('rMarginD', 0, margin, v => v.toFixed(1) + '%', 1500);
+  if (floorVal !== null) animateNumber('rFloor', 0, floorVal, v => money(v), 900);
+  else if ($('rFloor')) $('rFloor').textContent = '—';
+  if (margin !== null) {
+    animateNumber('rMargin', 0, margin, v => v.toFixed(1) + ' %', 900);
+    animateNumber('rMarginD', 0, margin, v => v.toFixed(1) + '%', 900);
+  } else {
+    if ($('rMargin')) $('rMargin').textContent = '—';
+    if ($('rMarginD')) $('rMarginD').textContent = '—';
+  }
+  animateNumber('rOffers', 0, numOffers, v => Math.floor(v), 900);
+  if (conf !== null) animateNumber('rConf', 0, conf * 100, v => `${v.toFixed(0)}%`, 900);
+  else if ($('rConf')) $('rConf').textContent = '—';
 
-  animateDonut('confArc', 25);
-  animateDonut('marginArc', 32);
+  animateDonut('confArc', conf === null ? 0 : conf * 100);
+  animateDonut('marginArc', margin === null ? 0 : margin);
 
   updateMain3DIntelligence(data);
   
@@ -1206,14 +1159,12 @@ if ($("createBtn")) $("createBtn").onclick = async () => {
     await loadRequests(wasSelected);
     
     // Auto-select the newly created request to trigger the terminal logs animation
-    setTimeout(() => {
-      const fullReq = requests.find(r => r.sys_id === createdReq.sys_id);
-      if (fullReq) {
-        const isLeft = leftRequests.some(r => r.sys_id === fullReq.sys_id);
-        fullReq.executive_summary = null;
-        selectRequest(fullReq, 0, 0, isLeft ? 'LEFT' : 'RIGHT', true);
-      }
-    }, 3200); // Wait 3.2s for the initial node spawn animation to finish
+    const fullReq = requests.find(r => r.sys_id === createdReq.sys_id);
+    if (fullReq) {
+      const isLeft = leftRequests.some(r => r.sys_id === fullReq.sys_id);
+      fullReq.executive_summary = null;
+      selectRequest(fullReq, 0, 0, isLeft ? 'LEFT' : 'RIGHT', true);
+    }
   } catch(e) {
     alert(e.message);
   } finally {

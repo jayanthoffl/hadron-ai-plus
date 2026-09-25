@@ -25,6 +25,11 @@ class HadronIntent(BaseModel):
     objective_summary: str = ""
     context_summary: str = ""
     inferred_industry: str = ""                    # tagged as inference, not fact
+    estimated_complexity: Optional[float] = None     # planning estimate; not verified scope
+    estimated_duration_months: Optional[int] = None  # planning estimate; not verified scope
+    estimated_resource_requirements: Dict[str, int] = {}
+    service_estimate_notes: str = ""
+    service_estimate_confidence: float = 0.0
     key_requirements: List[str] = []
     ambiguities: List[str] = []
     extraction_confidence: float = 0.5
@@ -64,6 +69,8 @@ class CustomerIntelligence(BaseModel):
     active_projects: List[str] = []
     existing_relationship: str = ""
     known_needs: List[str] = []
+    active_budget: Optional[float] = None
+    capacity_pressure: Optional[float] = None
     evidence: List[Evidence] = []
 
 
@@ -72,8 +79,8 @@ class ServiceIntelligence(BaseModel):
     data_availability: str = "NOT_FOUND"           # FOUND | NOT_FOUND
     description: str = ""
     scope: List[str] = []
-    complexity: float = 0.5
-    estimated_duration_months: int = 12
+    complexity: Optional[float] = None
+    estimated_duration_months: Optional[int] = None
     resource_requirements: Dict[str, Any] = {}
     value_drivers: List[str] = []
     evidence: List[Evidence] = []
@@ -86,6 +93,7 @@ class MarketIntelligence(BaseModel):
     pricing_environment: str = ""
     volatility: float = 0.5
     competitor_signals: List[str] = []
+    market_reference_price: Optional[float] = None
     market_factors: List[str] = []
     evidence: List[Evidence] = []
 
@@ -98,6 +106,13 @@ class InternalEconomics(BaseModel):
     minimum_viable_price: float = 0
     target_margin: float = 0.30
     capacity_available: float = 0.0
+    required_capacity: Optional[float] = None
+    revenue_target: Optional[float] = None
+    confirmed_pipeline_value: Optional[float] = None
+    pipeline_gap: Optional[float] = None
+    project_budget: Optional[float] = None
+    historical_deal_count: int = 0
+    historical_average_deal_value: Optional[float] = None
     economics_source: str = "NOT_FOUND"            # CATALOG | PARAMETRIC_BASELINE
 
 
@@ -119,6 +134,10 @@ class Offer(BaseModel):
     term_months: int
     scope: str
     expected_margin: float
+    win_signal: float = 0.0
+    strategic_value: float = 0.0
+    risk_score: float = 0.0
+    objective_score: float = 0.0
     strategic_rationale: str
     negotiation_levers: List[str] = []
     risks: List[str] = []

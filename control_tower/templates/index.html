@@ -135,19 +135,19 @@
         <div class="kpi-row">
           <div class="kpi-item">
             <div class="kpi-label">BALANCED OFFER</div>
-            <div class="kpi-val accent-gold" id="rBalancedOffer">$28,919,118</div>
+            <div class="kpi-val accent-gold" id="rBalancedOffer">—</div>
           </div>
           <div class="kpi-item">
             <div class="kpi-label">BASE FLOOR</div>
-            <div class="kpi-val" id="rFloor">$25,147,059</div>
+            <div class="kpi-val" id="rFloor">—</div>
           </div>
           <div class="kpi-item">
             <div class="kpi-label">TARGET MARGIN</div>
-            <div class="kpi-val" id="rMargin">32.0 %</div>
+            <div class="kpi-val" id="rMargin">—</div>
           </div>
           <div class="kpi-item">
             <div class="kpi-label">SCENARIO OFFERS</div>
-            <div class="kpi-val" id="rOffers">4</div>
+            <div class="kpi-val" id="rOffers">—</div>
           </div>
         </div>
 
@@ -161,7 +161,7 @@
                       transform="rotate(-90 40 40)" id="confArc"/>
             </svg>
             <div class="donut-label">
-              <span id="rConf">0.75%</span>
+              <span id="rConf">—</span>
               <small>CONFIDENCE</small>
             </div>
           </div>
@@ -173,7 +173,7 @@
                       transform="rotate(-90 40 40)" id="marginArc"/>
             </svg>
             <div class="donut-label">
-              <span id="rMarginD">32.0%</span>
+              <span id="rMarginD">—</span>
               <small>MARGIN</small>
             </div>
           </div>
@@ -259,24 +259,24 @@
             <div class="sub-card-title">Market & Competitive Signals</div>
             <div class="bars-vertical-group">
               <div class="bar-vert-item">
-                <div class="bar-vert-val" id="sigDemandVal">78%</div>
-                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigDemandFill" style="height: 78%; background: linear-gradient(to top, #38bdf8, #818cf8);"></div></div>
-                <div class="bar-vert-label">Market Demand</div>
+                <div class="bar-vert-val" id="sigDemandVal">No data</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigDemandFill" style="height: 0%; background: linear-gradient(to top, #38bdf8, #818cf8);"></div></div>
+                <div class="bar-vert-label">Demand Signal</div>
               </div>
               <div class="bar-vert-item">
-                <div class="bar-vert-val" id="sigCompVal">52%</div>
-                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigCompFill" style="height: 52%; background: linear-gradient(to top, #818cf8, #c084fc);"></div></div>
-                <div class="bar-vert-label">Competitive Pressure</div>
+                <div class="bar-vert-val" id="sigCompVal">No data</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigCompFill" style="height: 0%; background: linear-gradient(to top, #818cf8, #c084fc);"></div></div>
+                <div class="bar-vert-label">Competitor Signals</div>
               </div>
               <div class="bar-vert-item">
-                <div class="bar-vert-val" id="sigEnvVal">50%</div>
-                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigEnvFill" style="height: 50%; background: linear-gradient(to top, #38bdf8, #34d399);"></div></div>
+                <div class="bar-vert-val" id="sigEnvVal">No data</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigEnvFill" style="height: 0%; background: linear-gradient(to top, #38bdf8, #34d399);"></div></div>
                 <div class="bar-vert-label">Pricing Environment</div>
               </div>
               <div class="bar-vert-item">
-                <div class="bar-vert-val" id="sigUrgVal">36%</div>
-                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigUrgFill" style="height: 36%; background: linear-gradient(to top, #fb923c, #f87171);"></div></div>
-                <div class="bar-vert-label">Deal Urgency</div>
+                <div class="bar-vert-val" id="sigUrgVal">No data</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigUrgFill" style="height: 0%; background: linear-gradient(to top, #fb923c, #f87171);"></div></div>
+                <div class="bar-vert-label">Urgency Signal</div>
               </div>
             </div>
           </div>
@@ -326,7 +326,7 @@
             </div>
             <div>
               <h3>Executive Strategy Synthesis & AI Justification</h3>
-              <p>AI-generated strategic recommendation and commercial pricing rationale</p>
+              <p>Analysis summary and evidence-backed pricing rationale</p>
             </div>
           </div>
           <button class="sec-action-btn">View Strategy Details &rarr;</button>
@@ -340,53 +340,54 @@
                 AI EXECUTIVE JUSTIFICATION
               </div>
               <div class="balanced-figure-badge">
-                <span>RECOMMENDED BALANCED PRICE</span>
-                <strong id="balancedPriceBadge">$28,919,118</strong>
+              <span>BALANCED SCENARIO</span>
+                <strong id="balancedPriceBadge">—</strong>
               </div>
             </div>
 
             <div class="ai-just-grid">
               <div class="ai-just-col">
-                <h5>Economic Floor & Margin Build</h5>
-                <p>The minimum viable floor is established at <strong>$25,147,059</strong> with a 32.0% baseline margin. The Recommended Balanced scenario price of <strong>$28,919,118</strong> achieves a <strong>40.9% expected margin</strong>, absorbing delivery complexity while staying within competitive threshold.</p>
+                <h5>Economic Basis</h5>
+                <p id="economicJustification">Select a request to view its cost model.</p>
               </div>
               <div class="ai-just-col">
-                <h5>Market Alignment & Risk Buffer</h5>
-                <p>Market intelligence indicates an <strong>80% intent match</strong> and a pricing environment signal of 0.5. High-severity risk signals (cost exceeding market baselines) are mitigated by positioning 15% above the minimum floor price.</p>
+                <h5>Evidence & Limitations</h5>
+                <p id="marketJustification">Market, customer, and capacity evidence will be shown here when available.</p>
               </div>
             </div>
           </div>
 
           <h4 style="margin-top:20px;">Executive Commercial Summary</h4>
-          <p id="mainSummary">HADRON evaluated the opportunity using customer, service, market, internal economic, optimization, and deterministic risk signals. The internal economic model establishes a minimum viable price of $25,147,058.82 with a modeled target margin of 32.0%. The recommended approach is a Balanced commercial strategy ($28,919,118) with selective risk mitigation.</p>
+                <p id="mainSummary">Select a request to see its commercial analysis.</p>
+          <p id="analysisMethodNote"></p>
           
           <div class="strategy-kpi-strip">
             <div class="skpi-item">
               <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
               <div>
                 <small>Balanced Offer</small>
-                <strong style="color:var(--gold)" id="skpiBalanced">$28,919,118</strong>
+                <strong style="color:var(--gold)" id="skpiBalanced">—</strong>
               </div>
             </div>
             <div class="skpi-item">
               <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
               <div>
                 <small>Min. Viable Price</small>
-                <strong>$25,147,059</strong>
+                <strong id="skpiFloor">—</strong>
               </div>
             </div>
             <div class="skpi-item">
               <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
               <div>
                 <small>Delivery Complexity</small>
-                <strong>0.82</strong>
+                <strong id="skpiComplexity">—</strong>
               </div>
             </div>
             <div class="skpi-item">
               <div class="skpi-icon red"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
               <div>
                 <small>High-Severity Signals</small>
-                <strong>3</strong>
+                <strong id="skpiHighRisks">—</strong>
               </div>
             </div>
           </div>

@@ -51,6 +51,7 @@ class MarketAgent:
                 pricing_environment="Competitive",
                 volatility=0.35,
                 competitor_signals=signal_strings,
+                market_reference_price=avg_price or None,
                 market_factors=[
                     "Enterprise technology investment",
                     "Long-term strategic contracts",
@@ -89,6 +90,7 @@ Estimate an average or range of costs based on what you find.
 Return ONLY valid JSON:
 {{
   "pricing_environment": "e.g., Highly competitive, Premium pricing",
+  "market_reference_price": null,
   "competitor_signals": ["Signal 1 (with dollar amounts if found)", "Signal 2"],
   "market_factors": ["Factor 1", "Factor 2"],
   "summary_statement": "A brief summary of what the live search revealed."
@@ -117,6 +119,10 @@ Return ONLY valid JSON:
                 pricing_environment=data.get("pricing_environment", "Unknown"),
                 volatility=0.6,
                 competitor_signals=data.get("competitor_signals", []),
+                market_reference_price=(
+                    float(data["market_reference_price"])
+                    if data.get("market_reference_price") is not None else None
+                ),
                 market_factors=data.get("market_factors", []),
                 evidence=[
                     Evidence(
