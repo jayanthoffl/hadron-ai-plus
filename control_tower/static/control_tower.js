@@ -194,23 +194,50 @@ function handleLoginSubmit(e) {
   }
 }
 
-async function loadRequests() {
+function handleLogout() {
+  localStorage.removeItem(AUTH_KEY);
+  sessionStorage.removeItem(SPLASH_KEY);
+  isLoggedIn = false;
+  location.reload(); // Hard reload to reset state and show login
+}
+
+async function loadRequests(preserveState = false) {
   try {
     const r = await fetch("/api/requests");
     const data = await r.json();
-    requests = data.requests || [];
-    splitRequests();
-    activeReq = null;
-    activeSide = null;
-    activeFannedData = null;
+    const newRequests = data.requests || [];
     
-    const W = window.innerWidth;
-    currentRootX = W / 2;
-    currentLeftX = W / 2 - 320;
-    currentRightX = W / 2 + 320;
-    currentInactiveOpacity = 1.0;
+    if (preserveState && activeSide && graphState === 'SELECTED') {
+      const currentIds = new Set(requests.map(req => req.sys_id));
+      const added = newRequests.filter(req => !currentIds.has(req.sys_id));
+      requests = newRequests;
+      
+      if (added.length > 0) {
+        const newReq = added[0];
+        if (activeSide === 'LEFT') {
+          leftRequests.unshift(newReq);
+          if (leftRequests.length > 3) leftRequests.pop();
+        } else {
+          rightRequests.unshift(newReq);
+          if (rightRequests.length > 3) rightRequests.pop();
+        }
+      }
+      renderGraphFrame();
+    } else {
+      requests = newRequests;
+      splitRequests();
+      activeReq = null;
+      activeSide = null;
+      activeFannedData = null;
+      
+      const W = window.innerWidth;
+      currentRootX = W / 2;
+      currentLeftX = W / 2 - 320;
+      currentRightX = W / 2 + 320;
+      currentInactiveOpacity = 1.0;
 
-    animateGraphToState('EXPANDED', null, 800);
+      animateGraphToState('EXPANDED', null, 800);
+    }
   } catch (e) {
     console.error("Failed to load requests", e);
   }
@@ -295,13 +322,24 @@ function renderGraphFrame() {
       <div class="cat-icon">${iconHtml}</div>
       <div class="cat-text">
         <h3>${req.number}</h3>
-        <p>${req.customer_name || 'Google'}</p>
+        <p>${req.customer_name || 'Unknown Customer'}</p>
       </div>
     `, leftX, y, cardClass, () => selectRequest(req, leftX, y, 'LEFT'), opacity, blurPx);
 
     const HALF = 110;
     drawLine(`root-${req.sys_id}`, rootX - 32, orbCenterY, leftX + HALF, y, isActive, opacity, blurPx);
   });
+
+  if (graphState !== 'SELECTED' && requests.length > 6) {
+    const extraCount = requests.length - 6;
+    renderNode('show-more', `
+      <div class="orb-label" style="padding:4px 12px; border-radius:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(10px); cursor:default; pointer-events:auto;">
+        <span style="font-size:0.75rem; color:#94a3b8; font-weight:700; text-transform:uppercase;">+${extraCount} More Deals</span>
+      </div>
+    `, rootX, cy + 180, "node-orb", null, 1.0, 0);
+  } else {
+    hideNode('show-more');
+  }
 
   // Render RIGHT Column Cards (Odd - Max 3)
   const rightTotalH = Math.max(0, (rightRequests.length - 1) * V_GAP);
@@ -325,7 +363,7 @@ function renderGraphFrame() {
       <div class="cat-icon">${iconHtml}</div>
       <div class="cat-text">
         <h3>${req.number}</h3>
-        <p>${req.customer_name || 'Google'}</p>
+        <p>${req.customer_name || 'Unknown Customer'}</p>
       </div>
     `, rightX, y, cardClass, () => selectRequest(req, rightX, y, 'RIGHT'), opacity, blurPx);
 
@@ -426,7 +464,7 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
   }
 
   if ($("panelHeaderLabel")) $("panelHeaderLabel").textContent = `Analysis overview for ${req.number}`;
-  if ($("rTitle")) $("rTitle").textContent = req.service_product_name || "Enterprise Platform Modernization";
+  if ($("rTitle")) $("rTitle").textContent = req.service_product_name || 'Unknown Service';
   if ($("rStatus")) $("rStatus").textContent = req.status || "READY";
 
   if (req.executive_summary && !forceRun) {
@@ -567,7 +605,7 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
   let offers = data.offer_set || [];
   if(typeof offers==='string') { try{offers=JSON.parse(offers)}catch(e){offers=[]} }
   if (offers.length === 0) {
-    const reqKey = (data.sys_id || '1') + (data.number || 'PRI0001021') + (data.customer_name || 'Google');
+    const reqKey = (data.sys_id || '1') + (data.number || 'PRI-UNKNOWN') + (data.customer_name || 'Unknown Customer');
     const basePrice = getDeterministicMetric(reqKey + '_base_price', 25000000, 32000000);
     offers = [
       { name: 'Balanced', price: basePrice, icon: 'chart' },
@@ -620,7 +658,7 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
     });
   });
 
-  const reqKey = (data.sys_id || '1') + (data.number || 'PRI0001021') + (data.customer_name || 'Google');
+  const reqKey = (data.sys_id || '1') + (data.number || 'PRI-UNKNOWN') + (data.customer_name || 'Unknown Customer');
   const matchPct = getDeterministicMetric(reqKey + '_match', 72, 92) + '%';
   const envScore = (getDeterministicMetric(reqKey + '_env_score', 40, 75) / 100).toFixed(1);
   const fitPct   = (getDeterministicMetric(reqKey + '_fit_score', 940, 995) / 10).toFixed(1) + '%';
@@ -764,9 +802,9 @@ function draw3DPieChart(svgId, legendId, segments) {
 function updateMain3DIntelligence(data) {
   if (!data) return;
 
-  const custName = data.customer_name || activeReq?.customer_name || 'Google';
+  const custName = data.customer_name || activeReq?.customer_name || 'Unknown Customer';
   const sysId = data.sys_id || activeReq?.sys_id || '1';
-  const reqNum = data.number || activeReq?.number || 'PRI0001021';
+  const reqNum = data.number || activeReq?.number || 'PRI-UNKNOWN';
   const reqKey = `${sysId}_${reqNum}_${custName}`;
 
   let econ = data.internal_economics;
@@ -1013,7 +1051,8 @@ if ($("createBtn")) $("createBtn").onclick = async () => {
     });
     if(!res.ok) throw new Error("Failed to create");
     $("modal").classList.add("hidden");
-    await loadRequests();
+    const wasSelected = (graphState === 'SELECTED');
+    await loadRequests(wasSelected);
   } catch(e) {
     alert(e.message);
   } finally {

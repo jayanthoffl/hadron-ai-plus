@@ -50,8 +50,7 @@
       </div>
       <div id="loginError" class="login-error-text" style="display:none;">Invalid ServiceNow credentials. Try again.</div>
       <button type="submit" class="btn-login-submit">
-        <span>Sign In to Executive Gateway</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <span>Sign In</span>
       </button>
     </form>
   </div>
@@ -90,6 +89,10 @@
     </button>
     <button class="icon-btn" title="Search">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="btn-outline" onclick="handleLogout()" style="color: var(--red); border-color: rgba(248, 113, 113, 0.4); margin-right: 12px;">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
     </button>
     <div class="avatar"></div>
   </div>
