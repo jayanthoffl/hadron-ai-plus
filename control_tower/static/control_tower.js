@@ -43,6 +43,29 @@ let currentLeftX = null;
 let currentRightX = null;
 let currentInactiveOpacity = 1.0;
 let animFrameId = null;
+let logIntervalId = null;
+let loadingStartTime = null;
+let newRequestDrawTimes = {}; // track sys_id -> startTime for new requests
+
+const TERMINAL_LOGS = [
+  "Fetching Hadron Information...",
+  "Clarifying budget constraints...",
+  "Proportionating previous deals...",
+  "Consolidating related deals...",
+  "Initiating Quantum Engine...",
+  "Running market analysis...",
+  "Fetching client information...",
+  "Initializing QAOA inference...",
+  "Synthesizing market feed...",
+  "Extracting pricing factors...",
+  "Calculating minimum floor...",
+  "Mapping competitive matrix...",
+  "Assessing delivery risk...",
+  "Synchronizing with ServiceNow...",
+  "Optimizing objective function...",
+  "Evaluating scenario trade-offs...",
+  "Exporting results..."
+];
 
 let activeFannedData = null;
 
@@ -60,7 +83,7 @@ function splitRequests() {
 }
 
 // Draw smooth directional radial sigmoid cubic bezier curve
-function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0) {
+function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, drawProgress=1.0) {
   const svg = $("svgLayer");
   if (!svg) return;
   let path = $(`line-${id}`);
@@ -82,6 +105,15 @@ function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0) {
   path.setAttribute("class", `line-path ${highlight?'highlight':''}`);
   path.style.opacity = String(opacity);
   path.style.filter = blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
+
+  if (drawProgress < 1.0) {
+    const len = path.getTotalLength ? path.getTotalLength() : 800;
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len * (1.0 - Math.max(0, drawProgress));
+  } else {
+    path.style.strokeDasharray = 'none';
+    path.style.strokeDashoffset = '0';
+  }
 }
 
 function hideLine(id) {
@@ -116,6 +148,7 @@ function hideNode(id) {
   if(el) {
     el.style.opacity = '0';
     el.style.pointerEvents = 'none';
+    el.classList.remove('flip-animate');
   }
 }
 
@@ -214,6 +247,8 @@ async function loadRequests(preserveState = false) {
       
       if (added.length > 0) {
         const newReq = added[0];
+        // Record creation time for draw animation of root line
+        newRequestDrawTimes[newReq.sys_id] = performance.now();
         if (activeSide === 'LEFT') {
           leftRequests.unshift(newReq);
           if (leftRequests.length > 3) leftRequests.pop();
@@ -247,6 +282,7 @@ function handleOrbClick() {
   activeReq = null;
   activeSide = null;
   activeFannedData = null;
+  if (logIntervalId) clearInterval(logIntervalId);
   if ($("rightPanel")) {
     $("rightPanel").style.opacity = '0';
     setTimeout(() => $("rightPanel").style.display = 'none', 400);
@@ -299,6 +335,8 @@ function renderGraphFrame() {
 
   // Uniform Vertical Gap (70px center-to-center)
   const V_GAP = 70;
+  
+  const lastReqId = requests.length > 0 ? requests[requests.length - 1].sys_id : null;
 
   // Render LEFT Column Cards (Even - Max 3)
   const leftTotalH = Math.max(0, (leftRequests.length - 1) * V_GAP);
@@ -318,16 +356,25 @@ function renderGraphFrame() {
 
     const cardClass = `node-cat ${isActive ? 'active' : ''} ${isDimmed ? 'dimmed-blur' : ''}`;
 
+    const isLast = req.sys_id === lastReqId;
+
+    const createTime = newRequestDrawTimes[req.sys_id];
+    let dp = 1.0;
+    if (createTime) {
+      dp = Math.min(1.0, (performance.now() - createTime) / 1200);
+    }
+    const nodeOpacity = dp < 1.0 ? dp * opacity : opacity;
+
     renderNode(req.sys_id, `
       <div class="cat-icon">${iconHtml}</div>
       <div class="cat-text">
         <h3>${req.number}</h3>
         <p>${req.customer_name || 'Unknown Customer'}</p>
       </div>
-    `, leftX, y, cardClass, () => selectRequest(req, leftX, y, 'LEFT'), opacity, blurPx);
+    `, leftX, y, cardClass, () => selectRequest(req, leftX, y, 'LEFT'), nodeOpacity, blurPx);
 
     const HALF = 110;
-    drawLine(`root-${req.sys_id}`, rootX - 32, orbCenterY, leftX + HALF, y, isActive, opacity, blurPx);
+    drawLine(`root-${req.sys_id}`, rootX - 32, orbCenterY, leftX + HALF, y, isActive, opacity, blurPx, dp);
   });
 
   if (graphState !== 'SELECTED' && requests.length > 6) {
@@ -359,16 +406,25 @@ function renderGraphFrame() {
 
     const cardClass = `node-cat ${isActive ? 'active' : ''} ${isDimmed ? 'dimmed-blur' : ''}`;
 
+    const isLast = req.sys_id === lastReqId;
+
+    const createTime = newRequestDrawTimes[req.sys_id];
+    let dp = 1.0;
+    if (createTime) {
+      dp = Math.min(1.0, (performance.now() - createTime) / 1200);
+    }
+    const nodeOpacity = dp < 1.0 ? dp * opacity : opacity;
+
     renderNode(req.sys_id, `
       <div class="cat-icon">${iconHtml}</div>
       <div class="cat-text">
         <h3>${req.number}</h3>
         <p>${req.customer_name || 'Unknown Customer'}</p>
       </div>
-    `, rightX, y, cardClass, () => selectRequest(req, rightX, y, 'RIGHT'), opacity, blurPx);
+    `, rightX, y, cardClass, () => selectRequest(req, rightX, y, 'RIGHT'), nodeOpacity, blurPx);
 
     const HALF = 110;
-    drawLine(`root-${req.sys_id}`, rootX + 32, orbCenterY, rightX - HALF, y, isActive, opacity, blurPx);
+    drawLine(`root-${req.sys_id}`, rootX + 32, orbCenterY, rightX - HALF, y, isActive, opacity, blurPx, dp);
   });
 
   // Continuously render fanned factor cards glued to selected card every frame
@@ -422,6 +478,15 @@ function animateGraphToState(targetState, targetSide, duration = 1100) {
   graphState = targetState;
   activeSide = targetSide;
 
+  if (duration <= 0) {
+    currentRootX = endRootX;
+    currentLeftX = endLeftX;
+    currentRightX = endRightX;
+    currentInactiveOpacity = endInactiveOpacity;
+    renderGraphFrame();
+    return;
+  }
+
   const startTime = performance.now();
 
   function step(now) {
@@ -466,6 +531,11 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
   if ($("panelHeaderLabel")) $("panelHeaderLabel").textContent = `Analysis overview for ${req.number}`;
   if ($("rTitle")) $("rTitle").textContent = req.service_product_name || 'Unknown Service';
   if ($("rStatus")) $("rStatus").textContent = req.status || "READY";
+  if ($("rDate")) {
+    const today = new Date();
+    const formatted = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    $("rDate").textContent = `Last update ${formatted}`;
+  }
 
   if (req.executive_summary && !forceRun) {
     activeFannedData = req;
@@ -476,6 +546,7 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
 
   // Loading State
   activeFannedData = null;
+  loadingStartTime = performance.now();
   if ($("rConf")) $("rConf").textContent = "—";
   if ($("mainSummary")) $("mainSummary").textContent = "Running optimization engine and synthesizing market signals... Please wait.";
   if ($("rFloor")) $("rFloor").textContent = "—";
@@ -486,18 +557,35 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
 
   renderGraphFrame();
 
+  if (!window.loadingAnimFrameId) {
+    function loop() {
+      if (graphState === 'SELECTED' && !activeFannedData) {
+        renderGraphFrame();
+        window.loadingAnimFrameId = requestAnimationFrame(loop);
+      } else {
+        window.loadingAnimFrameId = null;
+      }
+    }
+    window.loadingAnimFrameId = requestAnimationFrame(loop);
+  }
+
   try {
-    const res = await fetch("/api/analyze",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        customer_name: req.customer_name,
-        service_product_name: req.service_product_name,
-        commercial_objective: req.commercial_objective,
-        additional_context: req.additional_context,
-        record_sys_id: req.sys_id
-      })
-    });
+    // Fire the API request but also enforce a minimum animation time of 3500ms
+    const [res] = await Promise.all([
+      fetch("/api/analyze",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          customer_name: req.customer_name,
+          service_product_name: req.service_product_name,
+          commercial_objective: req.commercial_objective,
+          additional_context: req.additional_context,
+          record_sys_id: req.sys_id
+        })
+      }),
+      new Promise(r => setTimeout(r, 3500))
+    ]);
+
     const data = await res.json();
     if(!res.ok) throw new Error(data.error);
 
@@ -512,7 +600,8 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
   } catch(e) {
     if ($("mainSummary")) $("mainSummary").textContent = "Analysis Failed: " + e.message;
     if ($("rStatus")) $("rStatus").textContent = "FAILED";
-    activeFannedData = null;
+    activeFannedData = 'ERROR'; // Stop it from defaulting to loading
+    window.loadingAnimFrameId = null; // Explicitly cancel the loop condition
     const W = window.innerWidth;
     const isLeft = side === 'LEFT';
     const cardX = isLeft ? currentLeftX : currentRightX;
@@ -529,37 +618,66 @@ function drawFannedNodesLoading(startX, startY, side = 'RIGHT') {
   const endX = isLeft ? Math.round(startX - GAP - FANNED_W) : Math.round(startX + GAP);
   const lineTargetX = isLeft ? Math.round(startX - GAP) : endX;
 
-  const items = [
-    { title: 'Extracting Customer Intent', sub: 'Intent Engine' },
-    { title: 'Synthesizing Market Data', sub: 'Market Feed' },
-    { title: 'Calculating Optimal Price', sub: 'Optimization Solver' },
-    { title: 'Evaluating Risks', sub: 'Risk Assessment' }
-  ];
-
-  let itemStartY = startY - ((items.length-1) * 38) / 2;
+  let itemStartY = startY - (3 * 38) / 2;
   for(let i=0; i<15; i++) {
     hideNode(`sub-${i}`);
     hideLine(`fan-${i}`);
   }
 
-  items.forEach((item, i) => {
+  const elapsed = performance.now() - loadingStartTime;
+
+  const logs = [
+    "> Fetching Hadron Information...",
+    "> Running market analysis...",
+    "> Initializing QAOA Engine inference...",
+    "> Consolidating related deals..."
+  ];
+
+  for(let i=0; i<4; i++) {
+    const itemDelay = i * 800; // 800ms stagger between lines
+    const drawDuration = 600; // 600ms to sketch the line
+    
+    if (elapsed < itemDelay) {
+      continue;
+    }
+    
+    let dp = (elapsed - itemDelay) / drawDuration;
+    if (dp > 1.0) dp = 1.0;
+    
+    const nodeOpacity = dp; // fade node in as line draws
     const y = itemStartY + (i * 38);
     renderNode(`sub-${i}`, `
-      <div class="item-left">
+      <div class="item-left shimmer-box" style="position:relative; overflow:hidden;">
         <div class="item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg></div>
-        <div class="item-title pulse-text" style="color:#e2c079">${item.title}</div>
+        <div class="item-title term-text" id="term-title-${i}" style="color:#38bdf8; font-family: monospace; font-size:0.75rem;">${logs[i]}<span class="blink-cursor">_</span></div>
       </div>
-      <div class="item-tag">
+      <div class="item-tag pulsing-border" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
         <span class="bars"><i class="on pulse-bar"></i><i class="pulse-bar"></i><i></i></span>
-        ${item.sub}
+        <span id="term-tag-${i}" style="font-family: monospace;">SYS_LOAD</span>
       </div>
-    `, endX, y, "node-item");
+    `, endX, y, "node-item", null, nodeOpacity);
+    drawLine(`fan-${i}`, startX, startY, lineTargetX, y, true, 1.0, 0, dp);
+  }
 
-    drawLine(`fan-${i}`, startX, startY, lineTargetX, y, true);
-  });
+  if (!logIntervalId) {
+    logIntervalId = setInterval(() => {
+      for(let i=0; i<4; i++) {
+        const title = $('term-title-'+i);
+        const tag = $('term-tag-'+i);
+        if(title && tag) {
+          title.textContent = TERMINAL_LOGS[Math.floor(Math.random() * TERMINAL_LOGS.length)];
+          tag.textContent = '0x' + Math.floor(Math.random()*16777215).toString(16).toUpperCase();
+        }
+      }
+    }, 180);
+  }
 }
 
 function drawFannedNodesError(errorMsg, startX, startY, side = 'RIGHT') {
+  if (logIntervalId) {
+    clearInterval(logIntervalId);
+    logIntervalId = null;
+  }
   const isLeft = side === 'LEFT';
   const GAP = 140;
   const FANNED_W = 480;
@@ -594,6 +712,10 @@ function drawFannedNodesError(errorMsg, startX, startY, side = 'RIGHT') {
 }
 
 function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
+  if (logIntervalId) {
+    clearInterval(logIntervalId);
+    logIntervalId = null;
+  }
   const isLeft = side === 'LEFT';
   const GAP = 140;
   const FANNED_W = 480;
@@ -726,7 +848,10 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
         <div class="item-title" title="${item.title}">${item.title}</div>
       </div>
       ${rightBadge}
-    `, endX, y, "node-item");
+    `, endX, y, "node-item flip-animate");
+
+    const nodeEl = $(`sub-${i}`);
+    if (nodeEl) nodeEl.style.animationDelay = `${i * 60}ms`;
 
     drawLine(`fan-${i}`, startX, startY, lineTargetX, y, true);
   });
@@ -825,11 +950,12 @@ function updateMain3DIntelligence(data) {
   }
 
   const balancedOffer = offers.find(o => o.name?.toLowerCase().includes('balanced')) || offers[0];
-  const balancedPriceVal = money(balancedOffer ? balancedOffer.price : 28919118);
+  const balancedPriceNum = balancedOffer ? balancedOffer.price : 28919118;
+  const balancedPriceVal = money(balancedPriceNum);
 
-  if ($('rBalancedOffer')) $('rBalancedOffer').textContent = balancedPriceVal;
-  if ($('balancedPriceBadge')) $('balancedPriceBadge').textContent = balancedPriceVal;
-  if ($('skpiBalanced')) $('skpiBalanced').textContent = balancedPriceVal;
+  animateNumber('rBalancedOffer', 0, balancedPriceNum, v => money(v), 1600);
+  animateNumber('balancedPriceBadge', 0, balancedPriceNum, v => money(v), 1600);
+  animateNumber('skpiBalanced', 0, balancedPriceNum, v => money(v), 1600);
 
   let risks = data.risks;
   if (typeof risks === 'string') { try { risks = JSON.parse(risks); } catch(e) { risks = []; } }
@@ -857,7 +983,7 @@ function updateMain3DIntelligence(data) {
       const fitText = o.fit || (i === 0 ? 'High' : i === 1 ? 'Very High' : i === 2 ? 'Medium' : 'High');
 
       return `
-        <div class="expanded-offer-card 3d-card-tilt ${isRec?'highlight-card':''}">
+        <div class="expanded-offer-card ${isRec?'highlight-card':''}">
           <div class="o-top-row">
             <span class="o-name">${o.name || 'Commercial Offer'}</span>
             ${isRec ? `<span class="o-rec-tag">Recommended</span>` : ''}
@@ -886,7 +1012,7 @@ function updateMain3DIntelligence(data) {
   const riskEl = $('mainRisks');
   if (riskEl) {
     riskEl.innerHTML = risks.map(r => `
-      <div class="expanded-risk-item 3d-card-tilt">
+      <div class="expanded-risk-item">
         <span class="risk-badge-3d">${r.severity || r.type || 'HIGH'}</span>
         <span class="risk-text-3d">${r.title || r.description || JSON.stringify(r)}</span>
       </div>`).join('');
@@ -895,7 +1021,23 @@ function updateMain3DIntelligence(data) {
   const execSummaryText = data.executive_summary || `HADRON evaluated the opportunity using customer, service, market, internal economic, optimization, and deterministic risk signals. The internal economic model establishes a minimum viable price of ${money(minPrice)} with a modeled target margin of ${(econ.target_margin?econ.target_margin*100:32).toFixed(1)}%. The recommended approach is a Balanced commercial strategy (${balancedPriceVal}) with selective risk mitigation.`;
 
   if ($('mainSummary')) {
-    $('mainSummary').textContent = execSummaryText;
+    // Typewriter effect
+    const el = $('mainSummary');
+    el.textContent = '';
+    let i = 0;
+    const speed = 10; // ms per char
+    
+    // Clear any previous typing intervals
+    if (window.typingIntervalId) clearInterval(window.typingIntervalId);
+    
+    window.typingIntervalId = setInterval(() => {
+      if (i < execSummaryText.length) {
+        el.textContent += execSummaryText.charAt(i);
+        i++;
+      } else {
+        clearInterval(window.typingIntervalId);
+      }
+    }, speed);
   }
 
   const totalOfferVal = offers.reduce((s, o) => s + (o.price || 0), 0);
@@ -946,7 +1088,6 @@ function updateMain3DIntelligence(data) {
   if ($('sigUrgVal'))     $('sigUrgVal').textContent = urgVal + '%';
   if ($('sigUrgFill'))    $('sigUrgFill').style.height = urgVal + '%';
 
-  init3DTilt();
 }
 
 function scrollToSection(id) {
@@ -968,25 +1109,30 @@ function scrollToSection(id) {
   }
 }
 
-function init3DTilt() {
-  const tiltCards = document.querySelectorAll('.3d-card-tilt, .expanded-offer-card');
-  tiltCards.forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      const rotateX = ((y - centerY) / centerY) * -12;
-      const rotateY = ((x - centerX) / centerX) * 12;
-      
-      card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateZ(14px)`;
-    });
-    
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)`;
-    });
+
+
+function animateNumber(elId, startVal, endVal, formatFn, duration = 1200) {
+  const el = $(elId);
+  if (!el) return;
+  const startTime = performance.now();
+  function tick(now) {
+    let dp = (now - startTime) / duration;
+    if (dp > 1) dp = 1;
+    dp = dp * (2 - dp); // ease out quad
+    const current = startVal + (endVal - startVal) * dp;
+    el.textContent = formatFn(current);
+    if (dp < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function triggerPopIn(selector, delayMs = 100) {
+  const items = document.querySelectorAll(selector);
+  items.forEach((item, idx) => {
+    item.classList.remove('pop-in-anim');
+    void item.offsetWidth; // reflow
+    item.style.animationDelay = `${idx * delayMs}ms`;
+    item.classList.add('pop-in-anim');
   });
 }
 
@@ -1002,32 +1148,36 @@ function populateRightPanel(data) {
   const conf    = data.confidence ? parseFloat(data.confidence) : 0.75;
   const margin  = econ.target_margin ? (econ.target_margin * 100) : 32.0;
   const signals = 14;
+  const numOffers = offers.length || 4;
+  const floorVal = econ.minimum_viable_price || 25147059;
 
-  if ($('rFloor'))   $('rFloor').textContent   = money(econ.minimum_viable_price || 25147059);
-  if ($('rMargin'))  $('rMargin').textContent  = margin.toFixed(1) + ' %';
-  if ($('rSignals')) $('rSignals').textContent = signals;
-  if ($('rOffers'))  $('rOffers').textContent  = offers.length || 4;
-  if ($('rConf'))    $('rConf').textContent    = (conf < 1 ? conf : conf) + '%';
-  if ($('rMarginD')) $('rMarginD').textContent = margin.toFixed(1) + '%';
+  animateNumber('rFloor', 0, floorVal, v => money(v), 1500);
+  animateNumber('rMargin', 0, margin, v => v.toFixed(1) + ' %', 1500);
+  animateNumber('rSignals', 0, signals, v => Math.floor(v), 1200);
+  animateNumber('rOffers', 0, numOffers, v => Math.floor(v), 1200);
+  animateNumber('rConf', 0, conf, v => v.toFixed(2) + '%', 1500);
+  animateNumber('rMarginD', 0, margin, v => v.toFixed(1) + '%', 1500);
 
   animateDonut('confArc', 25);
   animateDonut('marginArc', 32);
 
   updateMain3DIntelligence(data);
+  
+  // Trigger staggered animations for panels
+  setTimeout(() => {
+    triggerPopIn('.expanded-offer-card', 150);
+    triggerPopIn('.chart-box', 200);
+    triggerPopIn('.metric-col', 100);
+  }, 100);
 }
 
 // Window resize listener
 window.addEventListener('resize', () => {
   if (requests.length > 0) {
-    renderGraph();
-    if (graphState === 'SELECTED' && activeReq) {
-      const W = window.innerWidth;
-      const isLeft = activeSide === 'LEFT';
-      const cardX = isLeft ? (W / 2 - 320) : (W / 2 + 320);
-      const cardEl = $(`node-${activeReq.sys_id}`);
-      const startX = isLeft ? (cardX - 110) : (cardX + 110);
-      const startY = cardEl ? (cardEl.offsetTop + cardEl.offsetHeight / 2) : window.innerHeight / 2;
-      drawFannedNodes(activeReq, startX, startY, activeSide);
+    if (graphState) {
+      animateGraphToState(graphState, activeSide, 0);
+    } else {
+      renderGraph();
     }
   }
 });
@@ -1050,9 +1200,20 @@ if ($("createBtn")) $("createBtn").onclick = async () => {
       })
     });
     if(!res.ok) throw new Error("Failed to create");
+    const createdReq = await res.json();
     $("modal").classList.add("hidden");
     const wasSelected = (graphState === 'SELECTED');
     await loadRequests(wasSelected);
+    
+    // Auto-select the newly created request to trigger the terminal logs animation
+    setTimeout(() => {
+      const fullReq = requests.find(r => r.sys_id === createdReq.sys_id);
+      if (fullReq) {
+        const isLeft = leftRequests.some(r => r.sys_id === fullReq.sys_id);
+        fullReq.executive_summary = null;
+        selectRequest(fullReq, 0, 0, isLeft ? 'LEFT' : 'RIGHT', true);
+      }
+    }, 3200); // Wait 3.2s for the initial node spawn animation to finish
   } catch(e) {
     alert(e.message);
   } finally {
@@ -1061,14 +1222,5 @@ if ($("createBtn")) $("createBtn").onclick = async () => {
   }
 };
 
-if ($("runAnalysisBtn")) {
-  $("runAnalysisBtn").onclick = () => {
-    if (activeReq) {
-      selectRequest(activeReq, 0, 0, activeSide || 'RIGHT', true);
-    }
-  };
-}
-
 // Initialize Splash Screen & Login Gateway
 initSplashAndLogin();
-init3DTilt();

@@ -27,7 +27,7 @@
 
 <!-- LOGIN SCREEN OVERLAY -->
 <div id="loginOverlay" class="login-overlay hidden-fade">
-  <div class="login-card 3d-card-tilt">
+  <div class="login-card">
     <div class="login-header">
       <div class="logo-icon-lg"></div>
       <h2>OptimusPricing</h2>
@@ -127,7 +127,7 @@
           <h2 id="rTitle">Enterprise Platform Modernization</h2>
           <div class="status-row">
             <span class="status-pill active" id="rStatus">READY</span>
-            <span class="date-text" id="rDate">Last update 01 Oct 2024</span>
+            <span class="date-text" id="rDate">Last update today</span>
           </div>
         </div>
 
@@ -191,11 +191,6 @@
             <button class="tag">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               Context
-            </button>
-            <button class="tag run-btn" id="runAnalysisBtn">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Run Analysis
-            </button>
           </div>
         </div>
       </div>
@@ -207,7 +202,7 @@
     <div class="expanded-3d-container">
 
       <!-- CARD 1: Commercial Intelligence -->
-      <div class="expanded-section-card 3d-card-tilt" id="secCommercial">
+      <div class="expanded-section-card" id="secCommercial">
         <div class="section-card-header">
           <div class="header-left">
             <div class="header-icon-box gold">
@@ -224,7 +219,7 @@
       </div>
 
       <!-- CARD 2: Pricing Intelligence -->
-      <div class="expanded-section-card 3d-card-tilt" id="secPricing">
+      <div class="expanded-section-card" id="secPricing">
         <div class="section-card-header">
           <div class="header-left">
             <div class="header-icon-box cyan">
@@ -289,7 +284,7 @@
       </div>
 
       <!-- CARD 3: Risk Intelligence -->
-      <div class="expanded-section-card 3d-card-tilt" id="secRisk">
+      <div class="expanded-section-card" id="secRisk">
         <div class="section-card-header">
           <div class="header-left">
             <div class="header-icon-box red">
@@ -323,7 +318,7 @@
       </div>
 
       <!-- CARD 4: Executive Strategy Synthesis -->
-      <div class="expanded-section-card 3d-card-tilt" id="secStrategy">
+      <div class="expanded-section-card" id="secStrategy">
         <div class="section-card-header">
           <div class="header-left">
             <div class="header-icon-box gold">
@@ -413,14 +408,14 @@
       </div>
       <button id="closeModal" style="background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1;margin-top:-4px;">×</button>
     </div>
-    <label>Customer<input id="fCustomer" class="modal-input" value="Google"></label>
-    <label>Product / Service<input id="fService" class="modal-input" value="Enterprise Platform Modernization"></label>
-    <label>Commercial Objective<textarea id="fObjective" class="modal-input">Evaluate a strategic transformation opportunity</textarea></label>
-    <label>Additional Context<textarea id="fContext" class="modal-input">Client is evaluating multiple transformation partners.</textarea></label>
+    <label>Customer<input id="fCustomer" class="modal-input" placeholder="e.g. Google" value=""></label>
+    <label>Product / Service<input id="fService" class="modal-input" placeholder="e.g. Enterprise Platform Modernization" value=""></label>
+    <label>Commercial Objective<textarea id="fObjective" class="modal-input" placeholder="Evaluate a strategic transformation opportunity"></textarea></label>
+    <label>Additional Context<textarea id="fContext" class="modal-input" placeholder="Client is evaluating multiple transformation partners."></textarea></label>
     <button id="createBtn" class="btn-primary">Create Analysis Request</button>
   </div>
 </div>
 
-<script src="/static/control_tower.js"></script>
+<script src="/static/control_tower.js?v=2"></script>
 </body>
 </html>

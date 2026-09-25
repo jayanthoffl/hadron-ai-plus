@@ -49,7 +49,7 @@ class ExtractionAgent:
 
         try:
             response = self._client.models.generate_content(
-                model="gemini-3.6-flash",
+                model="gemini-3.8-flash",
                 contents=prompt,
             )
             text = (response.text or "").strip()

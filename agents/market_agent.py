@@ -96,7 +96,7 @@ Return ONLY valid JSON:
 """
         try:
             response = self._client.models.generate_content(
-                model="gemini-3.6-flash",
+                model="gemini-3.8-flash",
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     tools=[{"google_search": {}}],
