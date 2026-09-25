@@ -17,5 +17,24 @@
                 "price_signal": 12700000
             }
         ]
+    },
+    "Manufacturing Automation": {
+        "competitors": [
+            {
+                "name": "Siemens Digital Industries",
+                "positioning": "Premium industrial automation and digital twin leader",
+                "price_signal": 5200000
+            },
+            {
+                "name": "Rockwell Automation",
+                "positioning": "Mid-market industrial AI and PLC integrator",
+                "price_signal": 3800000
+            },
+            {
+                "name": "PTC Industrial AI",
+                "positioning": "Specialized industrial AI and IoT consultancy",
+                "price_signal": 4500000
+            }
+        ]
     }
 }

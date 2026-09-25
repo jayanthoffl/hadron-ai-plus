@@ -1,0 +1,15 @@
+{
+    "overall_utilization": 0.68,
+    "available_billable_capacity": 0.32,
+    "quarterly_revenue_target": 12000000,
+    "confirmed_pipeline_value": 8400000,
+    "headcount": {
+        "solution_architects": 12,
+        "ai_engineers": 28,
+        "data_engineers": 22,
+        "project_managers": 8,
+        "total_billable": 70
+    },
+    "upcoming_commitments": [],
+    "notes": ""
+}

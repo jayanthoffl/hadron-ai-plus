@@ -13,8 +13,42 @@ class HadronRequest(BaseModel):
     document_text: str = ""
 
 
+class HadronIntent(BaseModel):
+    """
+    Structured extraction of what the ServiceNow request actually means.
+    Produced by ExtractionAgent (Gemini).
+    This is interpretation only — not commercial conclusions.
+    """
+    customer_name: str = ""
+    service_name: str = ""
+    service_catalog_key: str = "CUSTOM_SERVICE"   # exact catalog key or CUSTOM_SERVICE
+    objective_summary: str = ""
+    context_summary: str = ""
+    inferred_industry: str = ""                    # tagged as inference, not fact
+    key_requirements: List[str] = []
+    ambiguities: List[str] = []
+    extraction_confidence: float = 0.5
+    extraction_notes: str = ""
+
+
+class CommercialContext(BaseModel):
+    """
+    Deterministic commercial strategy signals derived from retrieved intelligence.
+    These influence scenario construction — not the underlying delivery cost.
+    """
+    strategic_importance_signal: str = "UNKNOWN"   # HIGH, MEDIUM, LOW, UNKNOWN
+    urgency_signal: str = "NORMAL"                 # HIGH, NORMAL, LOW
+    scope_complexity: float = 0.5
+    relationship_strength: str = "UNKNOWN"          # ESTABLISHED, NEW, UNKNOWN
+    customer_evidence_available: bool = False
+    service_evidence_available: bool = False
+    market_evidence_available: bool = False
+    data_completeness: float = 0.0                 # 0–1, drives confidence and risk
+
+
 class Evidence(BaseModel):
     source: str
+    evidence_type: str = "unknown"   # internal_evidence | model_inference | external | unknown
     statement: str
     confidence: float = Field(default=0.5, ge=0.0, le=1.0)
     timestamp: Optional[str] = None
@@ -22,6 +56,7 @@ class Evidence(BaseModel):
 
 class CustomerIntelligence(BaseModel):
     customer_name: str
+    data_availability: str = "NOT_FOUND"           # FOUND | NOT_FOUND
     industry: str = ""
     revenue: float = 0
     employee_count: int = 0
@@ -34,6 +69,7 @@ class CustomerIntelligence(BaseModel):
 
 class ServiceIntelligence(BaseModel):
     service_name: str
+    data_availability: str = "NOT_FOUND"           # FOUND | NOT_FOUND
     description: str = ""
     scope: List[str] = []
     complexity: float = 0.5
@@ -44,6 +80,7 @@ class ServiceIntelligence(BaseModel):
 
 
 class MarketIntelligence(BaseModel):
+    data_availability: str = "NOT_FOUND"           # FOUND | NOT_FOUND
     market_size_signal: str = ""
     demand_signal: str = ""
     pricing_environment: str = ""
@@ -61,6 +98,7 @@ class InternalEconomics(BaseModel):
     minimum_viable_price: float = 0
     target_margin: float = 0.30
     capacity_available: float = 0.0
+    economics_source: str = "NOT_FOUND"            # CATALOG | PARAMETRIC_BASELINE
 
 
 class Scenario(BaseModel):
@@ -100,5 +138,8 @@ class HadronResponse(BaseModel):
     risks: str
     evidence: str
     confidence: float
+
+    request_intent: str = ""
+    commercial_context: str = ""
 
     run_id: str = ""

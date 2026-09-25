@@ -22,5 +22,29 @@
             "Revenue growth",
             "Legacy modernization"
         ]
+    },
+    "Manufacturing Automation": {
+        "description": "End-to-end manufacturing process automation using industrial AI, robotics integration, and intelligent control systems.",
+        "scope": [
+            "Process analysis and automation design",
+            "Robotics and PLC integration",
+            "Industrial AI and anomaly detection",
+            "SCADA and MES connectivity",
+            "Operator training and change management"
+        ],
+        "complexity": 0.65,
+        "estimated_duration_months": 12,
+        "resource_requirements": {
+            "automation_engineers": 5,
+            "industrial_ai_engineers": 3,
+            "systems_integrators": 4,
+            "project_managers": 2
+        },
+        "value_drivers": [
+            "Production throughput improvement",
+            "Quality defect reduction",
+            "Labor cost optimization",
+            "Predictive maintenance"
+        ]
     }
 }

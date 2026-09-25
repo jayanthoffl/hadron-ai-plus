@@ -416,6 +416,78 @@ class RiskAgent:
                 )
             })
 
+
+        # =========================================================
+        # 10. DATA COMPLETENESS — Customer evidence missing
+        # =========================================================
+
+        customer_avail = getattr(customer, "data_availability", None)
+        if customer_avail == "NOT_FOUND":
+            risks.append({
+                "type": "DATA_COMPLETENESS",
+                "severity": "MEDIUM",
+                "title": "No internal customer evidence available",
+                "description": (
+                    "No internal CRM record was found for this customer. "
+                    "Customer strategic importance, relationship history, "
+                    "and account profile cannot be confirmed from internal data. "
+                    "Commercial strategy is based on service and market evidence only."
+                ),
+                "metric": {"customer_evidence": "NOT_FOUND"},
+                "mitigation": (
+                    "Obtain customer background, relationship history, and strategic "
+                    "classification before final commercial commitment."
+                ),
+            })
+
+        # =========================================================
+        # 11. DATA COMPLETENESS — Service not in delivery catalog
+        # =========================================================
+
+        service_avail = getattr(service, "data_availability", None)
+        economics_source = getattr(economics, "economics_source", None)
+
+        if service_avail == "NOT_FOUND" or economics_source == "PARAMETRIC_BASELINE":
+            risks.append({
+                "type": "DATA_COMPLETENESS",
+                "severity": "HIGH",
+                "title": "Service not in internal delivery catalog — parametric economics applied",
+                "description": (
+                    "The requested service has no historical delivery evidence in the "
+                    "internal catalog. Economics are based on a deterministic parametric "
+                    "baseline (complexity x duration x burn rate), not verified "
+                    "historical delivery cost data."
+                ),
+                "metric": {
+                    "service_evidence": service_avail or "UNKNOWN",
+                    "economics_source": economics_source or "UNKNOWN",
+                },
+                "mitigation": (
+                    "Review delivery requirements, obtain comparable historical estimates, "
+                    "and validate the parametric cost baseline before commercial commitment."
+                ),
+            })
+
+        # =========================================================
+        # 12. DATA COMPLETENESS — No market intelligence
+        # =========================================================
+
+        market_avail = getattr(market, "data_availability", None)
+        if market_avail == "NOT_FOUND":
+            risks.append({
+                "type": "DATA_COMPLETENESS",
+                "severity": "MEDIUM",
+                "title": "No internal competitive intelligence — price positioning unvalidated",
+                "description": (
+                    "No internal competitive price signals were found for this service. "
+                    "The commercial offer range cannot be validated against market benchmarks."
+                ),
+                "metric": {"market_evidence": "NOT_FOUND"},
+                "mitigation": (
+                    "Gather external market pricing intelligence before finalizing commercial terms."
+                ),
+            })
+
         # =========================================================
         # 9. NO-EVIDENCE FALLBACK
         # =========================================================

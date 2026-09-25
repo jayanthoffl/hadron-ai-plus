@@ -1,50 +1,72 @@
+"""
+CustomerAgent — Pure Python evidence retrieval. No Gemini.
+
+Looks up the normalized customer name from HadronIntent in customer.json.
+
+Returns:
+  data_availability = FOUND   → full CustomerIntelligence from internal CRM data
+  data_availability = NOT_FOUND → skeleton with explicit evidence gap
+"""
+
 import json
 from pathlib import Path
 
 from schemas import CustomerIntelligence, Evidence
 
-
-DATA_FILE = Path(__file__).parent.parent / "data" / "customer.json"
+_DATA_FILE = Path(__file__).parent.parent / "data" / "customer.json"
 
 
 class CustomerAgent:
 
     def __init__(self):
-        with open(DATA_FILE, "r", encoding="utf-8") as f:
-            self.customers = json.load(f)
+        with open(_DATA_FILE, "r", encoding="utf-8") as f:
+            self._customers = json.load(f)
 
-    def analyze(self, customer_name: str) -> CustomerIntelligence:
+    def analyze(self, intent) -> CustomerIntelligence:
+        name = intent.customer_name.strip() if intent.customer_name else ""
+        data = self._customers.get(name)
 
-        data = self.customers.get(customer_name)
-
-        if not data:
+        if data:
             return CustomerIntelligence(
-                customer_name=customer_name,
-                strategic_importance="Unknown"
+                customer_name=name,
+                data_availability="FOUND",
+                industry=data.get("industry", ""),
+                revenue=data.get("revenue", 0),
+                employee_count=data.get("employee_count", 0),
+                strategic_importance=data.get("strategic_importance", ""),
+                active_projects=data.get("active_projects", []),
+                existing_relationship=data.get("existing_relationship", ""),
+                known_needs=data.get("known_needs", []),
+                evidence=[
+                    Evidence(
+                        source="Internal CRM",
+                        evidence_type="internal_evidence",
+                        statement=(
+                            f"{name} found in internal customer database. "
+                            f"Industry: {data.get('industry', 'N/A')}. "
+                            f"Revenue: ${data.get('revenue', 0):,.0f}. "
+                            f"Employees: {data.get('employee_count', 0):,}. "
+                            f"Strategic importance: {data.get('strategic_importance', 'N/A')}."
+                        ),
+                        confidence=0.95,
+                    )
+                ],
             )
 
-        evidence = [
-            Evidence(
-                source="Internal CRM",
-                statement=f"Customer has {data['employee_count']} employees "
-                          f"and reported revenue of ${data['revenue']:,.0f}.",
-                confidence=0.95
-            ),
-            Evidence(
-                source="Internal Project System",
-                statement=f"Customer has {len(data['active_projects'])} active strategic projects.",
-                confidence=0.90
-            )
-        ]
-
+        # No internal record — NOT_FOUND is the explicit, truthful result.
+        # We do not invent revenue, relationships, or strategic classification.
         return CustomerIntelligence(
-            customer_name=customer_name,
-            industry=data["industry"],
-            revenue=data["revenue"],
-            employee_count=data["employee_count"],
-            strategic_importance=data["strategic_importance"],
-            active_projects=data["active_projects"],
-            existing_relationship=data["existing_relationship"],
-            known_needs=data["known_needs"],
-            evidence=evidence
+            customer_name=name,
+            data_availability="NOT_FOUND",
+            evidence=[
+                Evidence(
+                    source="Internal CRM",
+                    evidence_type="internal_evidence",
+                    statement=(
+                        f"No internal CRM record found for '{name}'. "
+                        f"Customer intelligence is unavailable from internal sources."
+                    ),
+                    confidence=0.0,
+                )
+            ],
         )

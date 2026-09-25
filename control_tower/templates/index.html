@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HADRON Control Tower — Pricing Intelligence</title>
+  <link rel="stylesheet" href="/static/control_tower.css">
+</head>
+<body>
+
+<!-- 1-TIME SPLASH LOADING SCREEN OVERLAY (1.5s) -->
+<div id="splashOverlay" class="splash-overlay">
+  <div class="splash-content-box">
+    <div class="splash-clean-title">OptimusPricing</div>
+    <div class="splash-sub-tag">HADRON EXECUTIVE PLATFORM</div>
+    
+    <div class="splash-progress-track">
+      <div class="splash-progress-fill"></div>
+    </div>
+    
+    <div class="splash-status-text">
+      <span class="splash-pulse-dot"></span>
+      <span id="splashLogText">Connecting to ServiceNow Instance...</span>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN SCREEN OVERLAY -->
+<div id="loginOverlay" class="login-overlay hidden-fade">
+  <div class="login-card 3d-card-tilt">
+    <div class="login-header">
+      <div class="logo-icon-lg"></div>
+      <h2>OptimusPricing</h2>
+      <p>ServiceNow Executive Portal Gateway</p>
+    </div>
+    <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="login-form">
+      <div class="input-field-group">
+        <label>User ID</label>
+        <div class="input-with-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="loginUser" value="admin" required placeholder="User ID">
+        </div>
+      </div>
+      <div class="input-field-group">
+        <label>Password</label>
+        <div class="input-with-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="loginPass" value="gM1T6@iJepI*" required placeholder="Password">
+        </div>
+      </div>
+      <div id="loginError" class="login-error-text" style="display:none;">Invalid ServiceNow credentials. Try again.</div>
+      <button type="submit" class="btn-login-submit">
+        <span>Sign In to Executive Gateway</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="logo">
+    <button class="icon-btn" style="margin-right:2px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="logo-icon"></div>
+    <div class="logo-text">HADRON<br><span>Pricing Platform</span></div>
+  </div>
+
+  <!-- Center Navigation Pills -->
+  <div class="nav-pills">
+    <button class="nav-pill active" onclick="scrollToSection('graphSection')">Overview</button>
+    <button class="nav-pill" onclick="scrollToSection('secCommercial')">Commercial</button>
+    <button class="nav-pill" onclick="scrollToSection('secPricing')">Pricing</button>
+    <button class="nav-pill" onclick="scrollToSection('secRisk')">Risk</button>
+    <button class="nav-pill" onclick="scrollToSection('secStrategy')">Strategy</button>
+  </div>
+
+  <div class="top-right">
+    <button id="newBtn" class="btn-outline gold">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New Analysis
+    </button>
+    <button class="btn-outline" onclick="loadRequests()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+      Sync ServiceNow
+    </button>
+    <button class="icon-btn" title="Toggle Theme">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="icon-btn" title="Search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <div class="avatar"></div>
+  </div>
+</div>
+
+<!-- MAIN PAGE WORKSPACE (SCROLLABLE SINGLE PAGE) -->
+<div class="main-workspace-scroll" id="mainWorkspaceScroll">
+
+  <!-- TOP SECTION: Interactive Node Network Canvas -->
+  <div class="graph-section-wrap" id="graphSection">
+    <svg id="svgLayer" class="svg-layer"></svg>
+    <div id="nodesLayer" class="nodes-layer"></div>
+
+    <!-- Bottom Dock Bar -->
+    <div class="bottom-panel-wrapper" id="rightPanel" style="display:none; opacity:0;">
+      <div class="panel-top-row">
+        <div class="pill-header" id="panelHeaderLabel">Analysis Overview</div>
+        <button class="btn-explore" id="exploreBtn" onclick="scrollToSection('secCommercial')">
+          Explore Details &rarr;
+        </button>
+      </div>
+
+      <div class="glass-card">
+        <!-- Section 1 – Title & Status -->
+        <div class="card-section">
+          <div class="cat-label">
+            <span class="icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </span>
+            COMMERCIAL REQUEST
+          </div>
+          <h2 id="rTitle">Enterprise Platform Modernization</h2>
+          <div class="status-row">
+            <span class="status-pill active" id="rStatus">READY</span>
+            <span class="date-text" id="rDate">Last update 01 Oct 2024</span>
+          </div>
+        </div>
+
+        <!-- Section 2 – Metrics Grid -->
+        <div class="kpi-row">
+          <div class="kpi-item">
+            <div class="kpi-label">BALANCED OFFER</div>
+            <div class="kpi-val accent-gold" id="rBalancedOffer">$28,919,118</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-label">BASE FLOOR</div>
+            <div class="kpi-val" id="rFloor">$25,147,059</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-label">TARGET MARGIN</div>
+            <div class="kpi-val" id="rMargin">32.0 %</div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-label">SCENARIO OFFERS</div>
+            <div class="kpi-val" id="rOffers">4</div>
+          </div>
+        </div>
+
+        <!-- Section 3 – Dual Donut Gauges -->
+        <div class="charts-row">
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 80 80" id="confDonut">
+              <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+              <circle cx="40" cy="40" r="30" fill="none" stroke="#e2c079" stroke-width="8"
+                      stroke-dasharray="1.5 188.5" stroke-linecap="round"
+                      transform="rotate(-90 40 40)" id="confArc"/>
+            </svg>
+            <div class="donut-label">
+              <span id="rConf">0.75%</span>
+              <small>CONFIDENCE</small>
+            </div>
+          </div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 80 80" id="marginDonut">
+              <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
+              <circle cx="40" cy="40" r="30" fill="none" stroke="#38bdf8" stroke-width="8"
+                      stroke-dasharray="60 188.5" stroke-linecap="round"
+                      transform="rotate(-90 40 40)" id="marginArc"/>
+            </svg>
+            <div class="donut-label">
+              <span id="rMarginD">32.0%</span>
+              <small>MARGIN</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4 – Query & Action Box -->
+        <div class="chat-section">
+          <div class="chat-input-row">
+            <input type="text" placeholder="Search request intelligence...">
+            <button class="send-btn" title="Send">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <div class="chat-tags">
+            <button class="tag">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Context
+            </button>
+            <button class="tag run-btn" id="runAnalysisBtn">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Run Analysis
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN BOTTOM SECTION: STANDALONE EXECUTIVE CARDS ────── -->
+  <div class="main-bottom-section" id="mainBottomSection">
+    <div class="expanded-3d-container">
+
+      <!-- CARD 1: Commercial Intelligence -->
+      <div class="expanded-section-card 3d-card-tilt" id="secCommercial">
+        <div class="section-card-header">
+          <div class="header-left">
+            <div class="header-icon-box gold">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </div>
+            <div>
+              <h3>Commercial Intelligence</h3>
+              <p>Offer scenarios and commercial outcomes</p>
+            </div>
+          </div>
+          <button class="sec-action-btn">View Scenario Details &rarr;</button>
+        </div>
+        <div id="mainOffers" class="expanded-offers-grid"></div>
+      </div>
+
+      <!-- CARD 2: Pricing Intelligence -->
+      <div class="expanded-section-card 3d-card-tilt" id="secPricing">
+        <div class="section-card-header">
+          <div class="header-left">
+            <div class="header-icon-box cyan">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <div>
+              <h3>Pricing Intelligence</h3>
+              <p>Deep analysis of commercial and cost structure</p>
+            </div>
+          </div>
+          <button class="sec-action-btn">View Full Pricing Analysis &rarr;</button>
+        </div>
+        
+        <div class="pricing-three-grid">
+          <!-- Sub-card 1: Offer Distribution -->
+          <div class="sub-chart-card">
+            <div class="sub-card-title">Offer Distribution</div>
+            <div class="chart-stage-large">
+              <div class="chart-3d-floor-shadow"></div>
+              <svg class="pie-3d-svg-large" viewBox="0 0 160 150" id="offerPie"></svg>
+            </div>
+            <div class="pie-legend-expanded" id="offerLegend"></div>
+          </div>
+
+          <!-- Sub-card 2: Cost vs Margin -->
+          <div class="sub-chart-card">
+            <div class="sub-card-title">Cost vs Margin</div>
+            <div class="chart-stage-large">
+              <div class="chart-3d-floor-shadow"></div>
+              <svg class="pie-3d-svg-large" viewBox="0 0 160 150" id="marginPie"></svg>
+            </div>
+            <div class="pie-legend-expanded" id="marginLegend"></div>
+          </div>
+
+          <!-- Sub-card 3: Market & Competitive Signals -->
+          <div class="sub-chart-card">
+            <div class="sub-card-title">Market & Competitive Signals</div>
+            <div class="bars-vertical-group">
+              <div class="bar-vert-item">
+                <div class="bar-vert-val" id="sigDemandVal">78%</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigDemandFill" style="height: 78%; background: linear-gradient(to top, #38bdf8, #818cf8);"></div></div>
+                <div class="bar-vert-label">Market Demand</div>
+              </div>
+              <div class="bar-vert-item">
+                <div class="bar-vert-val" id="sigCompVal">52%</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigCompFill" style="height: 52%; background: linear-gradient(to top, #818cf8, #c084fc);"></div></div>
+                <div class="bar-vert-label">Competitive Pressure</div>
+              </div>
+              <div class="bar-vert-item">
+                <div class="bar-vert-val" id="sigEnvVal">50%</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigEnvFill" style="height: 50%; background: linear-gradient(to top, #38bdf8, #34d399);"></div></div>
+                <div class="bar-vert-label">Pricing Environment</div>
+              </div>
+              <div class="bar-vert-item">
+                <div class="bar-vert-val" id="sigUrgVal">36%</div>
+                <div class="bar-vert-track"><div class="bar-vert-fill" id="sigUrgFill" style="height: 36%; background: linear-gradient(to top, #fb923c, #f87171);"></div></div>
+                <div class="bar-vert-label">Deal Urgency</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3: Risk Intelligence -->
+      <div class="expanded-section-card 3d-card-tilt" id="secRisk">
+        <div class="section-card-header">
+          <div class="header-left">
+            <div class="header-icon-box red">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+              <h3>Risk Intelligence</h3>
+              <p>Identified risks and potential impact</p>
+            </div>
+          </div>
+          <button class="sec-action-btn">View All Risk Signals &rarr;</button>
+        </div>
+
+        <div class="risk-two-grid">
+          <!-- Risk Donut -->
+          <div class="sub-chart-card">
+            <div class="sub-card-title">Risk Profile</div>
+            <div class="chart-stage-large">
+              <div class="chart-3d-floor-shadow"></div>
+              <svg class="pie-3d-svg-large" viewBox="0 0 160 150" id="riskPie"></svg>
+            </div>
+            <div class="pie-legend-expanded" id="riskLegend"></div>
+          </div>
+
+          <!-- Active Risk Signals List -->
+          <div class="sub-risk-list-card">
+            <div class="sub-card-title">Active Risk Signals</div>
+            <div id="mainRisks" class="expanded-risk-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4: Executive Strategy Synthesis -->
+      <div class="expanded-section-card 3d-card-tilt" id="secStrategy">
+        <div class="section-card-header">
+          <div class="header-left">
+            <div class="header-icon-box gold">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>
+            </div>
+            <div>
+              <h3>Executive Strategy Synthesis & AI Justification</h3>
+              <p>AI-generated strategic recommendation and commercial pricing rationale</p>
+            </div>
+          </div>
+          <button class="sec-action-btn">View Strategy Details &rarr;</button>
+        </div>
+
+        <div class="strategy-hero-content">
+          <div class="ai-justification-banner">
+            <div class="ai-just-header">
+              <div class="ai-just-tag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                AI EXECUTIVE JUSTIFICATION
+              </div>
+              <div class="balanced-figure-badge">
+                <span>RECOMMENDED BALANCED PRICE</span>
+                <strong id="balancedPriceBadge">$28,919,118</strong>
+              </div>
+            </div>
+
+            <div class="ai-just-grid">
+              <div class="ai-just-col">
+                <h5>Economic Floor & Margin Build</h5>
+                <p>The minimum viable floor is established at <strong>$25,147,059</strong> with a 32.0% baseline margin. The Recommended Balanced scenario price of <strong>$28,919,118</strong> achieves a <strong>40.9% expected margin</strong>, absorbing delivery complexity while staying within competitive threshold.</p>
+              </div>
+              <div class="ai-just-col">
+                <h5>Market Alignment & Risk Buffer</h5>
+                <p>Market intelligence indicates an <strong>80% intent match</strong> and a pricing environment signal of 0.5. High-severity risk signals (cost exceeding market baselines) are mitigated by positioning 15% above the minimum floor price.</p>
+              </div>
+            </div>
+          </div>
+
+          <h4 style="margin-top:20px;">Executive Commercial Summary</h4>
+          <p id="mainSummary">HADRON evaluated the opportunity using customer, service, market, internal economic, optimization, and deterministic risk signals. The internal economic model establishes a minimum viable price of $25,147,058.82 with a modeled target margin of 32.0%. The recommended approach is a Balanced commercial strategy ($28,919,118) with selective risk mitigation.</p>
+          
+          <div class="strategy-kpi-strip">
+            <div class="skpi-item">
+              <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+              <div>
+                <small>Balanced Offer</small>
+                <strong style="color:var(--gold)" id="skpiBalanced">$28,919,118</strong>
+              </div>
+            </div>
+            <div class="skpi-item">
+              <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+              <div>
+                <small>Min. Viable Price</small>
+                <strong>$25,147,059</strong>
+              </div>
+            </div>
+            <div class="skpi-item">
+              <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+              <div>
+                <small>Delivery Complexity</small>
+                <strong>0.82</strong>
+              </div>
+            </div>
+            <div class="skpi-item">
+              <div class="skpi-icon red"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+              <div>
+                <small>High-Severity Signals</small>
+                <strong>3</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- New Analysis Modal -->
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+      <div style="text-align:center;width:100%;">
+        <div style="font-size:0.64rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">New Pricing Request</div>
+        <h2>Commercial Opportunity</h2>
+      </div>
+      <button id="closeModal" style="background:none;border:none;color:var(--muted);font-size:1.6rem;cursor:pointer;line-height:1;margin-top:-4px;">×</button>
+    </div>
+    <label>Customer<input id="fCustomer" class="modal-input" value="Google"></label>
+    <label>Product / Service<input id="fService" class="modal-input" value="Enterprise Platform Modernization"></label>
+    <label>Commercial Objective<textarea id="fObjective" class="modal-input">Evaluate a strategic transformation opportunity</textarea></label>
+    <label>Additional Context<textarea id="fContext" class="modal-input">Client is evaluating multiple transformation partners.</textarea></label>
+    <button id="createBtn" class="btn-primary">Create Analysis Request</button>
+  </div>
+</div>
+
+<script src="/static/control_tower.js"></script>
+</body>
+</html>

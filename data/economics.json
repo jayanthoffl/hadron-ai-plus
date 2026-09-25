@@ -5,5 +5,12 @@
         "resource_cost": 6800000,
         "target_margin": 0.32,
         "available_capacity": 0.74
+    },
+    "Manufacturing Automation": {
+        "base_delivery_cost": 3500000,
+        "infrastructure_cost": 800000,
+        "resource_cost": 2200000,
+        "target_margin": 0.28,
+        "available_capacity": 0.60
     }
 }
