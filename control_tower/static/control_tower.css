@@ -1022,12 +1022,11 @@ textarea { min-height: 75px; resize: vertical; }
 
 /* ── ORB ADD REQUEST BUTTON ─────────────────── */
 .orb-add-btn {
-  position: absolute;
-  transform: translate(-50%, 0);
+  margin-top: 4px;
   background: rgba(226, 192, 121, 0.12);
   border: 1px solid rgba(226, 192, 121, 0.45);
   color: var(--gold);
-  padding: 6px 14px;
+  padding: 5px 14px;
   border-radius: 16px;
   font-size: 0.72rem;
   font-weight: 700;
@@ -1035,7 +1034,7 @@ textarea { min-height: 75px; resize: vertical; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.25s;
+  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.25s;
   font-family: inherit;
   backdrop-filter: blur(16px);
   z-index: 12;
@@ -1045,5 +1044,5 @@ textarea { min-height: 75px; resize: vertical; }
   background: rgba(226, 192, 121, 0.24);
   border-color: var(--gold);
   box-shadow: 0 0 18px var(--gold-glow);
-  transform: translate(-50%, -2px);
+  transform: translateY(-2px);
 }

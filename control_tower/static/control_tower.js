@@ -246,10 +246,10 @@ function renderGraphFrame() {
 
   const rootX = currentRootX;
   const rootY = cy;
-  const orbCenterY = rootY - 30; // Exact vertical center of the 3D sphere circle (.orb-core)
+  const orbCenterY = rootY - 45; // Exact vertical center of the 3D sphere circle (.orb-core)
   const activeCount = requests.length || 12;
 
-  // Render Center Orb
+  // Render Center Orb with Add Request button built-in for 100% lockstep physical movement
   renderNode('root', `
     <div class="orb-core"></div>
     <div class="orb-label">
@@ -257,15 +257,13 @@ function renderGraphFrame() {
       <p>HADRON Executive</p>
       <div class="orb-tag"><span class="dot-live"></span> ${activeCount} Active Deals</div>
     </div>
+    <button class="orb-add-btn" onclick="event.stopPropagation(); if ($('modal')) $('modal').classList.remove('hidden');">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Request
+    </button>
   `, rootX, rootY, "node-orb", handleOrbClick);
 
-  // Render Add Request Button below Orb
-  renderNode('orb-add-btn', `
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Add Request
-  `, rootX, rootY + 70, "orb-add-btn", () => {
-    if ($("modal")) $("modal").classList.remove("hidden");
-  });
+  hideNode('orb-add-btn');
 
   if (graphState === 'INITIAL') return;
 
