@@ -1,4 +1,141 @@
 {
+    "Infosys": {
+        "industry": "Information Technology & Consulting",
+        "revenue": 18500000000,
+        "employee_count": 328000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Global Strategic Alliance Partner (Tier 1)",
+        "active_projects": [
+            "Quantum-accelerated ERP migration framework",
+            "Enterprise GenAI application platform",
+            "Global delivery workforce automation"
+        ],
+        "known_needs": [
+            "Accelerate client SAP/ERP cloud migrations",
+            "Build differentiated quantum computing offerings",
+            "Improve delivery margin on fixed-price transformation programs"
+        ]
+    },
+    "Tata Consultancy Services": {
+        "industry": "Information Technology & Services",
+        "revenue": 29000000000,
+        "employee_count": 615000,
+        "strategic_importance": "High",
+        "existing_relationship": "Co-innovation & Technology Ecosystem Partner",
+        "active_projects": [
+            "Enterprise core modernization",
+            "Algorithmic risk engine"
+        ],
+        "known_needs": [
+            "Quantum algorithm benchmarking",
+            "Complex logistics routing for clients"
+        ]
+    },
+    "Wipro": {
+        "industry": "Information Technology & Services",
+        "revenue": 11000000000,
+        "employee_count": 240000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Active Technology Client",
+        "active_projects": [
+            "Cloud data platform migration"
+        ],
+        "known_needs": [
+            "Cost reduction in multi-cloud hosting",
+            "AI pipeline optimization"
+        ]
+    },
+    "Cognizant": {
+        "industry": "Information Technology & Services",
+        "revenue": 19400000000,
+        "employee_count": 345000,
+        "strategic_importance": "High",
+        "existing_relationship": "Strategic Systems Integration Partner",
+        "active_projects": [
+            "Healthcare payer core modernization",
+            "Life sciences data mesh"
+        ],
+        "known_needs": [
+            "Accelerated algorithmic solutions",
+            "Modernize legacy client billing"
+        ]
+    },
+    "Capgemini": {
+        "industry": "Information Technology & Consulting",
+        "revenue": 24000000000,
+        "employee_count": 360000,
+        "strategic_importance": "High",
+        "existing_relationship": "European Delivery Partner",
+        "active_projects": [
+            "Smart factory robotics integration"
+        ],
+        "known_needs": [
+            "Quantum-ready security frameworks",
+            "Industrial AI models"
+        ]
+    },
+    "DHL Courier": {
+        "industry": "Global Logistics & Supply Chain",
+        "revenue": 94000000000,
+        "employee_count": 590000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Global Enterprise Account (Tier 1)",
+        "active_projects": [
+            "Global fleet dynamic route optimization",
+            "Express parcel sortation hub automation",
+            "Cross-border customs predictive classification"
+        ],
+        "known_needs": [
+            "Reduce last-mile delivery miles and fuel consumption by 25-30%",
+            "Dynamic real-time package rerouting under flight delays and traffic congestion",
+            "Automated warehouse scheduling and package loading"
+        ]
+    },
+    "FedEx": {
+        "industry": "Logistics & Freight Services",
+        "revenue": 90000000000,
+        "employee_count": 530000,
+        "strategic_importance": "High",
+        "existing_relationship": "Active Commercial Opportunity",
+        "active_projects": [
+            "Network 2.0 dispatch modernization"
+        ],
+        "known_needs": [
+            "Aviation crew scheduling",
+            "Intermodal cargo routing optimization"
+        ]
+    },
+    "Maersk": {
+        "industry": "Ocean Shipping & Container Logistics",
+        "revenue": 51000000000,
+        "employee_count": 100000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Long-term Strategic Customer",
+        "active_projects": [
+            "Vessel berth and quay crane scheduling",
+            "Global empty container repositioning engine",
+            "End-to-end supply chain visibility twin"
+        ],
+        "known_needs": [
+            "Combinatorial container repositioning cost reduction",
+            "Bunker fuel efficiency optimization",
+            "Port congestion avoidance algorithms"
+        ]
+    },
+    "United Parcel Service (UPS)": {
+        "industry": "Logistics & Express Delivery",
+        "revenue": 91000000000,
+        "employee_count": 500000,
+        "strategic_importance": "High",
+        "existing_relationship": "Target Enterprise Account",
+        "active_projects": [
+            "ORION route guidance upgrade"
+        ],
+        "known_needs": [
+            "Quantum dispatch optimization",
+            "Hub load balancing"
+        ]
+    },
     "Acme Corporation": {
         "industry": "Industrial Technology",
         "revenue": 4200000000,
@@ -14,6 +151,614 @@
             "Reduce operational cost",
             "Modernize legacy platforms",
             "Improve decision intelligence"
+        ]
+    },
+    "Siemens": {
+        "industry": "Industrial Automation & Electrical Engineering",
+        "revenue": 84000000000,
+        "employee_count": 320000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Strategic Co-Development Partner",
+        "active_projects": [
+            "Factory automation digital twin",
+            "Predictive maintenance for gas turbines",
+            "Industrial edge IoT orchestration"
+        ],
+        "known_needs": [
+            "Real-time robotics motion path optimization",
+            "Zero-defect computer vision inspection",
+            "Energy consumption minimization in automated plants"
+        ]
+    },
+    "Schneider Electric": {
+        "industry": "Energy Management & Industrial Automation",
+        "revenue": 38000000000,
+        "employee_count": 150000,
+        "strategic_importance": "High",
+        "existing_relationship": "Tier 1 Enterprise Client",
+        "active_projects": [
+            "Smart microgrid load balancing",
+            "EcoStruxure AI services"
+        ],
+        "known_needs": [
+            "Grid power flow optimization",
+            "Data center cooling optimization"
+        ]
+    },
+    "Honeywell": {
+        "industry": "Aerospace & Industrial Technologies",
+        "revenue": 37000000000,
+        "employee_count": 95000,
+        "strategic_importance": "High",
+        "existing_relationship": "Active Commercial Customer",
+        "active_projects": [
+            "Building management AI",
+            "Avionics navigation analytics"
+        ],
+        "known_needs": [
+            "Quantum sensors integration",
+            "Industrial supply chain resilience"
+        ]
+    },
+    "Caterpillar": {
+        "industry": "Heavy Equipment & Machinery",
+        "revenue": 67000000000,
+        "employee_count": 113000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Client Account",
+        "active_projects": [
+            "Autonomous haulage system optimization"
+        ],
+        "known_needs": [
+            "Fleet telemetry analysis",
+            "Predictive component failure"
+        ]
+    },
+    "General Electric": {
+        "industry": "Aviation & Energy Systems",
+        "revenue": 68000000000,
+        "employee_count": 125000,
+        "strategic_importance": "High",
+        "existing_relationship": "Key Client",
+        "active_projects": [
+            "Turbine performance digital twin"
+        ],
+        "known_needs": [
+            "Combustion optimization",
+            "Maintenance turnaround scheduling"
+        ]
+    },
+    "3M": {
+        "industry": "Diversified Manufacturing & Chemicals",
+        "revenue": 33000000000,
+        "employee_count": 92000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Client Account",
+        "active_projects": [
+            "Supply chain inventory rationalization"
+        ],
+        "known_needs": [
+            "Formulation yield optimization",
+            "Specialty chemical demand forecasting"
+        ]
+    },
+    "BMW Group": {
+        "industry": "Automotive & Premium Mobility",
+        "revenue": 168000000000,
+        "employee_count": 154000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Strategic Innovation Partner",
+        "active_projects": [
+            "Quantum vehicle assembly line robot scheduling",
+            "Battery cell chemistry molecular simulation",
+            "Autonomous driving perception compute optimization"
+        ],
+        "known_needs": [
+            "Minimize assembly line paint shop changeovers using quantum annealing",
+            "Optimize solid-state battery material discovery",
+            "Vehicle fleet OTA software deployment scheduling"
+        ]
+    },
+    "Mercedes-Benz": {
+        "industry": "Automotive Manufacturing",
+        "revenue": 165000000000,
+        "employee_count": 166000,
+        "strategic_importance": "High",
+        "existing_relationship": "Key Enterprise Account",
+        "active_projects": [
+            "Electric drive train optimization",
+            "Connected car telemetry"
+        ],
+        "known_needs": [
+            "Production line throughput balancing",
+            "Logistics routing for spare parts"
+        ]
+    },
+    "Toyota": {
+        "industry": "Automotive Manufacturing",
+        "revenue": 290000000000,
+        "employee_count": 375000,
+        "strategic_importance": "High",
+        "existing_relationship": "Innovation Opportunity",
+        "active_projects": [
+            "Lean production scheduling digital twin"
+        ],
+        "known_needs": [
+            "Global Tier-1 supplier network synchronization",
+            "Robotics automation"
+        ]
+    },
+    "JPMorgan Chase": {
+        "industry": "Banking & Financial Services",
+        "revenue": 158000000000,
+        "employee_count": 310000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Tier 1 Global Financial Account",
+        "active_projects": [
+            "Quantum arbitrage and portfolio optimization",
+            "Real-time institutional credit risk evaluation",
+            "High-frequency algorithmic market-making engine"
+        ],
+        "known_needs": [
+            "Sub-millisecond portfolio rebalancing across global asset classes",
+            "Derivative pricing under stochastic volatility models",
+            "Anti-money laundering graph neural network inference"
+        ]
+    },
+    "Bank of America": {
+        "industry": "Banking & Wealth Management",
+        "revenue": 98000000000,
+        "employee_count": 213000,
+        "strategic_importance": "High",
+        "existing_relationship": "Enterprise Customer",
+        "active_projects": [
+            "Retail banking digital assistant",
+            "Mortgage underwriting automation"
+        ],
+        "known_needs": [
+            "Cloud risk modeling platform",
+            "Fraud detection speed improvement"
+        ]
+    },
+    "Goldman Sachs": {
+        "industry": "Investment Banking & Securities",
+        "revenue": 46000000000,
+        "employee_count": 45000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Strategic Client",
+        "active_projects": [
+            "Quantitative trading execution",
+            "Risk compute modernization"
+        ],
+        "known_needs": [
+            "Monte Carlo acceleration on quantum processors",
+            "Collateral optimization"
+        ]
+    },
+    "Morgan Stanley": {
+        "industry": "Wealth Management & Investment Banking",
+        "revenue": 54000000000,
+        "employee_count": 82000,
+        "strategic_importance": "High",
+        "existing_relationship": "Commercial Client",
+        "active_projects": [
+            "Wealth advisor AI copilot"
+        ],
+        "known_needs": [
+            "Tax-loss harvesting algorithmic engine",
+            "Regulatory stress testing automation"
+        ]
+    },
+    "HSBC": {
+        "industry": "Global Banking & Trade Finance",
+        "revenue": 66000000000,
+        "employee_count": 220000,
+        "strategic_importance": "High",
+        "existing_relationship": "Global Account",
+        "active_projects": [
+            "Global trade finance document parsing",
+            "Cross-border FX routing"
+        ],
+        "known_needs": [
+            "Liquidity forecasting across 40 markets",
+            "Correspondent banking compliance"
+        ]
+    },
+    "Allianz": {
+        "industry": "Insurance & Asset Management",
+        "revenue": 175000000000,
+        "employee_count": 159000,
+        "strategic_importance": "High",
+        "existing_relationship": "Key European Enterprise Client",
+        "active_projects": [
+            "Catastrophe risk modeling",
+            "Claims automated settlement"
+        ],
+        "known_needs": [
+            "Actuarial pricing modernization",
+            "Climate change risk scenario simulation"
+        ]
+    },
+    "Pfizer": {
+        "industry": "Pharmaceuticals & Biotechnology",
+        "revenue": 62000000000,
+        "employee_count": 88000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Key Life Sciences Account (Tier 1)",
+        "active_projects": [
+            "Quantum-enhanced molecular docking and drug discovery",
+            "Global clinical trial patient recruitment optimizer",
+            "Cold-chain vaccine distribution logistics"
+        ],
+        "known_needs": [
+            "Reduce in-silico screening time for novel protein binders from months to days",
+            "Optimize clinical trial cohort site selection and retention",
+            "Real-time temperature and shelf-life tracking across international shipping routes"
+        ]
+    },
+    "Novartis": {
+        "industry": "Pharmaceuticals & Healthcare",
+        "revenue": 45000000000,
+        "employee_count": 76000,
+        "strategic_importance": "High",
+        "existing_relationship": "Strategic Partner",
+        "active_projects": [
+            "Biologics manufacturing yield optimization"
+        ],
+        "known_needs": [
+            "AI-driven target discovery",
+            "Global regulatory dossier generation"
+        ]
+    },
+    "AstraZeneca": {
+        "industry": "Biopharmaceuticals",
+        "revenue": 48000000000,
+        "employee_count": 89000,
+        "strategic_importance": "High",
+        "existing_relationship": "Enterprise Customer",
+        "active_projects": [
+            "Oncology genomics data platform"
+        ],
+        "known_needs": [
+            "Genomic variant search acceleration",
+            "Synthetic clinical trial control arms"
+        ]
+    },
+    "Walmart": {
+        "industry": "Retail & E-Commerce",
+        "revenue": 648000000000,
+        "employee_count": 2100000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Strategic Retail Account (Tier 1)",
+        "active_projects": [
+            "Dynamic store fulfillment & grocery delivery dispatch",
+            "Omnichannel price elasticity optimization engine",
+            "Automated distribution center pallet packing"
+        ],
+        "known_needs": [
+            "Micro-pricing optimization across 140,000 SKUs per store",
+            "Multi-temperature grocery van delivery routing",
+            "Supplier fill-rate predictive replenishment"
+        ]
+    },
+    "Target": {
+        "industry": "Retail & Department Stores",
+        "revenue": 107000000000,
+        "employee_count": 415000,
+        "strategic_importance": "High",
+        "existing_relationship": "Commercial Account",
+        "active_projects": [
+            "Store replenishment forecasting",
+            "Curbside pickup optimization"
+        ],
+        "known_needs": [
+            "Promotion cannibalization modeling",
+            "Regional distribution balancing"
+        ]
+    },
+    "Nestl\u00e9": {
+        "industry": "Consumer Goods & Food Manufacturing",
+        "revenue": 105000000000,
+        "employee_count": 275000,
+        "strategic_importance": "High",
+        "existing_relationship": "Enterprise Customer",
+        "active_projects": [
+            "Global agricultural commodity hedging",
+            "Factory water reduction twin"
+        ],
+        "known_needs": [
+            "Raw material price forecasting",
+            "Global freight network rationalization"
+        ]
+    },
+    "Procter & Gamble": {
+        "industry": "Consumer Goods",
+        "revenue": 84000000000,
+        "employee_count": 107000,
+        "strategic_importance": "High",
+        "existing_relationship": "Key Client",
+        "active_projects": [
+            "Supply chain control tower",
+            "Consumer sentiment AI"
+        ],
+        "known_needs": [
+            "Packaging sustainability optimization",
+            "Trade promotion spending efficiency"
+        ]
+    },
+    "Unilever": {
+        "industry": "Consumer Goods",
+        "revenue": 65000000000,
+        "employee_count": 128000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Client Account",
+        "active_projects": [
+            "Demand sensing in emerging markets"
+        ],
+        "known_needs": [
+            "Direct-to-consumer logistics optimization",
+            "Carbon footprint accounting"
+        ]
+    },
+    "TotalEnergies": {
+        "industry": "Energy & Petrochemicals",
+        "revenue": 237000000000,
+        "employee_count": 102000,
+        "strategic_importance": "High",
+        "existing_relationship": "Enterprise Client",
+        "active_projects": [
+            "Offshore wind farm wake effect optimization",
+            "Refinery scheduling"
+        ],
+        "known_needs": [
+            "Renewable asset yield optimization",
+            "LNG shipping voyage planning"
+        ]
+    },
+    "BP": {
+        "industry": "Integrated Energy",
+        "revenue": 213000000000,
+        "employee_count": 87000,
+        "strategic_importance": "High",
+        "existing_relationship": "Client Account",
+        "active_projects": [
+            "Subsurface seismic imaging acceleration"
+        ],
+        "known_needs": [
+            "EV charging station network placement optimization",
+            "Emissions abatement tracking"
+        ]
+    },
+    "Shell": {
+        "industry": "Energy & Petrochemicals",
+        "revenue": 316000000000,
+        "employee_count": 103000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Key Strategic Account",
+        "active_projects": [
+            "Hydrogen pipeline network simulation",
+            "Global oil trading risk platform"
+        ],
+        "known_needs": [
+            "Quantum chemistry for carbon capture catalysts",
+            "Trading portfolio VaR acceleration"
+        ]
+    },
+    "Rio Tinto": {
+        "industry": "Mining & Metals",
+        "revenue": 54000000000,
+        "employee_count": 57000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Commercial Client",
+        "active_projects": [
+            "Autonomous train dispatch optimization (AutoHaul)"
+        ],
+        "known_needs": [
+            "Port stockpile blending optimization",
+            "Ore grade spatial modeling"
+        ]
+    },
+    "BHP": {
+        "industry": "Mining & Natural Resources",
+        "revenue": 53000000000,
+        "employee_count": 80000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Target Account",
+        "active_projects": [
+            "Mine-to-port supply chain synchronization"
+        ],
+        "known_needs": [
+            "Equipment maintenance schedule optimization",
+            "Decarbonization pathway analysis"
+        ]
+    },
+    "Boeing": {
+        "industry": "Aerospace & Defense",
+        "revenue": 77000000000,
+        "employee_count": 171000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Strategic Account",
+        "active_projects": [
+            "Commercial airplane fuselage assembly synchronization",
+            "Supply chain Tier-2 tracking"
+        ],
+        "known_needs": [
+            "Aerodynamic shape optimization via quantum CFD",
+            "Factory bottleneck mitigation"
+        ]
+    },
+    "Airbus": {
+        "industry": "Aerospace & Defense",
+        "revenue": 71000000000,
+        "employee_count": 134000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "European Strategic Account",
+        "active_projects": [
+            "Aircraft flight trajectory optimization",
+            "Wing structure lightweighting simulation"
+        ],
+        "known_needs": [
+            "Quantum algorithms for composite materials",
+            "Airline delivery ramp-up scheduling"
+        ]
+    },
+    "Lockheed Martin": {
+        "industry": "Aerospace, Defense & Security",
+        "revenue": 67000000000,
+        "employee_count": 116000,
+        "strategic_importance": "High",
+        "existing_relationship": "Defense Technology Partner",
+        "active_projects": [
+            "Quantum radar cross-section calculation",
+            "Autonomous mission swarming"
+        ],
+        "known_needs": [
+            "High-assurance cryptographic modernization",
+            "Post-quantum defense resilience"
+        ]
+    },
+    "Delta Air Lines": {
+        "industry": "Airlines & Aviation",
+        "revenue": 58000000000,
+        "employee_count": 100000,
+        "strategic_importance": "High",
+        "existing_relationship": "Key Client",
+        "active_projects": [
+            "Flight irregular operations recovery engine"
+        ],
+        "known_needs": [
+            "Aircraft tail assignment & crew replanning during weather disruptions",
+            "Fuel optimization"
+        ]
+    },
+    "Lufthansa": {
+        "industry": "Aviation Group",
+        "revenue": 38000000000,
+        "employee_count": 109000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Client Account",
+        "active_projects": [
+            "Cargo space volumetric packing optimization"
+        ],
+        "known_needs": [
+            "Dynamic pricing for ancillary services",
+            "Maintenance hangar slot scheduling"
+        ]
+    },
+    "Cisco Systems": {
+        "industry": "Networking & Cloud Infrastructure",
+        "revenue": 57000000000,
+        "employee_count": 84000,
+        "strategic_importance": "High",
+        "existing_relationship": "Strategic Alliance Partner",
+        "active_projects": [
+            "Enterprise SD-WAN traffic steering",
+            "Automated threat detection"
+        ],
+        "known_needs": [
+            "Packet routing optimization under node failure",
+            "Quantum key distribution (QKD) hardware integration"
+        ]
+    },
+    "AT&T": {
+        "industry": "Telecommunications & Digital Services",
+        "revenue": 122000000000,
+        "employee_count": 150000,
+        "strategic_importance": "High",
+        "existing_relationship": "Enterprise Account",
+        "active_projects": [
+            "Fiber buildout capital allocation optimization"
+        ],
+        "known_needs": [
+            "Cell tower antenna tilt & beamforming optimization",
+            "Customer churn prevention AI"
+        ]
+    },
+    "Vodafone": {
+        "industry": "Telecommunications",
+        "revenue": 47000000000,
+        "employee_count": 98000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "European Client",
+        "active_projects": [
+            "5G core network slice allocation"
+        ],
+        "known_needs": [
+            "Energy saving in base station sleep modes",
+            "Roaming revenue optimization"
+        ]
+    },
+    "Telef\u00f3nica": {
+        "industry": "Telecommunications",
+        "revenue": 44000000000,
+        "employee_count": 103000,
+        "strategic_importance": "Medium",
+        "existing_relationship": "Client Account",
+        "active_projects": [
+            "Broadband churn early warning engine"
+        ],
+        "known_needs": [
+            "Spectrum allocation optimization",
+            "B2B enterprise service automation"
+        ]
+    },
+    "Sony": {
+        "industry": "Consumer Electronics & Entertainment",
+        "revenue": 88000000000,
+        "employee_count": 113000,
+        "strategic_importance": "High",
+        "existing_relationship": "Client Account",
+        "active_projects": [
+            "CMOS image sensor yield optimization",
+            "PlayStation cloud gaming delivery"
+        ],
+        "known_needs": [
+            "Silicon defect visual classification",
+            "Global digital supply chain logistics"
+        ]
+    },
+    "Samsung Electronics": {
+        "industry": "Semiconductors & Consumer Electronics",
+        "revenue": 200000000000,
+        "employee_count": 270000,
+        "strategic_importance": "Critical",
+        "existing_relationship": "Key Technology Partner",
+        "active_projects": [
+            "Semiconductor fab wafer dispatch scheduling",
+            "Lithography defect analysis"
+        ],
+        "known_needs": [
+            "Fab cycle time minimization using quantum annealing",
+            "Cleanroom automated material handling (AMHS)"
+        ]
+    },
+    "Hitachi": {
+        "industry": "Industrial Conglomerate & Social Innovation",
+        "revenue": 67000000000,
+        "employee_count": 322000,
+        "strategic_importance": "High",
+        "existing_relationship": "Commercial Partner",
+        "active_projects": [
+            "High-speed rail timetable synchronization"
+        ],
+        "known_needs": [
+            "Urban grid demand management",
+            "Industrial OT/IT convergence cybersecurity"
+        ]
+    },
+    "Bosch": {
+        "industry": "Automotive & Industrial Technology",
+        "revenue": 98000000000,
+        "employee_count": 429000,
+        "strategic_importance": "High",
+        "existing_relationship": "Enterprise Customer",
+        "active_projects": [
+            "MEMS sensor calibration automation",
+            "Automotive ECU software testing"
+        ],
+        "known_needs": [
+            "Cross-plant supply chain transparency",
+            "Connected power tool predictive maintenance"
         ]
     }
 }

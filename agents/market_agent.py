@@ -29,9 +29,26 @@ class MarketAgent:
         api_key = os.environ.get("GEMINI_API_KEY", "")
         self._client = genai.Client(api_key=api_key) if api_key else None
 
+    def _find_competitors(self, key: str, fallback_name: str = ""):
+        if key and key in self._competitors:
+            return key, self._competitors[key]
+        candidates = [k for k in (key, fallback_name) if k and k != "CUSTOM_SERVICE"]
+        for c in candidates:
+            clean = c.strip().lower()
+            for s_name, s_data in self._competitors.items():
+                if s_name.strip().lower() == clean:
+                    return s_name, s_data
+            for s_name, s_data in self._competitors.items():
+                s_clean = s_name.strip().lower()
+                if clean in s_clean or s_clean in clean:
+                    return s_name, s_data
+        return None, None
+
     def analyze(self, intent) -> MarketIntelligence:
         catalog_key = intent.service_catalog_key or "CUSTOM_SERVICE"
-        competitor_data = self._competitors.get(catalog_key)
+        matched_key, competitor_data = self._find_competitors(catalog_key, intent.service_name)
+        if matched_key:
+            catalog_key = matched_key
 
         if competitor_data:
             competitors = competitor_data.get("competitors", [])

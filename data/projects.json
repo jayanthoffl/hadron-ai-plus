@@ -1,11 +1,500 @@
 {
-    "Acme Corporation": {
-        "active_budget": 18500000,
+    "Infosys": {
+        "active_budget": 64750000.0,
         "active_programs": 3,
-        "capacity_pressure": 0.62,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Quantum-accelerated ERP migration framework",
+            "Enterprise GenAI application platform",
+            "Global delivery workforce automation"
+        ],
+        "procurement_focus": "Accelerate client SAP/ERP cloud migrations"
+    },
+    "Tata Consultancy Services": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Enterprise core modernization",
+            "Algorithmic risk engine"
+        ],
+        "procurement_focus": "Quantum algorithm benchmarking"
+    },
+    "Wipro": {
+        "active_budget": 38500000.0,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Cloud data platform migration"
+        ],
+        "procurement_focus": "Cost reduction in multi-cloud hosting"
+    },
+    "Cognizant": {
+        "active_budget": 67900000.0,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Healthcare payer core modernization",
+            "Life sciences data mesh"
+        ],
+        "procurement_focus": "Accelerated algorithmic solutions"
+    },
+    "Capgemini": {
+        "active_budget": 84000000.0,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Smart factory robotics integration"
+        ],
+        "procurement_focus": "Quantum-ready security frameworks"
+    },
+    "DHL Courier": {
+        "active_budget": 85000000,
+        "active_programs": 3,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Global fleet dynamic route optimization",
+            "Express parcel sortation hub automation",
+            "Cross-border customs predictive classification"
+        ],
+        "procurement_focus": "Reduce last-mile delivery miles and fuel consumption by 25-30%"
+    },
+    "FedEx": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Network 2.0 dispatch modernization"
+        ],
+        "procurement_focus": "Aviation crew scheduling"
+    },
+    "Maersk": {
+        "active_budget": 85000000,
+        "active_programs": 3,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Vessel berth and quay crane scheduling",
+            "Global empty container repositioning engine",
+            "End-to-end supply chain visibility twin"
+        ],
+        "procurement_focus": "Combinatorial container repositioning cost reduction"
+    },
+    "United Parcel Service (UPS)": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "ORION route guidance upgrade"
+        ],
+        "procurement_focus": "Quantum dispatch optimization"
+    },
+    "Acme Corporation": {
+        "active_budget": 14700000.0,
+        "active_programs": 3,
+        "capacity_pressure": 0.75,
         "strategic_programs": [
             "Cloud modernization",
-            "AI transformation"
-        ]
+            "Enterprise analytics",
+            "Digital operations transformation"
+        ],
+        "procurement_focus": "Reduce operational cost"
+    },
+    "Siemens": {
+        "active_budget": 85000000,
+        "active_programs": 3,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Factory automation digital twin",
+            "Predictive maintenance for gas turbines",
+            "Industrial edge IoT orchestration"
+        ],
+        "procurement_focus": "Real-time robotics motion path optimization"
+    },
+    "Schneider Electric": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Smart microgrid load balancing",
+            "EcoStruxure AI services"
+        ],
+        "procurement_focus": "Grid power flow optimization"
+    },
+    "Honeywell": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Building management AI",
+            "Avionics navigation analytics"
+        ],
+        "procurement_focus": "Quantum sensors integration"
+    },
+    "Caterpillar": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Autonomous haulage system optimization"
+        ],
+        "procurement_focus": "Fleet telemetry analysis"
+    },
+    "General Electric": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Turbine performance digital twin"
+        ],
+        "procurement_focus": "Combustion optimization"
+    },
+    "3M": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Supply chain inventory rationalization"
+        ],
+        "procurement_focus": "Formulation yield optimization"
+    },
+    "BMW Group": {
+        "active_budget": 85000000,
+        "active_programs": 3,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Quantum vehicle assembly line robot scheduling",
+            "Battery cell chemistry molecular simulation",
+            "Autonomous driving perception compute optimization"
+        ],
+        "procurement_focus": "Minimize assembly line paint shop changeovers using quantum annealing"
+    },
+    "Mercedes-Benz": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Electric drive train optimization",
+            "Connected car telemetry"
+        ],
+        "procurement_focus": "Production line throughput balancing"
+    },
+    "Toyota": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Lean production scheduling digital twin"
+        ],
+        "procurement_focus": "Global Tier-1 supplier network synchronization"
+    },
+    "JPMorgan Chase": {
+        "active_budget": 85000000,
+        "active_programs": 3,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Quantum arbitrage and portfolio optimization",
+            "Real-time institutional credit risk evaluation",
+            "High-frequency algorithmic market-making engine"
+        ],
+        "procurement_focus": "Sub-millisecond portfolio rebalancing across global asset classes"
+    },
+    "Bank of America": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Retail banking digital assistant",
+            "Mortgage underwriting automation"
+        ],
+        "procurement_focus": "Cloud risk modeling platform"
+    },
+    "Goldman Sachs": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Quantitative trading execution",
+            "Risk compute modernization"
+        ],
+        "procurement_focus": "Monte Carlo acceleration on quantum processors"
+    },
+    "Morgan Stanley": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Wealth advisor AI copilot"
+        ],
+        "procurement_focus": "Tax-loss harvesting algorithmic engine"
+    },
+    "HSBC": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Global trade finance document parsing",
+            "Cross-border FX routing"
+        ],
+        "procurement_focus": "Liquidity forecasting across 40 markets"
+    },
+    "Allianz": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Catastrophe risk modeling",
+            "Claims automated settlement"
+        ],
+        "procurement_focus": "Actuarial pricing modernization"
+    },
+    "Pfizer": {
+        "active_budget": 85000000,
+        "active_programs": 3,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Quantum-enhanced molecular docking and drug discovery",
+            "Global clinical trial patient recruitment optimizer",
+            "Cold-chain vaccine distribution logistics"
+        ],
+        "procurement_focus": "Reduce in-silico screening time for novel protein binders from months to days"
+    },
+    "Novartis": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Biologics manufacturing yield optimization"
+        ],
+        "procurement_focus": "AI-driven target discovery"
+    },
+    "AstraZeneca": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Oncology genomics data platform"
+        ],
+        "procurement_focus": "Genomic variant search acceleration"
+    },
+    "Walmart": {
+        "active_budget": 85000000,
+        "active_programs": 3,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Dynamic store fulfillment & grocery delivery dispatch",
+            "Omnichannel price elasticity optimization engine",
+            "Automated distribution center pallet packing"
+        ],
+        "procurement_focus": "Micro-pricing optimization across 140,000 SKUs per store"
+    },
+    "Target": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Store replenishment forecasting",
+            "Curbside pickup optimization"
+        ],
+        "procurement_focus": "Promotion cannibalization modeling"
+    },
+    "Nestl\u00e9": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Global agricultural commodity hedging",
+            "Factory water reduction twin"
+        ],
+        "procurement_focus": "Raw material price forecasting"
+    },
+    "Procter & Gamble": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Supply chain control tower",
+            "Consumer sentiment AI"
+        ],
+        "procurement_focus": "Packaging sustainability optimization"
+    },
+    "Unilever": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Demand sensing in emerging markets"
+        ],
+        "procurement_focus": "Direct-to-consumer logistics optimization"
+    },
+    "TotalEnergies": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Offshore wind farm wake effect optimization",
+            "Refinery scheduling"
+        ],
+        "procurement_focus": "Renewable asset yield optimization"
+    },
+    "BP": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Subsurface seismic imaging acceleration"
+        ],
+        "procurement_focus": "EV charging station network placement optimization"
+    },
+    "Shell": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Hydrogen pipeline network simulation",
+            "Global oil trading risk platform"
+        ],
+        "procurement_focus": "Quantum chemistry for carbon capture catalysts"
+    },
+    "Rio Tinto": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Autonomous train dispatch optimization (AutoHaul)"
+        ],
+        "procurement_focus": "Port stockpile blending optimization"
+    },
+    "BHP": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Mine-to-port supply chain synchronization"
+        ],
+        "procurement_focus": "Equipment maintenance schedule optimization"
+    },
+    "Boeing": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Commercial airplane fuselage assembly synchronization",
+            "Supply chain Tier-2 tracking"
+        ],
+        "procurement_focus": "Aerodynamic shape optimization via quantum CFD"
+    },
+    "Airbus": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Aircraft flight trajectory optimization",
+            "Wing structure lightweighting simulation"
+        ],
+        "procurement_focus": "Quantum algorithms for composite materials"
+    },
+    "Lockheed Martin": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Quantum radar cross-section calculation",
+            "Autonomous mission swarming"
+        ],
+        "procurement_focus": "High-assurance cryptographic modernization"
+    },
+    "Delta Air Lines": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Flight irregular operations recovery engine"
+        ],
+        "procurement_focus": "Aircraft tail assignment & crew replanning during weather disruptions"
+    },
+    "Lufthansa": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Cargo space volumetric packing optimization"
+        ],
+        "procurement_focus": "Dynamic pricing for ancillary services"
+    },
+    "Cisco Systems": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Enterprise SD-WAN traffic steering",
+            "Automated threat detection"
+        ],
+        "procurement_focus": "Packet routing optimization under node failure"
+    },
+    "AT&T": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "Fiber buildout capital allocation optimization"
+        ],
+        "procurement_focus": "Cell tower antenna tilt & beamforming optimization"
+    },
+    "Vodafone": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "5G core network slice allocation"
+        ],
+        "procurement_focus": "Energy saving in base station sleep modes"
+    },
+    "Telef\u00f3nica": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.55,
+        "strategic_programs": [
+            "Broadband churn early warning engine"
+        ],
+        "procurement_focus": "Spectrum allocation optimization"
+    },
+    "Sony": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "CMOS image sensor yield optimization",
+            "PlayStation cloud gaming delivery"
+        ],
+        "procurement_focus": "Silicon defect visual classification"
+    },
+    "Samsung Electronics": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.92,
+        "strategic_programs": [
+            "Semiconductor fab wafer dispatch scheduling",
+            "Lithography defect analysis"
+        ],
+        "procurement_focus": "Fab cycle time minimization using quantum annealing"
+    },
+    "Hitachi": {
+        "active_budget": 85000000,
+        "active_programs": 1,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "High-speed rail timetable synchronization"
+        ],
+        "procurement_focus": "Urban grid demand management"
+    },
+    "Bosch": {
+        "active_budget": 85000000,
+        "active_programs": 2,
+        "capacity_pressure": 0.75,
+        "strategic_programs": [
+            "MEMS sensor calibration automation",
+            "Automotive ECU software testing"
+        ],
+        "procurement_focus": "Cross-plant supply chain transparency"
     }
 }

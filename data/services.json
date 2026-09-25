@@ -1,50 +1,541 @@
 {
-    "Enterprise AI Transformation": {
-        "description": "Enterprise-scale AI transformation covering strategy, data, AI engineering and operational deployment.",
+    "Advanced Routing Service for Fleet": {
+        "description": "Enterprise-scale dynamic vehicle routing and dispatch optimization combining quantum annealing with classical heuristics for real-time fleet operations.",
         "scope": [
-            "AI strategy",
-            "Data platform modernization",
-            "AI solution engineering",
-            "Production deployment",
-            "Change management"
+            "Fleet telemetry and routing constraint ingestion pipeline",
+            "Quantum-hybrid vehicle routing problem (QVRP) algorithmic engine",
+            "Real-time traffic, delivery time-windows, and vehicle capacity solver",
+            "Driver mobile navigation integration & dispatch console",
+            "Fleet fuel burn and emission tracking analytics dashboard"
+        ],
+        "complexity": 0.78,
+        "estimated_duration_months": 9,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "quantum_engineers": 2,
+            "ai_engineers": 4,
+            "data_engineers": 3,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "20-30% reduction in fleet fuel consumption and route miles",
+            "99.2% on-time delivery window compliance",
+            "Real-time dynamic route re-optimization under traffic and flight delays",
+            "Lower carbon emissions complying with regional ESG mandates"
+        ]
+    },
+    "Quantum based ERP System Migration": {
+        "description": "High-assurance enterprise ERP cloud modernization and data schema migration powered by quantum combinatorial dependency mapping and AI code conversion.",
+        "scope": [
+            "Legacy ERP (SAP ECC/Oracle) data dictionary & custom ABAP/SQL code extraction",
+            "Quantum-assisted business logic dependency graph & sequencing optimization",
+            "Automated data pipeline conversion, reconciliation, and schema transformation",
+            "Cutover simulation, rollback orchestration, and performance tuning",
+            "Enterprise change management and finance/HR user acceptance training"
+        ],
+        "complexity": 0.85,
+        "estimated_duration_months": 14,
+        "resource_requirements": {
+            "solution_architects": 3,
+            "principal_consultants": 2,
+            "ai_engineers": 5,
+            "data_engineers": 6,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "business_analysts": 3,
+            "qa_engineers": 3
+        },
+        "value_drivers": [
+            "60% reduction in ERP migration cutover downtime window",
+            "Zero data discrepancy across financial ledgers and material management",
+            "Elimination of technical debt in legacy custom reporting modules",
+            "Future-proof cloud ERP foundation with AI-driven reporting"
+        ]
+    },
+    "Enterprise AI Transformation": {
+        "description": "Enterprise-scale AI transformation covering corporate strategy, governed data platform modernization, custom AI solution engineering, and operational production deployment.",
+        "scope": [
+            "Enterprise AI governance, value realization roadmap, and architecture strategy",
+            "Modern data platform and feature store modernization",
+            "Custom LLM and predictive decision intelligence solution engineering",
+            "MLOps deployment pipeline with automated drift monitoring and security",
+            "Executive enablement and enterprise change management program"
         ],
         "complexity": 0.82,
         "estimated_duration_months": 18,
         "resource_requirements": {
             "solution_architects": 4,
-            "data_engineers": 8,
+            "principal_consultants": 2,
             "ai_engineers": 10,
-            "project_managers": 3
+            "data_engineers": 8,
+            "project_managers": 3,
+            "delivery_leads": 2,
+            "qa_engineers": 4
         },
         "value_drivers": [
-            "Operational efficiency",
-            "Decision automation",
-            "Revenue growth",
-            "Legacy modernization"
+            "Operational cost reduction across core business workflows",
+            "Automated executive and operational decision intelligence",
+            "Accelerated time-to-market for digital products and services",
+            "Institutionalized AI governance avoiding compliance penalties"
         ]
     },
     "Manufacturing Automation": {
-        "description": "End-to-end manufacturing process automation using industrial AI, robotics integration, and intelligent control systems.",
+        "description": "End-to-end manufacturing process automation using industrial AI, robotics motion integration, SCADA/MES connectivity, and intelligent closed-loop control systems.",
         "scope": [
-            "Process analysis and automation design",
-            "Robotics and PLC integration",
-            "Industrial AI and anomaly detection",
-            "SCADA and MES connectivity",
-            "Operator training and change management"
+            "Shop floor process analysis and automation engineering design",
+            "Robotics, PLC, and industrial controller integration",
+            "Edge AI inference for automated real-time defect detection",
+            "SCADA, MES, and enterprise ERP bi-directional connectivity",
+            "Operator safety, training, and change management deployment"
         ],
-        "complexity": 0.65,
+        "complexity": 0.68,
         "estimated_duration_months": 12,
         "resource_requirements": {
-            "automation_engineers": 5,
-            "industrial_ai_engineers": 3,
-            "systems_integrators": 4,
-            "project_managers": 2
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 4,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "robotics_specialists": 4,
+            "qa_engineers": 2
         },
         "value_drivers": [
-            "Production throughput improvement",
-            "Quality defect reduction",
-            "Labor cost optimization",
-            "Predictive maintenance"
+            "18% increase in manufacturing production throughput",
+            "Up to 45% reduction in scrap and quality defects",
+            "Labor cost optimization and ergonomic risk mitigation",
+            "Real-time OEE (Overall Equipment Effectiveness) visibility"
+        ]
+    },
+    "Quantum Portfolio Optimization": {
+        "description": "High-frequency asset allocation and multi-asset portfolio rebalancing engine leveraging quantum quadratic unconstrained binary optimization (QUBO) for investment banks and hedge funds.",
+        "scope": [
+            "Market tick data and covariance matrix calculation engine",
+            "QUBO formulation for transaction cost, turnover, and ESG constraints",
+            "Quantum-classical hybrid execution pipeline against live order book",
+            "Backtesting simulator across historical market crisis regimes",
+            "Regulatory market risk and VaR compliance reporting interface"
+        ],
+        "complexity": 0.84,
+        "estimated_duration_months": 8,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "quantum_engineers": 3,
+            "ai_engineers": 3,
+            "data_engineers": 3,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "Superior risk-adjusted returns (Sharpe ratio improvement of 0.3-0.5)",
+            "Scalable rebalancing across 5,000+ assets with non-convex constraints",
+            "Sub-second execution window reducing slippage and market impact",
+            "Deterministic stress testing under tail-risk market conditions"
+        ]
+    },
+    "Supply Chain Network Digital Twin": {
+        "description": "End-to-end digital twin modeling supplier tiers, distribution hubs, freight lanes, and customer demand with real-time what-if disruption simulation.",
+        "scope": [
+            "Multi-echelon supply chain graph model and data ingestion pipeline",
+            "Discrete event simulation engine synchronized with live ERP/TMS signals",
+            "Disruption scenario simulator (port strikes, geopolitical blocks, weather)",
+            "Automated inventory safety stock buffer optimization",
+            "Executive supply chain control tower dashboard and notification system"
+        ],
+        "complexity": 0.76,
+        "estimated_duration_months": 10,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 5,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "business_analysts": 2,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "Resilience against global supply disruptions with instant rerouting options",
+            "15-22% reduction in tied-up working capital inventory",
+            "Predictive detection of supplier component shortages 3 weeks in advance",
+            "Single source of truth for global logistics and manufacturing operations"
+        ]
+    },
+    "Predictive Maintenance & Asset Health": {
+        "description": "Industrial IoT acoustic, vibration, and thermal sensor analytics with deep learning to predict heavy machinery failures before unplanned outages occur.",
+        "scope": [
+            "High-frequency sensor telemetry ingestion pipeline at the industrial edge",
+            "Anomaly detection and remaining useful life (RUL) predictive models",
+            "Integration with enterprise asset management (SAP PM / IBM Maximo)",
+            "Automated work order creation and spare parts reservation workflow",
+            "Field technician augmented mobile diagnostics application"
+        ],
+        "complexity": 0.7,
+        "estimated_duration_months": 9,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 4,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "Up to 35% reduction in unplanned downtime in heavy manufacturing",
+            "20% extension of industrial asset operational lifespan",
+            "Optimized maintenance staffing avoiding costly emergency overtime",
+            "Lower insurance premiums on critical industrial infrastructure"
+        ]
+    },
+    "Algorithmic Pricing & Revenue Management": {
+        "description": "Multi-factor dynamic pricing engine estimating customer price elasticity, competitor reaction functions, and inventory perishability to maximize contribution margin.",
+        "scope": [
+            "Historical transactional sales and elasticity regression data pipeline",
+            "Competitor price crawling and real-time market signal processing",
+            "Constrained mathematical optimization solver for margin and volume targets",
+            "A/B testing framework for price policy validation",
+            "Commercial sales override and executive governance console"
+        ],
+        "complexity": 0.72,
+        "estimated_duration_months": 7,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 3,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "business_analysts": 2,
+            "qa_engineers": 1
+        },
+        "value_drivers": [
+            "2.5% to 5.0% direct increase in gross margin across product lines",
+            "Elimination of margin-eroding unapproved sales discounting",
+            "Instant dynamic response to competitor promotional campaigns",
+            "Transparent price justification aligning with enterprise buyer expectations"
+        ]
+    },
+    "Autonomous Warehouse Robotics Integration": {
+        "description": "Integration and orchestration of Autonomous Mobile Robots (AMRs) and Automated Storage and Retrieval Systems (ASRS) with warehouse management software.",
+        "scope": [
+            "Fleet manager interface and multi-robot traffic routing solver",
+            "WMS and ERP pick/pack/ship order prioritization pipeline",
+            "Dynamic warehouse slotting algorithm based on product velocity",
+            "Safety protocol verification and industrial wireless mesh configuration",
+            "Warehouse supervisor monitoring console and exception handling"
+        ],
+        "complexity": 0.75,
+        "estimated_duration_months": 11,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 3,
+            "data_engineers": 3,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "robotics_specialists": 4,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "300% increase in order picking speed and fulfillment accuracy",
+            "Significant mitigation of warehouse labor shortages",
+            "Reduction in workplace ergonomic strain and picking accidents",
+            "Higher warehouse storage density per square foot"
+        ]
+    },
+    "Customer 360 & GenAI Intelligence Platform": {
+        "description": "Unified customer data platform aggregating CRM, transactional, and behavioral touchpoints with conversational AI copilots for customer service and sales teams.",
+        "scope": [
+            "Identity resolution across legacy CRM, ERP, and e-commerce silos",
+            "Real-time event streaming and customer profile feature store",
+            "Enterprise retrieval-augmented generation (RAG) assistant for account reps",
+            "Automated churn prediction and next-best-action recommendation engine",
+            "Data privacy, consent management, and GDPR/CCPA compliance auditing"
+        ],
+        "complexity": 0.69,
+        "estimated_duration_months": 8,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 5,
+            "data_engineers": 4,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "30% reduction in customer service call handling time",
+            "15% increase in cross-sell and up-sell conversion rates",
+            "Single unified view of customer interactions across all channels",
+            "Instant answers for frontline sales and support reps"
+        ]
+    },
+    "Cybersecurity Zero Trust Modernization": {
+        "description": "Enterprise-wide transition to Zero Trust security architecture covering identity verification, micro-segmentation, continuous posture assessment, and automated incident response.",
+        "scope": [
+            "Enterprise identity and access management (IAM) modernization",
+            "Software-defined network micro-segmentation across hybrid clouds",
+            "Endpoint threat detection and automated SOAR playbook orchestration",
+            "Continuous compliance and vulnerability scanning automation",
+            "Security operations center (SOC) AI triage assistant deployment"
+        ],
+        "complexity": 0.77,
+        "estimated_duration_months": 12,
+        "resource_requirements": {
+            "solution_architects": 3,
+            "cybersecurity_specialists": 5,
+            "cloud_architects": 3,
+            "data_engineers": 2,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "80% reduction in lateral attack movement vulnerability",
+            "Accelerated mean time to detect (MTTD) and remediate threats",
+            "Fulfillment of stringent cyber insurance and defense compliance mandates",
+            "Frictionless secure access for remote and mobile enterprise workforce"
+        ]
+    },
+    "Cloud Native Infrastructure Migration": {
+        "description": "Migration of legacy on-premises data centers and monolithic applications to containerized Kubernetes and serverless architectures on hybrid multi-cloud.",
+        "scope": [
+            "Application discovery, dependency mapping, and 6R migration strategy",
+            "Terraform/Ansible infrastructure-as-code and landing zone automation",
+            "Database migration to managed cloud databases with zero data loss",
+            "CI/CD GitOps pipeline configuration with automated testing",
+            "FinOps cloud cost governance, tagging, and budget guardrails"
+        ],
+        "complexity": 0.74,
+        "estimated_duration_months": 10,
+        "resource_requirements": {
+            "solution_architects": 3,
+            "cloud_architects": 4,
+            "devops_engineers": 5,
+            "data_engineers": 3,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "30-40% savings in data center hosting and hardware refresh costs",
+            "Auto-scaling elastic infrastructure handling peak business surges",
+            "Developer deployment frequency increased from monthly to multiple times daily",
+            "Disaster recovery RPO/RTO reduced to under 15 minutes"
+        ]
+    },
+    "Real-Time Fraud Detection & Risk Analytics": {
+        "description": "Streaming graph analytics and machine learning pipeline scoring financial transactions for fraud and anti-money laundering in under 50 milliseconds.",
+        "scope": [
+            "Kafka/Flink real-time transaction streaming architecture",
+            "Graph database modeling account entities, devices, and fund flows",
+            "Dual-model inference (gradient boosted trees + graph neural network)",
+            "Fraud investigator case management interface with explainable AI hints",
+            "Regulatory SAR (Suspicious Activity Report) automated filing pipeline"
+        ],
+        "complexity": 0.79,
+        "estimated_duration_months": 9,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 5,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "50% reduction in financial loss from account takeovers and card fraud",
+            "70% reduction in false positive declines for legitimate customers",
+            "Sub-50ms decision latency integrated into payment authorization flow",
+            "Complete auditability for financial regulators and banking auditors"
+        ]
+    },
+    "Energy Grid Optimization & Load Balancing": {
+        "description": "AI and mathematical programming for electrical utilities to forecast renewable energy generation, balance grid loads, and optimize battery storage dispatch.",
+        "scope": [
+            "Weather satellite, solar, and wind telemetry ingestion pipeline",
+            "Sub-hourly load forecasting models for regional transmission zones",
+            "Nonlinear optimal power flow (OPF) unit commitment solver",
+            "Battery energy storage system (BESS) charge/discharge arbitrage engine",
+            "SCADA integration and transmission operator display interface"
+        ],
+        "complexity": 0.81,
+        "estimated_duration_months": 11,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 4,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "domain_specialists": 2,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "Maximized integration of volatile wind and solar without grid instability",
+            "Avoidance of costly peak peaker-plant startup fuel expenses",
+            "Optimal revenue generation from utility battery storage assets",
+            "Prevention of regional blackout risks during extreme weather events"
+        ]
+    },
+    "Drug Discovery Molecular Simulation": {
+        "description": "Quantum-classical computational chemistry pipeline simulating protein-ligand binding affinities and ADMET properties for pharmaceutical target discovery.",
+        "scope": [
+            "Cryo-EM and AlphaFold structural data processing pipeline",
+            "Variational quantum eigensolver (VQE) and tensor network simulation modules",
+            "High-throughput virtual screening of billion-compound chemical libraries",
+            "Bioavailability and toxicity (ADMET) predictive deep learning models",
+            "Medicinal chemist web interface for lead optimization and visualization"
+        ],
+        "complexity": 0.9,
+        "estimated_duration_months": 15,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "quantum_engineers": 4,
+            "ai_engineers": 4,
+            "data_engineers": 3,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "domain_specialists": 3,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "Reduction of preclinical drug candidate discovery timeline by 12 months",
+            "Millions saved in wet-lab assay synthesis and experimental testing",
+            "Identification of novel binding pockets invisible to classical docking",
+            "Proprietary intellectual property and patent protection on lead molecules"
+        ]
+    },
+    "Aviation Fleet Scheduling & Crew Allocation": {
+        "description": "Large-scale combinatorial optimization engine solving aircraft tail assignment, scheduled maintenance routing, and flight crew pairing under FAA/EASA rules.",
+        "scope": [
+            "Flight timetable, fleet availability, and airport gate constraint modeling",
+            "Mixed-integer programming (MIP) and column generation crew pairing solver",
+            "Dynamic disruption recovery engine for severe weather cancellations",
+            "Crew bidding, legality verification, and seniority preference engine",
+            "Airline operations center (AOC) dispatch controller dashboard"
+        ],
+        "complexity": 0.83,
+        "estimated_duration_months": 10,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 4,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "domain_specialists": 2,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "$15M-$30M annual operational savings in crew hotel, per diem, and overtime",
+            "Rapid aircraft tail swap optimization during maintenance delays",
+            "High compliance with union contracts and federal duty-time limits",
+            "Minimized passenger flight delay minutes and compensation costs"
+        ]
+    },
+    "Smart Factory MES & SCADA Modernization": {
+        "description": "Upgrade of legacy manufacturing execution systems to cloud-connected, event-driven architecture integrating industrial IoT and real-time genealogy tracking.",
+        "scope": [
+            "Shop floor sensor and PLC OPC-UA protocol bridging",
+            "Cloud-native manufacturing execution system (MES) implementation",
+            "Real-time lot tracking, electronic batch records, and component genealogy",
+            "Automated quality inspection gate integration",
+            "Plant manager OEE dashboards and predictive scrap alerts"
+        ],
+        "complexity": 0.73,
+        "estimated_duration_months": 11,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 3,
+            "data_engineers": 4,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "robotics_specialists": 2,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "100% paperless shop floor operations with electronic batch records",
+            "Instant traceability of defective components preventing wide product recalls",
+            "Real-time labor and machine utilization transparency across multiple plants",
+            "Compliance with ISO 9001 and industry-specific manufacturing standards"
+        ]
+    },
+    "Container Logistics & Port Berth Allocation": {
+        "description": "Maritime terminal optimization solving vessel berthing slots, quay crane allocation, yard stack management, and drayage truck appointments.",
+        "scope": [
+            "Vessel arrival AIS telemetry and terminal booking ingestion",
+            "Combinatorial berth allocation and quay crane scheduling solver",
+            "Container yard stacking optimization minimizing unproductive reshuffles",
+            "Automated gate truck appointment system and OCR container tracking",
+            "Terminal operating system (TOS) integration and real-time harbor view"
+        ],
+        "complexity": 0.8,
+        "estimated_duration_months": 12,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "ai_engineers": 4,
+            "data_engineers": 4,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "domain_specialists": 2,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "25% reduction in vessel turnaround and idle anchorage time",
+            "30% reduction in yard crane reshuffle moves per container",
+            "Minimized harbor pollution and diesel fuel burn from idling ships",
+            "Greater container throughput without costly physical harbor expansion"
+        ]
+    },
+    "Post-Quantum Cryptography Migration": {
+        "description": "Enterprise cryptographic inventory, risk assessment, and migration of legacy RSA/ECC public key infrastructure to NIST-standardized post-quantum algorithms.",
+        "scope": [
+            "Automated cryptographic discovery across networks, codebases, and databases",
+            "Quantum vulnerability risk assessment (Harvest Now, Decrypt Later threats)",
+            "Deployment of hybrid classical/PQC algorithms (Kyber, Dilithium, Falcon)",
+            "Hardware security module (HSM) and TLS certificate authority upgrades",
+            "Cryptographic agility governance framework and compliance documentation"
+        ],
+        "complexity": 0.82,
+        "estimated_duration_months": 13,
+        "resource_requirements": {
+            "solution_architects": 3,
+            "cybersecurity_specialists": 5,
+            "cloud_architects": 2,
+            "data_engineers": 2,
+            "project_managers": 2,
+            "delivery_leads": 1,
+            "qa_engineers": 2
+        },
+        "value_drivers": [
+            "Protection against impending quantum computer decryption of sensitive IP",
+            "Fulfillment of government defense and intelligence cryptographic mandates",
+            "Avoidance of costly emergency cryptographic overhaul when RSA is broken",
+            "Maintain customer trust and regulatory compliance in banking and defense"
+        ]
+    },
+    "Multi-Cloud FinOps Optimization": {
+        "description": "Cloud financial management framework implementing automated waste termination, committed-use discount optimization, and cost-allocation chargeback.",
+        "scope": [
+            "Multi-cloud billing data ingestion and unified cost allocation tagging",
+            "Automated idle resource and unattached storage cleanup policies",
+            "Reserved instance and savings plan portfolio purchase optimizer",
+            "Engineering team unit economics dashboards and anomaly alerts",
+            "FinOps cultural adoption workshops and executive accountability reviews"
+        ],
+        "complexity": 0.65,
+        "estimated_duration_months": 6,
+        "resource_requirements": {
+            "solution_architects": 2,
+            "cloud_architects": 3,
+            "data_engineers": 3,
+            "project_managers": 1,
+            "delivery_leads": 1,
+            "business_analysts": 2,
+            "qa_engineers": 1
+        },
+        "value_drivers": [
+            "Guaranteed 25-35% immediate reduction in multi-cloud hosting spend",
+            "Transparent unit economics mapping cloud spend directly to business revenue",
+            "Elimination of surprise end-of-month cloud invoice spikes",
+            "Empowerment of product engineers to build cost-efficient architectures"
         ]
     }
 }

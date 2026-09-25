@@ -22,9 +22,26 @@ class ServiceAgent:
         with open(_DATA_FILE, "r", encoding="utf-8") as f:
             self._services = json.load(f)
 
+    def _find_service(self, key: str, fallback_name: str = ""):
+        if key and key in self._services:
+            return key, self._services[key]
+        candidates = [k for k in (key, fallback_name) if k and k != "CUSTOM_SERVICE"]
+        for c in candidates:
+            clean = c.strip().lower()
+            for s_name, s_data in self._services.items():
+                if s_name.strip().lower() == clean:
+                    return s_name, s_data
+            for s_name, s_data in self._services.items():
+                s_clean = s_name.strip().lower()
+                if clean in s_clean or s_clean in clean:
+                    return s_name, s_data
+        return None, None
+
     def analyze(self, intent) -> ServiceIntelligence:
         catalog_key = intent.service_catalog_key or "CUSTOM_SERVICE"
-        data = self._services.get(catalog_key)
+        matched_key, data = self._find_service(catalog_key, intent.service_name)
+        if matched_key:
+            catalog_key = matched_key
 
         if data:
             return ServiceIntelligence(

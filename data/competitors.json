@@ -1,39 +1,381 @@
 {
+    "Advanced Routing Service for Fleet": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 7580000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 6940000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 6100000.0
+            }
+        ]
+    },
+    "Quantum based ERP System Migration": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 19540000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 17880000.0
+            },
+            {
+                "name": "McKinsey QuantumBlack",
+                "positioning": "High-tier strategic AI and advanced analytics practice",
+                "price_signal": 15730000.0
+            }
+        ]
+    },
     "Enterprise AI Transformation": {
         "competitors": [
             {
-                "name": "Competitor A",
-                "positioning": "Premium transformation partner",
-                "price_signal": 14500000
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 34320000.0
             },
             {
-                "name": "Competitor B",
-                "positioning": "Low-cost implementation provider",
-                "price_signal": 9800000
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 31410000.0
             },
             {
-                "name": "Competitor C",
-                "positioning": "Specialized AI consultancy",
-                "price_signal": 12700000
+                "name": "McKinsey QuantumBlack",
+                "positioning": "High-tier strategic AI and advanced analytics practice",
+                "price_signal": 27630000.0
             }
         ]
     },
     "Manufacturing Automation": {
         "competitors": [
             {
-                "name": "Siemens Digital Industries",
-                "positioning": "Premium industrial automation and digital twin leader",
-                "price_signal": 5200000
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 11620000.0
             },
             {
-                "name": "Rockwell Automation",
-                "positioning": "Mid-market industrial AI and PLC integrator",
-                "price_signal": 3800000
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 10640000.0
             },
             {
-                "name": "PTC Industrial AI",
-                "positioning": "Specialized industrial AI and IoT consultancy",
-                "price_signal": 4500000
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 9360000.0
+            }
+        ]
+    },
+    "Quantum Portfolio Optimization": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 6680000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 6110000.0
+            },
+            {
+                "name": "McKinsey QuantumBlack",
+                "positioning": "High-tier strategic AI and advanced analytics practice",
+                "price_signal": 5380000.0
+            }
+        ]
+    },
+    "Supply Chain Network Digital Twin": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 9100000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 8330000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 7320000.0
+            }
+        ]
+    },
+    "Predictive Maintenance & Asset Health": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 6610000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 6050000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 5320000.0
+            }
+        ]
+    },
+    "Algorithmic Pricing & Revenue Management": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 4980000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 4560000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 4010000.0
+            }
+        ]
+    },
+    "Autonomous Warehouse Robotics Integration": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 9560000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 8750000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 7690000.0
+            }
+        ]
+    },
+    "Customer 360 & GenAI Intelligence Platform": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 6310000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 5780000.0
+            },
+            {
+                "name": "McKinsey QuantumBlack",
+                "positioning": "High-tier strategic AI and advanced analytics practice",
+                "price_signal": 5080000.0
+            }
+        ]
+    },
+    "Cybersecurity Zero Trust Modernization": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 12970000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 11870000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 10440000.0
+            }
+        ]
+    },
+    "Cloud Native Infrastructure Migration": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 10750000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 9840000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 8650000.0
+            }
+        ]
+    },
+    "Real-Time Fraud Detection & Risk Analytics": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 7510000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 6880000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 6050000.0
+            }
+        ]
+    },
+    "Energy Grid Optimization & Load Balancing": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 10070000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 9210000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 8100000.0
+            }
+        ]
+    },
+    "Drug Discovery Molecular Simulation": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 17060000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 15620000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 13740000.0
+            }
+        ]
+    },
+    "Aviation Fleet Scheduling & Crew Allocation": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 9590000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 8780000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 7720000.0
+            }
+        ]
+    },
+    "Smart Factory MES & SCADA Modernization": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 8990000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 8230000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 7240000.0
+            }
+        ]
+    },
+    "Container Logistics & Port Berth Allocation": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 10980000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 10050000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 8840000.0
+            }
+        ]
+    },
+    "Post-Quantum Cryptography Migration": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 13170000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 12050000.0
+            },
+            {
+                "name": "McKinsey QuantumBlack",
+                "positioning": "High-tier strategic AI and advanced analytics practice",
+                "price_signal": 10600000.0
+            }
+        ]
+    },
+    "Multi-Cloud FinOps Optimization": {
+        "competitors": [
+            {
+                "name": "Accenture",
+                "positioning": "Premium global transformation integrator",
+                "price_signal": 4090000.0
+            },
+            {
+                "name": "IBM Quantum / Consulting",
+                "positioning": "Enterprise technology and quantum computing division",
+                "price_signal": 3740000.0
+            },
+            {
+                "name": "Deloitte",
+                "positioning": "Big 4 commercial enterprise advisory and delivery",
+                "price_signal": 3290000.0
             }
         ]
     }

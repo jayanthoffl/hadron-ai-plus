@@ -1,16 +1,142 @@
 {
+    "Advanced Routing Service for Fleet": {
+        "base_delivery_cost": 4495600.0,
+        "infrastructure_cost": 409000.0,
+        "resource_cost": 3405600,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Quantum based ERP System Migration": {
+        "base_delivery_cost": 11590800.0,
+        "infrastructure_cost": 1054000.0,
+        "resource_cost": 8780800,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
     "Enterprise AI Transformation": {
-        "base_delivery_cost": 9200000,
-        "infrastructure_cost": 1100000,
-        "resource_cost": 6800000,
-        "target_margin": 0.32,
-        "available_capacity": 0.74
+        "base_delivery_cost": 20357400.0,
+        "infrastructure_cost": 1851000.0,
+        "resource_cost": 15422400,
+        "target_margin": 0.3,
+        "available_capacity": 0.8
     },
     "Manufacturing Automation": {
-        "base_delivery_cost": 3500000,
-        "infrastructure_cost": 800000,
-        "resource_cost": 2200000,
-        "target_margin": 0.28,
-        "available_capacity": 0.60
+        "base_delivery_cost": 7387800.0,
+        "infrastructure_cost": 672000.0,
+        "resource_cost": 5596800,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
+    },
+    "Quantum Portfolio Optimization": {
+        "base_delivery_cost": 3961600.0,
+        "infrastructure_cost": 360000.0,
+        "resource_cost": 3001600,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Supply Chain Network Digital Twin": {
+        "base_delivery_cost": 5397000.0,
+        "infrastructure_cost": 491000.0,
+        "resource_cost": 4088000,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Predictive Maintenance & Asset Health": {
+        "base_delivery_cost": 4200400.0,
+        "infrastructure_cost": 382000.0,
+        "resource_cost": 3182400,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
+    },
+    "Algorithmic Pricing & Revenue Management": {
+        "base_delivery_cost": 3163800.0,
+        "infrastructure_cost": 288000.0,
+        "resource_cost": 2396800,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
+    },
+    "Autonomous Warehouse Robotics Integration": {
+        "base_delivery_cost": 6074400.0,
+        "infrastructure_cost": 552000.0,
+        "resource_cost": 4602400,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
+    },
+    "Customer 360 & GenAI Intelligence Platform": {
+        "base_delivery_cost": 4013000.0,
+        "infrastructure_cost": 365000.0,
+        "resource_cost": 3040000,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
+    },
+    "Cybersecurity Zero Trust Modernization": {
+        "base_delivery_cost": 7691200.0,
+        "infrastructure_cost": 699000.0,
+        "resource_cost": 5827200,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Cloud Native Infrastructure Migration": {
+        "base_delivery_cost": 6832000.0,
+        "infrastructure_cost": 621000.0,
+        "resource_cost": 5176000,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
+    },
+    "Real-Time Fraud Detection & Risk Analytics": {
+        "base_delivery_cost": 4456800.0,
+        "infrastructure_cost": 405000.0,
+        "resource_cost": 3376800,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Energy Grid Optimization & Load Balancing": {
+        "base_delivery_cost": 5971200.0,
+        "infrastructure_cost": 543000.0,
+        "resource_cost": 4523200,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Drug Discovery Molecular Simulation": {
+        "base_delivery_cost": 10122000.0,
+        "infrastructure_cost": 920000.0,
+        "resource_cost": 7668000,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Aviation Fleet Scheduling & Crew Allocation": {
+        "base_delivery_cost": 5691000.0,
+        "infrastructure_cost": 517000.0,
+        "resource_cost": 4312000,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Smart Factory MES & SCADA Modernization": {
+        "base_delivery_cost": 5715600.0,
+        "infrastructure_cost": 520000.0,
+        "resource_cost": 4329600,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
+    },
+    "Container Logistics & Port Berth Allocation": {
+        "base_delivery_cost": 6513400.0,
+        "infrastructure_cost": 592000.0,
+        "resource_cost": 4934400,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Post-Quantum Cryptography Migration": {
+        "base_delivery_cost": 7811600.0,
+        "infrastructure_cost": 710000.0,
+        "resource_cost": 5917600,
+        "target_margin": 0.3,
+        "available_capacity": 0.85
+    },
+    "Multi-Cloud FinOps Optimization": {
+        "base_delivery_cost": 2598000.0,
+        "infrastructure_cost": 236000.0,
+        "resource_cost": 1968000,
+        "target_margin": 0.25,
+        "available_capacity": 0.85
     }
 }

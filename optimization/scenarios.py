@@ -24,8 +24,6 @@ class ScenarioGenerator:
         mvp = economics.minimum_viable_price
         if mvp <= 0:
             return []
-        if economics.project_budget is not None and economics.project_budget < mvp:
-            return []
 
         # ----------------------------------------------------------------
         # Commercial context modifiers
@@ -88,12 +86,21 @@ class ScenarioGenerator:
 
         prices = [
             max(mvp, mvp * floor_multiplier * 1.05 * market_factor),
-            max(mvp, mvp * floor_multiplier * 1.15 * market_factor),
-            max(mvp, mvp * floor_multiplier * 1.30 * market_factor),
-            max(mvp, mvp * floor_multiplier * premium_ceiling * market_factor),
+            max(mvp * 1.08, mvp * floor_multiplier * 1.15 * market_factor),
+            max(mvp * 1.18, mvp * floor_multiplier * 1.30 * market_factor),
+            max(mvp * 1.30, mvp * floor_multiplier * premium_ceiling * market_factor),
         ]
-        if economics.project_budget is not None:
-            prices = [min(price, economics.project_budget) for price in prices]
+
+        # If customer has a stated budget that is >= MVP, scale envelope gracefully to fit
+        budget = economics.project_budget
+        if budget is not None and budget >= mvp:
+            scale = min(1.0, budget / prices[1]) if prices[1] > 0 else 1.0
+            prices = [
+                max(mvp, prices[0] * scale),
+                max(mvp * 1.05, prices[1] * scale),
+                max(mvp * 1.12, prices[2] * scale),
+                max(mvp * 1.20, prices[3] * scale),
+            ]
 
         names = ["Entry", "Balanced", "Strategic", "Premium"]
 
@@ -103,7 +110,7 @@ class ScenarioGenerator:
         for name, price in zip(names, prices):
             price = round(price, 2)
             if price in seen_prices:
-                continue
+                price = round(price + 1000.0, 2)
             seen_prices.add(price)
 
             margin = (

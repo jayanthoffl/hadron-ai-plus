@@ -1,15 +1,31 @@
 {
-    "overall_utilization": 0.68,
-    "available_billable_capacity": 0.32,
-    "quarterly_revenue_target": 12000000,
-    "confirmed_pipeline_value": 8400000,
+    "overall_utilization": 0.72,
+    "available_billable_capacity": 0.28,
+    "quarterly_revenue_target": 35000000,
+    "confirmed_pipeline_value": 26800000,
+    "pipeline_gap": 8200000,
     "headcount": {
-        "solution_architects": 12,
-        "ai_engineers": 28,
-        "data_engineers": 22,
-        "project_managers": 8,
-        "total_billable": 70
+        "solution_architects": 28,
+        "principal_consultants": 14,
+        "quantum_engineers": 16,
+        "ai_engineers": 82,
+        "data_engineers": 64,
+        "cloud_architects": 32,
+        "devops_engineers": 38,
+        "project_managers": 24,
+        "delivery_leads": 18,
+        "business_analysts": 26,
+        "qa_engineers": 35,
+        "domain_specialists": 15,
+        "cybersecurity_specialists": 12,
+        "total_billable": 404
     },
-    "upcoming_commitments": [],
-    "notes": ""
+    "bench_fte_by_discipline": {
+        "quantum_computing": 4.5,
+        "applied_ai": 22.0,
+        "data_engineering": 17.5,
+        "architecture_and_cloud": 16.0,
+        "delivery_management": 11.5
+    },
+    "notes": "Capacity constrained in Quantum Algorithm Specialists and Principal Architects for Q3/Q4."
 }

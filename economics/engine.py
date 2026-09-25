@@ -54,6 +54,21 @@ class EconomicsEngine:
         else:
             self.monthly_burn_rate = 50_000
 
+    def _find_economics(self, service_name: str):
+        if not service_name:
+            return None, None
+        if service_name in self._economics:
+            return service_name, self._economics[service_name]
+        clean = service_name.strip().lower()
+        for s_name, s_data in self._economics.items():
+            if s_name.strip().lower() == clean:
+                return s_name, s_data
+        for s_name, s_data in self._economics.items():
+            s_clean = s_name.strip().lower()
+            if clean in s_clean or s_clean in clean:
+                return s_name, s_data
+        return None, None
+
     def calculate(
         self,
         customer: CustomerIntelligence,
@@ -88,7 +103,7 @@ class EconomicsEngine:
         )
 
         service_name = service.service_name.strip() if service.service_name else ""
-        data = self._economics.get(service_name)
+        matched_name, data = self._find_economics(service_name)
 
         if data:
             # ---- Catalog-backed deterministic economics ----

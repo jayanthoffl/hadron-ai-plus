@@ -28,12 +28,30 @@ class CustomerAgent:
         except (OSError, json.JSONDecodeError):
             self._projects = {}
 
+    def _find_customer(self, name: str):
+        if not name:
+            return None, None
+        if name in self._customers:
+            return name, self._customers[name]
+        clean = name.strip().lower()
+        # Case-insensitive exact match
+        for c_name, c_data in self._customers.items():
+            if c_name.strip().lower() == clean:
+                return c_name, c_data
+        # Substring / alias match
+        for c_name, c_data in self._customers.items():
+            c_clean = c_name.strip().lower()
+            if clean in c_clean or c_clean in clean:
+                return c_name, c_data
+        return None, None
+
     def analyze(self, intent) -> CustomerIntelligence:
-        name = intent.customer_name.strip() if intent.customer_name else ""
-        data = self._customers.get(name)
+        raw_name = intent.customer_name.strip() if intent.customer_name else ""
+        matched_name, data = self._find_customer(raw_name)
+        name = matched_name or raw_name
 
         if data:
-            project_data = self._projects.get(name, {})
+            project_data = self._projects.get(name, {}) or self._projects.get(raw_name, {})
             return CustomerIntelligence(
                 customer_name=name,
                 data_availability="FOUND",
