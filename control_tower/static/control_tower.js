@@ -246,6 +246,8 @@ function renderGraphFrame() {
 
   const rootX = currentRootX;
   const rootY = cy;
+  const orbCenterY = rootY - 30; // Exact vertical center of the 3D sphere circle (.orb-core)
+  const activeCount = requests.length || 12;
 
   // Render Center Orb
   renderNode('root', `
@@ -253,7 +255,7 @@ function renderGraphFrame() {
     <div class="orb-label">
       <h3>Opportunity Pipeline</h3>
       <p>HADRON Executive</p>
-      <div class="orb-tag"><span class="dot-live"></span> 12 Active Deals</div>
+      <div class="orb-tag"><span class="dot-live"></span> ${activeCount} Active Deals</div>
     </div>
   `, rootX, rootY, "node-orb", handleOrbClick);
 
@@ -300,7 +302,7 @@ function renderGraphFrame() {
     `, leftX, y, cardClass, () => selectRequest(req, leftX, y, 'LEFT'), opacity, blurPx);
 
     const HALF = 110;
-    drawLine(`root-${req.sys_id}`, rootX - 32, rootY, leftX + HALF, y, isActive, opacity, blurPx);
+    drawLine(`root-${req.sys_id}`, rootX - 32, orbCenterY, leftX + HALF, y, isActive, opacity, blurPx);
   });
 
   // Render RIGHT Column Cards (Odd - Max 3)
@@ -330,7 +332,7 @@ function renderGraphFrame() {
     `, rightX, y, cardClass, () => selectRequest(req, rightX, y, 'RIGHT'), opacity, blurPx);
 
     const HALF = 110;
-    drawLine(`root-${req.sys_id}`, rootX + 32, rootY, rightX - HALF, y, isActive, opacity, blurPx);
+    drawLine(`root-${req.sys_id}`, rootX + 32, orbCenterY, rightX - HALF, y, isActive, opacity, blurPx);
   });
 
   // Continuously render fanned factor cards glued to selected card every frame
