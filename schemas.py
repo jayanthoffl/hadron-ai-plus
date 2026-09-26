@@ -27,11 +27,11 @@ class HadronIntent(BaseModel):
     inferred_industry: str = ""                    # tagged as inference, not fact
     estimated_complexity: Optional[float] = None     # planning estimate; not verified scope
     estimated_duration_months: Optional[int] = None  # planning estimate; not verified scope
-    estimated_resource_requirements: Dict[str, int] = {}
+    estimated_resource_requirements: Optional[Dict[str, Any]] = Field(default_factory=dict)
     service_estimate_notes: str = ""
-    service_estimate_confidence: float = 0.0
-    key_requirements: List[str] = []
-    ambiguities: List[str] = []
+    service_estimate_confidence: Optional[float] = 0.0
+    key_requirements: List[str] = Field(default_factory=list)
+    ambiguities: List[str] = Field(default_factory=list)
     extraction_confidence: float = 0.5
     extraction_notes: str = ""
 

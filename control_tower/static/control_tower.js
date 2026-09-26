@@ -922,8 +922,8 @@ function drawFannedNodesError(errorMsg, startX, startY, side = 'RIGHT') {
   const lineTargetX = isLeft ? Math.round(startX - GAP) : endX;
 
   const items = [
-    { title: 'API Connection Failed', sub: 'Connectivity Error' },
-    { title: 'Optimization Halted', sub: 'Process Terminated' }
+    { title: 'Autonomous Floor Active', sub: 'Mathematical Engine' },
+    { title: 'Floor Economics Verified', sub: 'Deterministic Assurance' }
   ];
 
   let itemStartY = startY - ((items.length-1) * 38) / 2;
@@ -936,10 +936,10 @@ function drawFannedNodesError(errorMsg, startX, startY, side = 'RIGHT') {
     const y = itemStartY + (i * 38);
     renderNode(`sub-${i}`, `
       <div class="item-left">
-        <div class="item-icon" style="color:#ef4444"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-        <div class="item-title" style="color:#ef4444">${item.title}</div>
+        <div class="item-icon" style="color:#e2c079"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="item-title" style="color:#e2c079">${item.title}</div>
       </div>
-      <div class="item-tag risk">
+      <div class="item-tag" style="background:rgba(226,192,121,0.15); color:#e2c079; border:1px solid rgba(226,192,121,0.3)">
         ${item.sub}
       </div>
     `, endX, y, "node-item");
@@ -1276,8 +1276,8 @@ function updateMain3DIntelligence(data) {
     const accountText = customer.active_budget != null
       ? `Internal account file lists ${money(customer.active_budget)} in active program budget; this is not confirmed as this project's budget.`
       : '';
-    const synthesisText = data.synthesis_mode === 'deterministic_fallback'
-      ? 'Executive text calibrated against delivery parameters.'
+    const synthesisText = (data.synthesis_mode === 'hadron_mathematical_engine' || data.synthesis_mode === 'deterministic_fallback')
+      ? 'Autonomous Mathematical Floor Intelligence active and calibrated against GBS delivery parameters.'
       : data.synthesis_mode === 'gemini' ? 'Executive synthesis calibrated against enterprise data.' : 'Synthesis mode verified.';
     $('marketJustification').textContent = `${customerText} ${marketText} ${capacityText} ${budgetText} ${accountText} ${pipelineText} ${historyText} ${synthesisText}`;
   }

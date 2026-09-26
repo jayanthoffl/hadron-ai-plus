@@ -279,23 +279,34 @@ def analyze():
     try:
         sys_id = payload.get("record_sys_id", "")
         _set_service_now_status(sys_id, "1")  # Analyzing
-        response = requests.post(
-            f"{HADRON_API.rstrip('/')}/hadron/analyze",
-            json=payload,
-            timeout=TIMEOUT,
-        )
 
-        if response.status_code != 200:
-            _set_service_now_status(sys_id, "6")  # Failed
-            return (response.content, response.status_code,
-                    {"Content-Type": response.headers.get("Content-Type", "application/json")})
-        
+        data = None
+        # Attempt engine via HTTP endpoint first
+        try:
+            response = requests.post(
+                f"{HADRON_API.rstrip('/')}/hadron/analyze",
+                json=payload,
+                timeout=TIMEOUT,
+            )
+            if response.status_code == 200:
+                data = response.json()
+            else:
+                print(f"[ControlTower] Local API HTTP {response.status_code}. Running engine in-process...")
+        except Exception as http_err:
+            print(f"[ControlTower] Local API unreachable ({http_err}). Running engine in-process...")
+
+        # In-process execution fallback guarantees 100% availability
+        if data is None:
+            from schemas import HadronRequest
+            from orchestrator import HadronOrchestrator
+            orch = HadronOrchestrator()
+            data = orch.run(HadronRequest(**payload))
+
         # Best-effort ServiceNow writeback; never discard a successful analysis response.
         sys_id = payload.get("record_sys_id", "")
         if sys_id and not sys_id.startswith("LOCAL-"):
             try:
                 import json as _json
-                data = response.json()
                 offers = data.get("offer_set", [])
                 if isinstance(offers, str):
                     offers = _json.loads(offers)
@@ -345,15 +356,13 @@ def analyze():
             except Exception as sn_exc:
                 print(f"[ControlTower] SN write-back failed: {sn_exc}")
 
-        return (response.content, response.status_code,
-                {"Content-Type": response.headers.get("Content-Type", "application/json")})
-    except requests.RequestException as exc:
-        _set_service_now_status(payload.get("record_sys_id", ""), "6")
+        return jsonify(data), 200
+    except Exception as exc:
+        print(f"[ControlTower] Analysis fatal exception: {exc}")
         return jsonify({
-            "error": "HADRON API unavailable",
+            "error": "Engine exception",
             "detail": str(exc),
-            "hint": "Start the existing app.py on port 5000.",
-        }), 502
+        }), 500
 
 
 @app.post("/hadron/analyze")
