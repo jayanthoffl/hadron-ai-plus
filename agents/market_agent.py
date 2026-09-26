@@ -12,6 +12,7 @@ Returns:
 import json
 import os
 from pathlib import Path
+import re
 from google import genai
 from google.genai import types
 
@@ -113,19 +114,23 @@ Return ONLY valid JSON:
   "summary_statement": "A brief summary of what the live search revealed."
 }}
 """
+        from gemini_pool import gemini_key_pool
         try:
-            response = self._client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    tools=[{"google_search": {}}],
-                    temperature=0.2,
+            response = gemini_key_pool.execute_with_failover(
+                lambda client: client.models.generate_content(
+                    model="gemini-3.8-flash",
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        tools=[{"google_search": {}}],
+                        temperature=0.2,
+                    )
                 )
             )
             
             text = (response.text or "").strip()
-            if text.startswith("```"):
-                text = text.replace("```json", "").replace("```", "").strip()
+            json_match = re.search(r"\{.*\}", text, re.DOTALL)
+            if json_match:
+                text = json_match.group(0)
                 
             data = json.loads(text)
             
@@ -152,37 +157,44 @@ Return ONLY valid JSON:
             )
         except Exception as e:
             print(f"[MarketAgent] Live search failed: {e}. Trying standard Gemini inference.")
-            try:
-                resp = self._client.models.generate_content(
-                    model="gemini-3.8-flash",
-                    contents=prompt
-                )
-                text = (resp.text or "").strip()
-                if text.startswith("```"):
-                    text = text.replace("```json", "").replace("```", "").strip()
-                data = json.loads(text)
-                ref_price = float(data["market_reference_price"]) if data.get("market_reference_price") is not None else 850000.0
-                return MarketIntelligence(
-                    data_availability="INFERRED",
-                    market_size_signal="Enterprise Demand",
-                    demand_signal="Active",
-                    pricing_environment=data.get("pricing_environment", "Competitive Enterprise IT Market"),
-                    volatility=0.45,
-                    competitor_signals=data.get("competitor_signals", ["Tier-1 SI benchmark: $600k - $1.2M"]),
-                    market_reference_price=ref_price,
-                    market_factors=data.get("market_factors", ["Specialized quantum/cyber skills premium", "Enterprise compliance mandates"]),
-                    evidence=[
-                        Evidence(
-                            source="Gemini Market Intelligence Inference",
-                            evidence_type="model_inference",
-                            statement=data.get("summary_statement", f"Market reference rate estimated at ${ref_price:,.0f}."),
-                            confidence=0.75,
+            for model_name in ["gemini-3.8-flash", "gemini-flash-latest"]:
+                try:
+                    resp = gemini_key_pool.execute_with_failover(
+                        lambda client: client.models.generate_content(
+                            model=model_name,
+                            contents=prompt
                         )
-                    ]
-                )
-            except Exception as e2:
-                print(f"[MarketAgent] Standard inference failed: {e2}. Using parametric market reference.")
-                return self._deterministic_fallback(intent.service_catalog_key or "CUSTOM_SERVICE")
+                    )
+                    text = (resp.text or "").strip()
+                    json_match = re.search(r"\{.*\}", text, re.DOTALL)
+                    if json_match:
+                        text = json_match.group(0)
+                    data = json.loads(text)
+                    ref_price = float(data["market_reference_price"]) if data.get("market_reference_price") is not None else 850000.0
+                    return MarketIntelligence(
+                        data_availability="INFERRED",
+                        market_size_signal="Enterprise Demand",
+                        demand_signal="Active",
+                        pricing_environment=data.get("pricing_environment", "Competitive Enterprise IT Market"),
+                        volatility=0.45,
+                        competitor_signals=data.get("competitor_signals", ["Tier-1 SI benchmark: $600k - $1.2M"]),
+                        market_reference_price=ref_price,
+                        market_factors=data.get("market_factors", ["Specialized quantum/cyber skills premium", "Enterprise compliance mandates"]),
+                        evidence=[
+                            Evidence(
+                                source="Parametric Market Inference (Gemini)",
+                                evidence_type="inferred",
+                                statement=f"Market price benchmark inferred at ${ref_price:,.0f} for enterprise scope.",
+                                confidence=0.7,
+                            )
+                        ]
+                    )
+                except Exception as model_err:
+                    print(f"[MarketAgent] {model_name} inference failed: {model_err}")
+                    continue
+
+            print("[MarketAgent] All Gemini models unavailable. Using parametric market reference.")
+            return self._deterministic_fallback(intent.service_catalog_key or "CUSTOM_SERVICE")
             
     def _deterministic_fallback(self, catalog_key: str) -> MarketIntelligence:
         return MarketIntelligence(

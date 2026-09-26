@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask, request, jsonify
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
@@ -116,9 +118,12 @@ def run_quantum_pricing():
     """
     
     try:
-        response = client.models.generate_content(
-            model='gemini-3.8-flash',
-            contents=prompt
+        from gemini_pool import gemini_key_pool
+        response = gemini_key_pool.execute_with_failover(
+            lambda c: c.models.generate_content(
+                model='gemini-3.8-flash',
+                contents=prompt
+            )
         )
         ai_explanation = response.text or ""
     except Exception as gemini_err:

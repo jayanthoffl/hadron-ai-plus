@@ -4,7 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HADRON Control Tower — Pricing Intelligence</title>
-  <link rel="stylesheet" href="/static/control_tower.css?v=8">
+  <link rel="stylesheet" href="/static/control_tower.css?v=17">
+  <script>
+    if (sessionStorage.getItem('optimus_splash_done') === 'true') {
+      document.documentElement.classList.add('splash-bypassed');
+    }
+  </script>
 </head>
 <body>
 
@@ -29,24 +34,18 @@
 <div id="loginOverlay" class="login-overlay hidden-fade">
   <div class="login-card">
     <div class="login-header">
-      <div class="logo-icon-lg"></div>
+      <div class="login-brand-kicker">HADRON EXECUTIVE SUITE</div>
       <h2>OptimusPricing</h2>
       <p>ServiceNow Executive Portal Gateway</p>
     </div>
     <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="login-form">
       <div class="input-field-group">
         <label>User ID</label>
-        <div class="input-with-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <input type="text" id="loginUser" value="admin" required placeholder="User ID">
-        </div>
+        <input type="text" id="loginUser" class="form-input" value="admin" required placeholder="User ID">
       </div>
       <div class="input-field-group">
         <label>Password</label>
-        <div class="input-with-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" id="loginPass" value="gM1T6@iJepI*" required placeholder="Password">
-        </div>
+        <input type="password" id="loginPass" class="form-input" value="gM1T6@iJepI*" required placeholder="Password">
       </div>
       <div id="loginError" class="login-error-text" style="display:none;">Invalid ServiceNow credentials. Try again.</div>
       <button type="submit" class="btn-login-submit">
@@ -59,9 +58,6 @@
 <!-- TOP BAR (MATCHES MOCKUP) -->
 <div class="top-bar">
   <div class="logo">
-    <div class="logo-icon-gold">
-      <div class="logo-icon-inner"></div>
-    </div>
     <div class="logo-text-wrap">
       <div class="logo-title">HADRON</div>
       <div class="logo-sub">Pricing Intelligence Platform</div>
@@ -111,15 +107,12 @@
     <div class="canvas-hero-text" id="canvasHeroText">
       <div class="hero-kicker"><span class="kicker-dot"></span> COMMERCIAL INTELLIGENCE</div>
       <h1 class="hero-title">Turn Opportunities<br>into <span class="gradient-text">Profitable Growth</span></h1>
-      <p class="hero-subtitle">AI + Quantum powered pricing, grounded in your data.</p>
+      <p class="hero-subtitle">Algorithmic & Quantum-Calibrated Pricing Engine, Grounded in Real Enterprise Data.</p>
     </div>
 
-    <!-- Floating Homepage Executive Live Metrics Strip (Matches Mockup) -->
+    <!-- Floating Homepage Executive Live Metrics Strip -->
     <div id="homeHudStrip" class="home-hud-strip">
       <div class="hud-item" onclick="openAllRequestsModal()" title="View all active deals in pipeline">
-        <div class="hud-item-icon blue">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        </div>
         <div class="hud-item-text">
           <strong id="hudDealCount">7</strong>
           <span>Pipeline Deals</span>
@@ -127,9 +120,6 @@
       </div>
       
       <div class="hud-item" onclick="openCompanyDirectoryModal('companies')" title="Open Client & Partner Directory">
-        <div class="hud-item-icon blue">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
         <div class="hud-item-text">
           <strong id="hudCompanyCount">51</strong>
           <span>Client Accounts</span>
@@ -137,9 +127,6 @@
       </div>
 
       <div class="hud-item" onclick="openCompanyDirectoryModal('services')" title="Open Delivery Catalog">
-        <div class="hud-item-icon blue">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        </div>
         <div class="hud-item-text">
           <strong id="hudServiceCount">20</strong>
           <span>Delivery Catalog</span>
@@ -147,14 +134,11 @@
       </div>
 
       <div class="hud-item" onclick="openCompanyDirectoryModal('economics')" title="View Hadron GBS Delivery Rate Cards & QAOA Solver">
-        <div class="hud-item-icon blue">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
         <div class="hud-item-text">
           <strong>QAOA</strong>
           <span>Quantum Solver</span>
         </div>
-        <span class="hud-active-pill"><span class="dot-live"></span> Active</span>
+        <span class="hud-active-pill">Active</span>
       </div>
     </div>
 
@@ -172,19 +156,19 @@
         <div class="card-section">
           <div class="cat-label">
             <span class="icon">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             </span>
             COMMERCIAL REQUEST
           </div>
           <h2 id="rTitle">Enterprise Platform Modernization</h2>
-          <div class="status-row" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-            <div style="display:flex; align-items:center; gap:8px;">
+          <div class="status-row">
+            <div class="status-date-wrap">
               <span class="status-pill active" id="rStatus">READY</span>
               <span class="date-text" id="rDate">Last update today</span>
             </div>
-            <div class="deal-status-actions" id="activeDealActions" style="display:flex; gap:6px;">
-              <button class="btn-deal-action won" onclick="markActiveDealOutcome('5')" title="Mark deal as Closed Won in ServiceNow">🏆 Won</button>
-              <button class="btn-deal-action lost" onclick="markActiveDealOutcome('6')" title="Mark deal as Closed Lost in ServiceNow">✗ Lost</button>
+            <div class="deal-status-actions" id="activeDealActions">
+              <button class="btn-deal-action won" onclick="markActiveDealOutcome('5')" title="Mark deal as Closed Won in ServiceNow"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Won</button>
+              <button class="btn-deal-action lost" onclick="markActiveDealOutcome('6')" title="Mark deal as Closed Lost in ServiceNow"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Lost</button>
             </div>
           </div>
         </div>
@@ -212,11 +196,11 @@
         <!-- Section 3 – Dual Donut Gauges -->
         <div class="charts-row">
           <div class="donut-wrap">
-            <svg class="donut-svg" viewBox="0 0 80 80" id="confDonut">
-              <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
-              <circle cx="40" cy="40" r="30" fill="none" stroke="#e2c079" stroke-width="8"
-                      stroke-dasharray="1.5 188.5" stroke-linecap="round"
-                      transform="rotate(-90 40 40)" id="confArc"/>
+            <svg class="donut-svg" viewBox="0 0 88 88" id="confDonut">
+              <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="6.5"/>
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#e2c079" stroke-width="6.5"
+                      stroke-dasharray="1.5 213.6" stroke-linecap="round"
+                      transform="rotate(-90 44 44)" id="confArc"/>
             </svg>
             <div class="donut-label">
               <span id="rConf">—</span>
@@ -224,11 +208,11 @@
             </div>
           </div>
           <div class="donut-wrap">
-            <svg class="donut-svg" viewBox="0 0 80 80" id="marginDonut">
-              <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="8"/>
-              <circle cx="40" cy="40" r="30" fill="none" stroke="#38bdf8" stroke-width="8"
-                      stroke-dasharray="60 188.5" stroke-linecap="round"
-                      transform="rotate(-90 40 40)" id="marginArc"/>
+            <svg class="donut-svg" viewBox="0 0 88 88" id="marginDonut">
+              <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="6.5"/>
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#38bdf8" stroke-width="6.5"
+                      stroke-dasharray="60 213.6" stroke-linecap="round"
+                      transform="rotate(-90 44 44)" id="marginArc"/>
             </svg>
             <div class="donut-label">
               <span id="rMarginD">—</span>
@@ -237,18 +221,26 @@
           </div>
         </div>
 
-        <!-- Section 4 – Query & Action Box -->
-        <div class="chat-section">
-          <div class="chat-input-row">
-            <input type="text" placeholder="Search request intelligence...">
-            <button class="send-btn" title="Send">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-          <div class="chat-tags">
-            <button class="tag">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              Context
+        <!-- Section 4 – Commercial Governance Specification -->
+        <div class="governance-meta-section">
+          <div class="gov-meta-header">COMMERCIAL GOVERNANCE</div>
+          <div class="gov-meta-grid">
+            <div class="gov-meta-item">
+              <span class="gov-meta-label">Optimization Engine</span>
+              <span class="gov-meta-val"><span class="engine-indicator"></span>Qiskit QAOA</span>
+            </div>
+            <div class="gov-meta-item">
+              <span class="gov-meta-label">Pipeline Reference</span>
+              <span class="gov-meta-val mono" id="rGovTicket">PRI-ACTIVE</span>
+            </div>
+            <div class="gov-meta-item">
+              <span class="gov-meta-label">Commercial Model</span>
+              <span class="gov-meta-val" id="rGovModel">Fixed Delivery Pod</span>
+            </div>
+            <div class="gov-meta-item">
+              <span class="gov-meta-label">Assurance Status</span>
+              <span class="gov-meta-val status-verified">Verified Floor</span>
+            </div>
           </div>
         </div>
       </div>
@@ -263,9 +255,6 @@
       <div class="expanded-section-card" id="secCommercial">
         <div class="section-card-header">
           <div class="header-left">
-            <div class="header-icon-box gold">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            </div>
             <div>
               <h3>Commercial Intelligence</h3>
               <p>Offer scenarios and commercial outcomes</p>
@@ -280,9 +269,6 @@
       <div class="expanded-section-card" id="secPricing">
         <div class="section-card-header">
           <div class="header-left">
-            <div class="header-icon-box cyan">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            </div>
             <div>
               <h3>Pricing Intelligence</h3>
               <p>Deep analysis of commercial and cost structure</p>
@@ -345,9 +331,6 @@
       <div class="expanded-section-card" id="secRisk">
         <div class="section-card-header">
           <div class="header-left">
-            <div class="header-icon-box red">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            </div>
             <div>
               <h3>Risk Intelligence</h3>
               <p>Identified risks and potential impact</p>
@@ -379,11 +362,8 @@
       <div class="expanded-section-card" id="secStrategy">
         <div class="section-card-header">
           <div class="header-left">
-            <div class="header-icon-box gold">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>
-            </div>
             <div>
-              <h3>Executive Strategy Synthesis & AI Justification</h3>
+              <h3>Executive Strategy Synthesis & Commercial Rationale</h3>
               <p>Analysis summary and evidence-backed pricing rationale</p>
             </div>
           </div>
@@ -395,7 +375,7 @@
             <div class="ai-just-header">
               <div class="ai-just-tag">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                AI EXECUTIVE JUSTIFICATION
+                EXECUTIVE COMMERCIAL RATIONALE
               </div>
               <div class="balanced-figure-badge">
               <span>BALANCED SCENARIO</span>
@@ -421,32 +401,20 @@
           
           <div class="strategy-kpi-strip">
             <div class="skpi-item">
-              <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-              <div>
-                <small>Balanced Offer</small>
-                <strong style="color:var(--gold)" id="skpiBalanced">—</strong>
-              </div>
+              <small>Balanced Offer</small>
+              <strong style="color:var(--gold)" id="skpiBalanced">—</strong>
             </div>
             <div class="skpi-item">
-              <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-              <div>
-                <small>Min. Viable Price</small>
-                <strong id="skpiFloor">—</strong>
-              </div>
+              <small>Min. Viable Price</small>
+              <strong id="skpiFloor">—</strong>
             </div>
             <div class="skpi-item">
-              <div class="skpi-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-              <div>
-                <small>Delivery Complexity</small>
-                <strong id="skpiComplexity">—</strong>
-              </div>
+              <small>Delivery Complexity</small>
+              <strong id="skpiComplexity">—</strong>
             </div>
             <div class="skpi-item">
-              <div class="skpi-icon red"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
-              <div>
-                <small>High-Severity Signals</small>
-                <strong id="skpiHighRisks">—</strong>
-              </div>
+              <small>High-Severity Signals</small>
+              <strong id="skpiHighRisks">—</strong>
             </div>
           </div>
         </div>
@@ -492,8 +460,8 @@
       <div class="filter-pills" id="allReqFilterPills">
         <button class="filter-pill active" onclick="setReqStatusFilter('ALL', this)">All Deals</button>
         <button class="filter-pill" onclick="setReqStatusFilter('READY', this)">Ready / Analyzed</button>
-        <button class="filter-pill" onclick="setReqStatusFilter('APPROVED', this)">🏆 Closed Won</button>
-        <button class="filter-pill" onclick="setReqStatusFilter('FAILED', this)">✗ Closed Lost</button>
+        <button class="filter-pill" onclick="setReqStatusFilter('APPROVED', this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Closed Won</button>
+        <button class="filter-pill" onclick="setReqStatusFilter('FAILED', this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Closed Lost</button>
         <button class="filter-pill" onclick="setReqStatusFilter('ANALYZING', this)">Analyzing</button>
         <button class="filter-pill" onclick="setReqStatusFilter('DRAFT', this)">Draft / New</button>
       </div>
@@ -539,23 +507,26 @@
     <div class="hub-tab-bar">
       <button class="hub-tab-btn active" id="tabBtnCompanyProfile" onclick="switchHubTab('companyProfile')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Our Company Profile (Hadron GBS)
+        <span>Our Company Profile (Hadron GBS)</span>
       </button>
       <button class="hub-tab-btn" id="tabBtnCompanies" onclick="switchHubTab('companies')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Client Accounts (<span id="hubCountCustomers">51</span>)
+        <span>Client Accounts</span>
+        <span class="hub-tab-count" id="hubCountCustomers">51</span>
       </button>
       <button class="hub-tab-btn" id="tabBtnServices" onclick="switchHubTab('services')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        Service Catalog (<span id="hubCountServices">20</span>)
+        <span>Service Catalog</span>
+        <span class="hub-tab-count" id="hubCountServices">20</span>
       </button>
       <button class="hub-tab-btn" id="tabBtnDeals" onclick="switchHubTab('deals')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-        Closed Deals & Precedents (<span id="hubCountDeals">72</span>)
+        <span>Closed Deals & Precedents</span>
+        <span class="hub-tab-count" id="hubCountDeals">72</span>
       </button>
       <button class="hub-tab-btn" id="tabBtnEconomics" onclick="switchHubTab('economics')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M17 10h-7.5a2.5 2.5 0 0 0 0 5H15"/></svg>
-        Rate Card & Policies
+        <span>Rate Card & Policies</span>
       </button>
     </div>
 
@@ -704,8 +675,8 @@
       <div class="modal-filter-row" style="margin-top:14px;">
         <div class="filter-pills" id="dealsFilterPills">
           <button class="filter-pill active" onclick="setDealsOutcomeFilter('ALL', this)">All Deals (72)</button>
-          <button class="filter-pill" onclick="setDealsOutcomeFilter('WON', this)">🏆 Closed Won</button>
-          <button class="filter-pill" onclick="setDealsOutcomeFilter('LOST', this)">✗ Closed Lost</button>
+          <button class="filter-pill" onclick="setDealsOutcomeFilter('WON', this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><polyline points="20 6 9 17 4 12"/></svg>Closed Won</button>
+          <button class="filter-pill" onclick="setDealsOutcomeFilter('LOST', this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Closed Lost</button>
         </div>
         <div class="deal-count-tag" id="dealsCountTag">Showing 72 Historical Deals</div>
       </div>
@@ -760,7 +731,7 @@
           </div>
           <div class="policy-item">
             <strong>Custom Pod Estimation</strong>
-            <span>Gemini Solution Architect Scoping</span>
+            <span>Parametric Solution Architecture Calibration</span>
           </div>
         </div>
       </div>
@@ -768,6 +739,6 @@
   </div>
 </div>
 
-<script src="/static/control_tower.js?v=10"></script>
+<script src="/static/control_tower.js?v=17"></script>
 </body>
 </html>

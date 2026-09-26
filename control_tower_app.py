@@ -9,6 +9,7 @@ If the API is unavailable, the dashboard still loads with demo records.
 """
 
 import os
+import time
 from flask import Flask, jsonify, render_template, request
 import requests
 from integrations.servicenow.client import ServiceNowClient
@@ -22,10 +23,23 @@ app.register_blueprint(intel_bp)
 HADRON_API = os.getenv("HADRON_API_URL", "http://127.0.0.1:5000")
 TIMEOUT = int(os.getenv("HADRON_API_TIMEOUT", "120"))
 
+# In-memory TTL cache for instant page refresh performance
+_requests_cache = {
+    "data": None,
+    "timestamp": 0.0
+}
+_REQUESTS_CACHE_TTL = 15.0  # 15 seconds TTL
+
+
+def _invalidate_requests_cache():
+    global _requests_cache
+    _requests_cache["timestamp"] = 0.0
+
 
 def _set_service_now_status(sys_id, status):
     if not sys_id or sys_id.startswith("LOCAL-"):
         return
+    _invalidate_requests_cache()
     try:
         ServiceNowClient().update_record(
             table="x_2216687_optimu_0_pricing_request",
@@ -42,6 +56,13 @@ def index():
 
 @app.get("/api/requests")
 def requests_list():
+    global _requests_cache
+    now = time.time()
+    force_fresh = request.args.get("fresh") == "1"
+
+    if not force_fresh and _requests_cache["data"] is not None and (now - _requests_cache["timestamp"] < _REQUESTS_CACHE_TTL):
+        return jsonify(_requests_cache["data"])
+
     try:
         client = ServiceNowClient()
         # Fetch actual records from ServiceNow
@@ -103,10 +124,14 @@ def requests_list():
                 "competitive_intelligence": r.get("competitive_intelligence", ""),
             })
 
-        return jsonify({
+        result_payload = {
             "requests": requests_data,
             "source": "servicenow",
-        })
+        }
+        _requests_cache["data"] = result_payload
+        _requests_cache["timestamp"] = now
+
+        return jsonify(result_payload)
     except Exception as exc:
         return jsonify({
             "error": "ServiceNow API unavailable",
@@ -131,6 +156,7 @@ def create_request():
             table="x_2216687_optimu_0_pricing_request",
             payload=sn_payload
         )
+        _invalidate_requests_cache()
         return jsonify({
             "sys_id": record.get("sys_id", ""),
             "number": record.get("number", ""),
@@ -150,6 +176,7 @@ def update_deal_status(sys_id):
         data = request.get_json(force=True)
         new_status = str(data.get("status", "2"))
         _set_service_now_status(sys_id, new_status)
+        _invalidate_requests_cache()
         return jsonify({"ok": True, "sys_id": sys_id, "status": new_status})
     except Exception as exc:
         return jsonify({"error": str(exc)}), 500

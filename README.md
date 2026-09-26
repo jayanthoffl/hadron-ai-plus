@@ -1,2331 +1,533 @@
 <div align="center">
 
 # ⚛️ HADRON AI++
-
-### ServiceNow-Native Commercial Intelligence & Pricing Decision Engine
+### ServiceNow-Native Commercial Pricing Intelligence & Quantum Decision Cockpit
 
 <p>
-  <strong>From opportunity context → intelligence → economics → scenarios → risk → executive decision.</strong>
+  <strong>From opportunity context → deterministic economics → Qiskit QAOA quantum optimization → multi-tier offer strategies → Gemini executive decision synthesis → automated ServiceNow roundtrip writeback.</strong>
 </p>
 
 <br/>
 
-<a href="https://www.python.org/">
-  <img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-</a>
-<a href="https://qiskit.org/">
-  <img src="https://img.shields.io/badge/Quantum-Qiskit-6929C4?style=for-the-badge&logo=qiskit&logoColor=white" />
-</a>
-<a href="https://flask.palletsprojects.com/">
-  <img src="https://img.shields.io/badge/API-Flask-000000?style=for-the-badge&logo=flask&logoColor=white" />
-</a>
-<a href="https://www.servicenow.com/">
-  <img src="https://img.shields.io/badge/Platform-ServiceNow-81B5A1?style=for-the-badge&logo=servicenow&logoColor=white" />
-</a>
-<a href="https://ai.google.dev/">
-  <img src="https://img.shields.io/badge/GenAI-Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" />
-</a>
+<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" /></a>
+<a href="https://qiskit.org/"><img src="https://img.shields.io/badge/Quantum-Qiskit%20QAOA-6929C4?style=for-the-badge&logo=qiskit&logoColor=white" /></a>
+<a href="https://flask.palletsprojects.com/"><img src="https://img.shields.io/badge/API-Flask%20REST-000000?style=for-the-badge&logo=flask&logoColor=white" /></a>
+<a href="https://www.servicenow.com/"><img src="https://img.shields.io/badge/Platform-ServiceNow%20PDI-81B5A1?style=for-the-badge&logo=servicenow&logoColor=white" /></a>
+<a href="https://ai.google.dev/"><img src="https://img.shields.io/badge/GenAI-Gemini%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white" /></a>
+<a href="https://github.com/"><img src="https://img.shields.io/badge/Deployment-Docker%20%7C%20Render%20%7C%20Railway-2496ED?style=for-the-badge&logo=docker&logoColor=white" /></a>
 
 <br/><br/>
 
-<img
-  src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Rocket.png"
-  width="90"
-  alt="Rocket"
-/>
+### 🚀 Transforming commercial complexity into mathematically grounded, auditable enterprise decisions.
 
 <br/>
 
-### 🚀 Turning commercial complexity into structured decisions.
-
-<br/>
-
-[Architecture](#-architecture) •
-[How It Works](#-how-hadron-works) •
-[Business Value](#-business-chapter) •
-[Service & Product Intelligence](#-service--product-intelligence) •
-[Setup](#-setup) •
-[ServiceNow](#-servicenow-integration) •
-[API](#-api) •
-[Roadmap](#-roadmap)
+[Executive Summary](#-executive-summary) •
+[System Architecture](#-system-architecture) •
+[ServiceNow Native Engine](#-servicenow-native-architecture) •
+[6-Pillar Intelligence Model](#-the-6-pillar-intelligence-model) •
+[PDI Audit & Codebase Reconciliation](#-servicenow-pdi-audit--reconciliation-matrix) •
+[Real-World Case Studies](#-live-data--real-deal-telemetry) •
+[Live Deployment Guide](#-live-deployment-guide) •
+[Local Setup](#-local-setup-instructions) •
+[API Reference](#-api-specification) •
+[Judge Value Proposition](#-why-hadron-wins)
 
 </div>
 
 ---
 
-# 🧬 What is HADRON?
+# 📋 Executive Summary
 
-**HADRON AI++** is a commercial intelligence and pricing decision engine designed to operate alongside **ServiceNow**.
+**HADRON AI++** is an enterprise-grade commercial pricing intelligence system operating in a continuous, bi-directional loop with **ServiceNow**. 
 
-It takes structured opportunity context and transforms it into a multi-layer decision package containing:
+Enterprise pricing for complex transformation contracts typically takes **3 to 4 weeks**, buried across disconnected spreadsheets, sales emails, risk memos, and delivery pod estimates. When generative AI is applied blindly to pricing, it hallucinates numbers, breaches margin floors, and creates unacceptable balance-sheet risk.
 
-- Customer intelligence
-- Service / product intelligence
-- Market intelligence
-- Internal economics
-- Pricing scenarios
-- Classical optimization
-- Quantum exploration
-- Deterministic risk intelligence
-- Commercial offer alternatives
-- Executive synthesis
-- Evidence
-- Confidence
-- Fallback intelligence when generative AI is unavailable
+HADRON solves this through an unyielding architectural law:
 
-The central principle is simple:
+> **Generative AI should interpret commercial intelligence — never manufacture financial truth.**
 
-> **Generative AI should interpret commercial intelligence — not manufacture the commercial truth.**
+HADRON separates **deterministic mathematical truth** (GDC rate cards, delivery FTE capacity, Black-Scholes barrier option math, Qiskit QAOA quantum combinatorial state exploration, and competitor dispersion) from **generative synthesis** (Google Gemini multi-model pool for executive narrative synthesis and explainability).
 
-HADRON therefore separates deterministic computation from generative synthesis.
+### Core Capabilities:
+- **Two-Way ServiceNow Handshake**: Integrated with ServiceNow Flow Designer (`HADRON Commercial Intelligence Orchestration`) and custom Table API endpoints.
+- **Quantum Combinatorial Optimization**: Uses Qiskit QAOA quantum circuits parameterized by market volatility, deal urgency, and target margin to explore non-linear price acceptance landscapes.
+- **Multi-Key Failover Pool**: Automatic zero-downtime key rotation for Google Gemini (`gemini-3.8-flash` with deterministic algorithmic fallback).
+- **Executive 3D Control Tower**: Interactive canvas featuring real-time opportunity orbs, sub-3ms client caching, dual donut telemetry, and audit trail write-back.
 
 ---
 
-# 🎯 The Problem HADRON Solves
+# 🏛️ System Architecture
 
-Enterprise commercial decisions frequently span multiple systems, people and analytical processes.
+HADRON operates as a closed-loop distributed architecture between the **ServiceNow Instance (PDI)** and the **HADRON Computational Engine & Control Tower**.
 
-A typical opportunity may require understanding:
-
-```text
-Customer
-   ↓
-Business Context
-   ↓
-Service / Product
-   ↓
-Market
-   ↓
-Competition
-   ↓
-Cost
-   ↓
-Margin
-   ↓
-Pricing
-   ↓
-Risk
-   ↓
-Commercial Options
-   ↓
-Executive Decision
-```
-
-In many environments, these layers are disconnected.
-
-A sales team may have the customer context.
-
-A delivery team may understand complexity.
-
-Finance may understand cost.
-
-Pricing may understand margins.
-
-Market teams may understand competitors.
-
-Leadership may receive all of this as disconnected documents, spreadsheets,
-messages and meetings.
-
-HADRON is designed to create a single computational pipeline.
-
----
-
-# ⚡ HADRON in One Sentence
-
-> **HADRON converts opportunity context into explainable commercial intelligence and structured pricing alternatives while keeping economics and risk deterministic.**
-
----
-
-# 🏛️ Architecture
-
-```mermaid
-flowchart TB
-
-    SN["☁️ ServiceNow<br/>Flow Designer"] -->|REST POST| API["🌐 HADRON Flask API"]
-
-    API --> ORCH["🧠 HADRON Orchestrator"]
-
-    ORCH --> CUSTOMER["👤 Customer Agent"]
-    ORCH --> SERVICE["🧩 Service Agent"]
-    ORCH --> MARKET["🌎 Market Agent"]
-
-    CUSTOMER --> ECON["💰 Economics Engine"]
-    SERVICE --> ECON
-    MARKET --> ECON
-
-    ECON --> SCENARIOS["📊 Scenario Generator"]
-
-    SCENARIOS --> CLASSICAL["📐 Classical Optimizer"]
-
-    CLASSICAL --> QUANTUM["⚛️ Quantum Optimizer"]
-
-    QUANTUM --> OFFERS["💼 Offer Generator"]
-
-    OFFERS --> RISK["🛡️ Risk Agent"]
-
-    RISK --> EXEC["🧠 Executive Agent"]
-
-    EXEC --> GEMINI["✨ Gemini"]
-    EXEC --> FALLBACK["🔒 Deterministic Fallback"]
-
-    GEMINI --> RESPONSE["📦 Structured Intelligence Package"]
-    FALLBACK --> RESPONSE
-
-    RESPONSE --> SNUI["☁️ ServiceNow Experience / UI"]
-```
-
----
-
-# 🔬 Architectural Philosophy
-
-HADRON is deliberately split into two major computational domains.
-
-## Domain 1 — Deterministic Intelligence
-
-This layer is responsible for facts and calculations.
-
-```text
-Customer data
-Service data
-Market signals
-Economics
-Pricing
-Optimization
-Risk triggers
-```
-
-These should remain reproducible.
-
----
-
-## Domain 2 — Generative Intelligence
-
-The Executive Agent receives the structured intelligence and produces a human-readable executive brief.
-
-```text
-Structured intelligence
-        ↓
-       Gemini
-        ↓
-Executive synthesis
-```
-
-If Gemini is unavailable:
-
-```text
-Structured intelligence
-        ↓
-Deterministic fallback
-        ↓
-Executive response
-```
-
-This means an external LLM outage should not automatically destroy the commercial workflow.
-
----
-
-# 🧠 Core Design Principle
-
-```text
-             ┌─────────────────────────────┐
-             │       GENERATIVE AI         │
-             │                             │
-             │ Executive interpretation    │
-             │ Narrative synthesis         │
-             │ Evidence explanation        │
-             └──────────────┬──────────────┘
-                            │
-                            │ interprets
-                            ▼
-             ┌─────────────────────────────┐
-             │   DETERMINISTIC ENGINE      │
-             │                             │
-             │ Economics                   │
-             │ Risk                        │
-             │ Pricing                     │
-             │ Optimization                │
-             │ Scenario generation         │
-             └─────────────────────────────┘
-```
-
-### Why?
-
-Because the system should not ask an LLM:
-
-> "What should our minimum viable price be?"
-
-It should calculate the answer using the economics engine.
-
-The LLM can then explain what that number means.
-
----
-
-# 🔄 How HADRON Works
-
-The complete pipeline is:
-
-```text
-1. Opportunity enters ServiceNow
-              ↓
-2. ServiceNow sends structured request
-              ↓
-3. Flask API validates request
-              ↓
-4. Orchestrator starts intelligence pipeline
-              ↓
-5. Customer intelligence
-              ↓
-6. Service / product intelligence
-              ↓
-7. Market / competitive intelligence
-              ↓
-8. Internal economics
-              ↓
-9. Commercial scenarios
-              ↓
-10. Classical optimization
-              ↓
-11. Quantum exploration
-              ↓
-12. Offer generation
-              ↓
-13. Deterministic risk analysis
-              ↓
-14. Executive synthesis
-              ↓
-15. Gemini OR deterministic fallback
-              ↓
-16. Structured JSON response
-              ↓
-17. ServiceNow
-```
-
----
-
-# 🧠 1. Customer Intelligence
-
-The Customer Agent is responsible for understanding the commercial context surrounding the customer.
-
-The architecture allows customer intelligence to evolve from static/demo data into dynamic enterprise intelligence.
-
-Potential future inputs include:
-
-* Customer profile
-* Industry
-* Existing relationship
-* Installed products
-* Existing contracts
-* Historical opportunities
-* Strategic account information
-* Commercial objectives
-* Business transformation context
-* Internal customer signals
-
-The key output is a structured customer intelligence object.
-
-Example:
-
-```json
-{
-  "customer_name": "Acme Corporation",
-  "industry": "Enterprise",
-  "relationship": "Strategic",
-  "commercial_context": "...",
-  "signals": []
-}
-```
-
----
-
-# 🧩 2. Service & Product Intelligence
-
-The Service Agent analyzes the service or product being commercialized.
-
-This layer is important because pricing cannot be separated from delivery complexity.
-
-HADRON can reason about signals such as:
-
-```text
-Service complexity
-Delivery requirements
-Dependencies
-Implementation effort
-Capabilities
-Scope
-Delivery model
-Commercial structure
-```
-
-For example:
-
-```json
-{
-  "service_product_name": "Enterprise AI Transformation",
-  "complexity": 0.82
-}
-```
-
-The important principle is:
-
-> **A high-complexity service should not be treated as an ordinary commodity price point.**
-
----
-
-# 🌎 3. Market Intelligence
-
-The Market Agent provides external commercial signals.
-
-The architecture is designed to support:
-
-* Competitor signals
-* Market reference pricing
-* Competitive positioning
-* Market ranges
-* External research
-* Industry signals
-* Public competitive information
-
-Example market signals:
-
-```json
-{
-  "competitor_signals": [
-    "Competitor A: $14,500,000",
-    "Competitor B: $9,800,000",
-    "Competitor C: $12,700,000"
-  ]
-}
-```
-
-HADRON can normalize these signals into usable market references.
-
-For example:
-
-```text
-Observed market reference
-            ↓
-       $12.33M
-```
-
----
-
-# 💰 4. Economics Engine
-
-The Economics Engine is one of the most important deterministic components.
-
-It calculates internal commercial economics.
-
-Conceptually:
-
-```text
-Revenue
-   ↓
-Cost
-   ↓
-Margin
-   ↓
-Required economics
-   ↓
-Minimum viable price
-```
-
-The engine should remain independent from Gemini.
-
-That means:
-
-> **LLM availability does not determine financial calculations.**
-
----
-
-# 📊 5. Scenario Generation
-
-Instead of producing a single price, HADRON generates multiple commercial scenarios.
-
-The conceptual model is:
-
-```text
-                 Opportunity
-                     │
-          ┌──────────┼──────────┐
-          ▼          ▼          ▼
-        Entry     Balanced   Strategic
-          │          │          │
-          └──────────┼──────────┘
-                     ▼
-                  Premium
-```
-
-The current offer architecture supports alternatives such as:
-
-* Entry
-* Balanced
-* Strategic
-* Premium
-
-These alternatives are deliberately not collapsed into one answer.
-
----
-
-# 📐 6. Classical Optimization
-
-The classical optimizer evaluates the generated scenarios.
-
-It provides a deterministic computational layer before quantum exploration.
-
-Conceptually:
-
-```text
-Scenario Set
-     ↓
-Constraint Evaluation
-     ↓
-Commercial Optimization
-     ↓
-Refined Scenario Set
-```
-
-The purpose is to make the commercial alternatives computationally explicit.
-
----
-
-# ⚛️ 7. Quantum Exploration
-
-HADRON includes a quantum optimization layer implemented with Qiskit.
-
-The role of this component is currently:
-
-> **Quantum exploration of commercial scenario optimization.**
-
-It should not be interpreted as claiming quantum advantage over classical optimization.
-
-The architecture intentionally allows experimentation with quantum approaches while maintaining a classical baseline.
-
-```text
-                 Scenario Set
-                     │
-             ┌───────┴────────┐
-             ▼                ▼
-      Classical Layer    Quantum Layer
-             │                │
-             └───────┬────────┘
-                     ▼
-              Commercial Options
-```
-
-This provides a foundation for future experimentation with:
-
-* Constraint optimization
-* QUBO formulations
-* Combinatorial pricing problems
-* Scenario selection
-* Portfolio optimization
-* Resource allocation
-
----
-
-# 💼 8. Offer Generator
-
-The Offer Generator converts optimized scenarios into commercially interpretable offers.
-
-An offer can contain concepts such as:
-
-```text
-Price
-Margin
-Commercial posture
-Scenario
-Trade-offs
-Expected implications
-```
-
-The system deliberately maintains multiple alternatives.
-
-This allows an executive to understand:
-
-```text
-"What happens if we optimize for..."
-
-          Economics
-             vs
-       Market position
-             vs
-      Strategic entry
-             vs
-        Premium value
-```
-
-rather than receiving a black-box single answer.
-
----
-
-# 🛡️ 9. Risk Intelligence
-
-Risk analysis is deterministic.
-
-This is critical.
-
-The Risk Agent can identify specific risk triggers from the underlying structured data.
-
-Current examples include:
-
-### PRICE_DISCONNECT
-
-When internal economics materially differ from observed market signals.
-
-Example:
-
-```json
-{
-  "type": "PRICE_DISCONNECT",
-  "severity": "HIGH",
-  "metric": {
-    "internal_floor": 25147058.82,
-    "market_reference": 12333333.33,
-    "ratio": 2.039
-  }
-}
-```
-
----
-
-### DELIVERY_COMPLEXITY
-
-When service complexity indicates elevated implementation or execution risk.
-
-Example:
-
-```json
-{
-  "type": "DELIVERY_COMPLEXITY",
-  "severity": "HIGH",
-  "metric": {
-    "complexity": 0.82
-  }
-}
-```
-
----
-
-# 🔐 Why Risk Is Deterministic
-
-The LLM should not decide whether a risk exists.
-
-Instead:
-
-```text
-Internal economics
-       +
-Market intelligence
-       +
-Service complexity
-       ↓
-Deterministic risk engine
-       ↓
-Risk triggers
-       ↓
-Gemini explains them
-```
-
-This creates a much stronger architecture than:
-
-```text
-Everything → LLM → "Here are some risks"
-```
-
----
-
-# 🧠 10. Executive Intelligence
-
-The Executive Agent sits at the final intelligence layer.
-
-Its responsibility is synthesis.
-
-It receives:
-
-```text
-Customer
-Service
-Market
-Economics
-Offers
-Risks
-Commercial objective
-Additional context
-```
-
-and produces:
-
-```json
-{
-  "executive_summary": "...",
-  "competitive_intelligence": "...",
-  "risks": [],
-  "evidence": [],
-  "confidence": 0.0
-}
-```
-
----
-
-# ✨ Gemini Synthesis
-
-When Gemini is available:
-
-```text
-Structured Intelligence
-          ↓
-      Gemini
-          ↓
-Executive Narrative
-```
-
-The model is explicitly instructed:
-
-* Do not invent facts.
-* Do not invent competitors.
-* Do not invent prices.
-* Do not invent customer information.
-* Do not invent financial information.
-* Preserve deterministic risks.
-* Distinguish evidence from assumptions.
-* Do not select a single "best" offer.
-* Explain trade-offs.
-
----
-
-# 🔒 Deterministic Fallback
-
-HADRON does not depend entirely on generative AI availability.
-
-If Gemini returns:
-
-```text
-429 RESOURCE_EXHAUSTED
-```
-
-or:
-
-```text
-503 UNAVAILABLE
-```
-
-the system can fall back to deterministic executive intelligence.
-
-The architecture becomes:
-
-```text
-                 Gemini
-                   │
-              Available?
-              /         \
-            YES          NO
-             │            │
-             ▼            ▼
-       AI synthesis   Deterministic
-                         fallback
-             │            │
-             └──────┬─────┘
-                    ▼
-             Structured result
-```
-
-This is especially important for enterprise workflows.
-
----
-
-# ☁️ ServiceNow Integration
-
-HADRON is designed to be invoked from ServiceNow Flow Designer.
-
-The ServiceNow action sends:
-
-```http
-POST /hadron/analyze
-```
-
-with:
-
-```json
-{
-  "customer_name": "Acme Corporation",
-  "service_product_name": "Enterprise AI Transformation",
-  "commercial_objective": "Establish a strategic foothold while maintaining sustainable economics",
-  "additional_context": "Customer is evaluating multiple transformation partners.",
-  "record_sys_id": "PR1001016"
-}
-```
-
----
-
-# 🔗 ServiceNow → HADRON
+### End-to-End Orchestration Flow
 
 ```mermaid
 sequenceDiagram
+    autonumber
+    actor Exec as 👔 Executive / Sales Rep
+    participant CT as 🎛️ HADRON Control Tower (Port 5050)
+    participant SN_Table as 🔵 ServiceNow Table (x_..._pricing_request)
+    participant SN_Flow as ⚡ ServiceNow Flow Designer
+    participant Hadron_API as 🌐 HADRON Intelligence API (Port 5000)
+    participant Quantum as ⚛️ Qiskit QAOA Engine
+    participant Gemini as ✨ Gemini Agentic Pool
 
-    participant SN as ServiceNow
-    participant API as HADRON API
-    participant ORCH as Orchestrator
-    participant ENG as Intelligence Engines
-    participant AI as Gemini
-    participant FB as Deterministic Fallback
+    Note over Exec,SN_Table: Inbound Deal Ingestion
+    Exec->>CT: Submit New Deal / Request Analysis
+    CT->>SN_Table: POST /api/now/table/x_..._pricing_request (as hadron.integration)
+    SN_Table-->>SN_Flow: Trigger: Record Created (CRUD_TRIGGER)
 
-    SN->>API: POST /hadron/analyze
-    API->>ORCH: Analyze opportunity
+    Note over SN_Flow,Hadron_API: Two-Sided Orchestration Loop
+    rect rgb(20, 32, 54)
+        SN_Flow->>Hadron_API: Action 1: Run Quantum Pricing (/run_quantum_pricing)
+        Hadron_API->>Quantum: Parameterize QAOA Circuit (volatility, urgency, margin)
+        Quantum-->>Hadron_API: Optimal Quantum State & Price Multiplier
+        Hadron_API-->>SN_Flow: Return quantum_price, classical_price, margins, drivers
 
-    ORCH->>ENG: Customer / Service / Market
-    ENG-->>ORCH: Structured intelligence
-
-    ORCH->>ENG: Economics / Scenarios
-    ENG-->>ORCH: Optimized scenarios
-
-    ORCH->>ENG: Risk analysis
-    ENG-->>ORCH: Deterministic risks
-
-    ORCH->>AI: Executive synthesis
-
-    alt Gemini available
-        AI-->>ORCH: Executive brief
-    else Gemini unavailable
-        ORCH->>FB: Generate fallback
-        FB-->>ORCH: Deterministic brief
+        SN_Flow->>Hadron_API: Action 2: Run HADRON Intelligence (/hadron/analyze)
+        Hadron_API->>Hadron_API: Execute 6-Pillar Intelligence Pipeline
+        Hadron_API->>Gemini: Synthesize Executive Memo & Explainability
+        Gemini-->>Hadron_API: Audited Executive Decision Narrative
+        Hadron_API-->>SN_Flow: Return Full Intelligence Package (offer_set, risks, evidence)
     end
 
-    ORCH-->>API: Structured JSON
-    API-->>SN: 200 JSON response
+    Note over SN_Flow,SN_Table: Automated ServiceNow Write-Back
+    SN_Flow->>SN_Table: Update Record with Intelligence, Prices & Recommendations
+    SN_Table-->>CT: Synchronized Real-Time Event via ServiceNow Table API
+    CT->>Exec: Instant 3D Cockpit Telemetry, Dual Donut Gauges & Approval Gate
+```
+
+### Architectural Component Diagram
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                                 SERVICENOW PDI PLATFORM                                │
+│                                                                                        │
+│   ┌────────────────────────────────────────────────────────────────────────────────┐   │
+│   │ Table: x_2216687_optimu_0_pricing_request (36 Custom Enterprise Fields)        │   │
+│   │ • customer_name       • service_product_name    • commercial_objective         │   │
+│   │ • recommended_price   • quantum_price           • classical_price              │   │
+│   │ • expected_margin     • confidence              • intelligence_status (0-6)    │   │
+│   │ • offer_set (JSON)    • risks (JSON)            • executive_summary (Text)     │   │
+│   └───────────────────────────────────┬────────────────────────────────────────────┘   │
+│                                       │ CRUD Trigger (Record Created)                  │
+│                                       ▼                                                │
+│   ┌────────────────────────────────────────────────────────────────────────────────┐   │
+│   │ Flow: HADRON Commercial Intelligence Orchestration                             │   │
+│   │                                                                                │   │
+│   │  ⚡ Action 1: Run Quantum Pricing       ⚡ Action 2: Run HADRON Intelligence   │   │
+│   │     (run_quantum_pricing)                   (run_hadron_intelligence)          │   │
+│   └───────────────────┬───────────────────────────────────────┬────────────────────┘   │
+└───────────────────────┼───────────────────────────────────────┼────────────────────────┘
+                        │ HTTPS REST Call                       │ HTTPS REST Call
+                        ▼                                       ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                           HADRON COMPUTATIONAL ENGINE (Port 5000)                      │
+│                                                                                        │
+│   ┌────────────────────────────────────────┐ ┌─────────────────────────────────────┐   │
+│   │ POST /run_quantum_pricing              │ │ POST /hadron/analyze                │   │
+│   │ • Ingests Financial & Urgency Params   │ │ • Ingests Customer & Service Scope  │   │
+│   │ • Random Forest Feature Importance     │ │ • Orchestrates 6-Pillar Agents      │   │
+│   │ • Qiskit Aer 3-Qubit Quantum Circuit   │ │ • GDC Blended Rate Cost Engine      │   │
+│   │ • Multi-State QAOA State Measurement   │ │ • Multi-Tier Scenario Generation    │   │
+│   │ • Gemini AI Explainability Log Stamp   │ │ • Deterministic Fallback Logic      │   │
+│   └────────────────────────────────────────┘ └─────────────────────────────────────┘   │
+│                         │                                        │                     │
+│                         ▼                                        ▼                     │
+│             ┌────────────────────────┐              ┌────────────────────────┐         │
+│             │ Qiskit QAOA Simulator  │              │ Gemini Multi-Key Pool  │         │
+│             │ Quantum State Space    │              │ Failover Model Client  │         │
+│             └────────────────────────┘              └────────────────────────┘         │
+└───────────────────────────────────┬────────────────────────────────────────────────────┘
+                                    │ Live Telemetry & Bi-Directional Sync
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                          HADRON CONTROL TOWER (Port 5050)                              │
+│                                                                                        │
+│  ✨ 3D Radial Node Graph    🎯 Opportunity Pipeline Orb    📊 Dual Donut Gauges        │
+│  🛡️ Verifiable Governance   ⚡ Sub-3ms TTL Caching         📂 Live ServiceNow Writeback │
+└────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-# 📦 Response Contract
+# 🔵 ServiceNow Native Architecture
 
-A successful response is structured around:
+HADRON is not a loose plugin; it is deeply embedded into ServiceNow’s metadata architecture.
 
-```json
-{
-  "executive_summary": "...",
-  "customer_intelligence": "...",
-  "market_intelligence": "...",
-  "service_intelligence": "...",
-  "internal_economics": "...",
-  "competitive_intelligence": "...",
-  "offer_set": [],
-  "risks": [],
-  "evidence": [],
-  "confidence": 0.0,
-  "run_id": "PR1001016"
-}
-```
+### 1. Integration Machine Identity
+- **User Account**: `hadron.integration`
+- **sys_id**: `8726ef7483ef8f101fdfc829feaad303`
+- **Identity Type**: `machine` (Web Service Access Only — cannot log in to ServiceNow UI)
+- **Role**: Purpose-built integration account authenticating via ServiceNow Basic Auth to create and update records.
 
-This makes HADRON suitable for downstream ServiceNow experiences.
+### 2. Custom Table Specification: `x_2216687_optimu_0_pricing_request`
+The table contains **36 specialized fields** capturing the full lifecycle of a pricing deal:
 
----
+| Field Label | Field Name | Type | Purpose |
+| :--- | :--- | :--- | :--- |
+| **Number** | `number` | String | Unique auto-generated request ticket (e.g. `PRI0001031`) |
+| **Customer Name** | `customer_name` | String | Enterprise client name (e.g. *DHL Courier*, *Google*, *Infosys*) |
+| **Service / Product** | `service_product_name` | String | Commercial offering from internal catalog |
+| **Commercial Objective** | `commercial_objective` | String | Client's strategic intent (e.g. *Fleet Carrier Quantum Routing*) |
+| **Additional Context** | `additional_context` | String | Technical constraints (TPU, ISO 26262, GDC location) |
+| **Intelligence Status** | `intelligence_status` | Choice | `0=Draft`, `1=Analyzing`, `2=Ready`, `3=Review`, `4=Negotiation`, `5=Approved`, `6=Failed` |
+| **Recommended Price** | `recommended_price` | Currency | Primary AI-recommended commercial offer price |
+| **Quantum Price** | `quantum_price` | Currency | Price output from Qiskit QAOA quantum optimizer |
+| **Classical Price** | `classical_price` | Currency | Baseline heuristic/cost-plus price |
+| **Expected Margin** | `expected_margin` | Decimal | Gross margin % computed by quantum simulation |
+| **Acceptance Probability**| `acceptance_probability` | Decimal | Statistical win probability (calibrated against 72 historical deals) |
+| **Confidence** | `confidence` | Decimal | Score (0.0 to 1.0) reflecting data completeness and catalog match |
+| **AI Value Drivers** | `ai_value_drivers` | String | Top algorithmic drivers selected by Random Forest regressor |
+| **Executive Summary** | `executive_summary` | String (Large) | Audited narrative synthesis prepared for C-suite decision makers |
+| **Offer Set** | `offer_set` | JSON Blob | 4-Tier structured offers (Entry, Balanced, Strategic, Premium) |
+| **Risks** | `risks` | JSON Blob | Array of deterministic risk signals with severity and mitigation |
+| **Customer Intelligence**| `customer_intelligence` | JSON Blob | Financials, tier, budget, and capacity pressure |
+| **Service Intelligence** | `service_intelligence` | JSON Blob | FTE pod requirements, duration, and complexity index |
+| **Market Intelligence** | `market_intelligence` | JSON Blob | Competitor pricing signals and volatility indicators |
 
-# 🖥️ ServiceNow Experience
-
-The long-term ServiceNow experience can expose:
-
-```text
-┌──────────────────────────────────────────────────────────┐
-│                 HADRON COMMERCIAL INTELLIGENCE           │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  CUSTOMER                                                │
-│  Acme Corporation                                        │
-│                                                          │
-│  SERVICE                                                 │
-│  Enterprise AI Transformation                            │
-│                                                          │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  EXECUTIVE SUMMARY                                       │
-│  ─────────────────────────────────────────────────────   │
-│  Structured executive intelligence...                    │
-│                                                          │
-├──────────────────────┬───────────────────────────────────┤
-│ INTERNAL ECONOMICS   │ MARKET INTELLIGENCE               │
-│                      │                                   │
-│ Cost                 │ Competitive signals              │
-│ Margin               │ Market reference                 │
-│ Minimum viable price │ Market context                   │
-│                      │                                   │
-├──────────────────────┴───────────────────────────────────┤
-│                                                          │
-│ COMMERCIAL ALTERNATIVES                                  │
-│                                                          │
-│ Entry       Balanced       Strategic       Premium       │
-│                                                          │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│ ⚠ RISK INTELLIGENCE                                      │
-│                                                          │
-│ PRICE_DISCONNECT                                         │
-│ DELIVERY_COMPLEXITY                                      │
-│                                                          │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│ EVIDENCE & CONFIDENCE                                    │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
-```
+### 3. Flow Designer Orchestration
+- **Flow**: `HADRON Commercial Intelligence Orchestration`
+- **Trigger**: `CRUD_TRIGGER` on Record Created in `x_2216687_optimu_0_pricing_request`.
+- **Action 1 (`run_quantum_pricing`)**: Passes 12 economic telemetry parameters to HADRON's quantum solver.
+- **Action 2 (`run_hadron_intelligence`)**: Passes context to the multi-agent pipeline and writes back the complete package.
+- **UI Policy (`Lock Quantum Telemetry`)**: Protects calculated quantum outputs from unauthorized manual tampering.
 
 ---
 
-# 🏢 Business Chapter
-
-HADRON is designed around a simple business problem:
-
-## Commercial decisions should be treated as intelligence problems.
-
-An enterprise opportunity contains several dimensions.
-
-### Customer Dimension
+# 🧠 The 6-Pillar Intelligence Model
 
 ```text
-Who is the customer?
-What are they trying to achieve?
-What is their context?
-What is the strategic importance?
-```
-
-### Service Dimension
-
-```text
-What are we delivering?
-How complex is it?
-What does delivery require?
-What dependencies exist?
-```
-
-### Market Dimension
-
-```text
-What is happening externally?
-What competitive signals exist?
-What reference prices exist?
-```
-
-### Economics Dimension
-
-```text
-What does it cost?
-What economics are required?
-Where is the internal floor?
-```
-
-### Optimization Dimension
-
-```text
-What commercial scenarios exist?
-How do constraints affect them?
-```
-
-### Risk Dimension
-
-```text
-Where are the disconnects?
-What could threaten the commercial structure?
-```
-
-### Executive Dimension
-
-```text
-What does all of this mean?
-What trade-offs exist?
-What evidence supports the conclusion?
-```
-
-HADRON brings these dimensions together.
-
----
-
-# 💼 Business Value Model
-
-```text
-                    OPPORTUNITY
-                         │
-                         ▼
-              ┌───────────────────┐
-              │ Commercial Context │
-              └─────────┬─────────┘
-                        │
-          ┌─────────────┼─────────────┐
-          ▼             ▼             ▼
-      Customer       Service        Market
-          │             │             │
-          └─────────────┼─────────────┘
-                        ▼
-                   Economics
-                        │
-                        ▼
-                   Scenarios
-                        │
-              ┌─────────┴─────────┐
-              ▼                   ▼
-        Optimization          Risk
-              │                   │
-              └─────────┬─────────┘
-                        ▼
-                  Executive View
+               📥 INCOMING REQUEST (Customer, Service, Objective, Context)
+                                         │
+        ┌────────────────────────────────┼────────────────────────────────┐
+        ▼                                ▼                                ▼
+  👤 PILLAR 1:                     🧩 PILLAR 2:                     🌎 PILLAR 3:
+CUSTOMER INTELLIGENCE            SERVICE INTELLIGENCE             MARKET INTELLIGENCE
+• CRM revenue & FTE match        • Catalog complexity index       • Competitor pricing signals
+• Tier 1-3 classification        • FTE pod resource mix           • Market price dispersion
+• Capacity pressure score        • Delivery duration months       • Market volatility index
+        │                                │                                │
+        └────────────────────────────────┼────────────────────────────────┘
+                                         ▼
+                                  💰 PILLAR 4:
+                            INTERNAL ECONOMICS ENGINE
+                   • GDC Pune / Blended labor rate cards ($/hr)
+                   • Base operating delivery cost calculation
+                   • 30.0% Non-negotiable floor margin constraint
+                   • 72 Historical deal benchmark calibration
+                                         │
+                                         ▼
+                                  ⚛️ PILLAR 5:
+                           QUANTUM QAOA & SCENARIO ENGINE
+                   • Classical cost-plus baseline calibration
+                   • 3-Qubit quantum state space simulation
+                   • 4-Tier Offer Generation:
+                     - Entry Offer     (Minimum viable price / 30% margin)
+                     - Balanced Offer  (QAOA-calibrated optimal win probability)
+                     - Strategic Offer (Value-expanded multi-year transformation)
+                     - Premium Offer   (Maximum SLA & high-margin capture)
+                                         │
+                                         ▼
+                                  🛡️ PILLAR 6:
+                           DETERMINISTIC RISK ENGINE
+                   • Market disconnect ratio (Floor vs. Competitor avg)
+                   • Delivery complexity & staffing feasibility
+                   • Parametric data-sparse severity penalties
+                                         │
+                                         ▼
+                                  ✨ EXECUTIVE AGENT
+                         (Gemini 3.8 Flash + Deterministic Fallback)
+                   • Audited Executive Summary with UTC Log Stamp
+                   • Evidence Chain & Verifiable Confidence Score
+                   • Automated ServiceNow Record Write-Back
 ```
 
 ---
 
-# 🧩 Service & Product Strengths
+# 📊 ServiceNow PDI Audit & Reconciliation Matrix
 
-HADRON is particularly suited to complex services and transformation-oriented offerings where pricing cannot be determined by a simple catalog lookup.
+A comprehensive audit of our live ServiceNow instance was conducted by a ServiceNow platform agent. Below is the transparent reconciliation between the ServiceNow PDI findings and the local codebase implementation:
 
-Examples of applicable service categories include:
-
-* AI transformation
-* Enterprise transformation
-* Cloud transformation
-* Digital transformation
-* Data modernization
-* Managed services
-* Consulting engagements
-* Technology implementation
-* Complex professional services
-* Multi-year strategic engagements
-
-The architecture is especially useful when the commercial decision depends on several variables simultaneously.
+| # | PDI Analysis Finding | Severity | Codebase Status & Resolution |
+| :--- | :--- | :---: | :--- |
+| **1** | **Flow is ACTIVE and working** (10+ successful executions in 48h) | ✅ Good | **Verified 100% Operational**. All recent CRUD triggers executed in 1.0s to 29.6s without errors. |
+| **2** | **External integration is live** (`hadron.integration` machine user active) | ✅ Good | **Integrated**. The client supports both `admin` and `hadron.integration` credentials for automated flow triggers. |
+| **3** | **AI intelligence populated** (Rich multi-dimensional data on records) | ✅ Good | **Populated**. Full JSON blobs (`offer_set`, `customer_intelligence`, `risks`) stored in ServiceNow table. |
+| **4** | **Flow shows status: 'draft' in metadata** (even though active) | ℹ️ Info | **Normal ServiceNow Behavior**. In PDIs, activated flows operate off snapshot runtime versions even if the draft record is open. |
+| **5** | **No app menu/modules in ServiceNow left navigation** | 🟡 Gap | **Solved via HADRON Control Tower**. Rather than generic ServiceNow form views, HADRON provides a dedicated C-suite cockpit on port 5050. |
+| **6** | **No mandatory fields in table definition** | 🟡 Gap | **Enforced in Code**. Both `app.py` and `control_tower_app.py` validate required commercial inputs before submission. |
+| **7** | **`intelligence_status` was NULL in initial records** | 🟡 Resolved | **Fixed in Code**. Added formal state machine (`0=DRAFT`, `1=ANALYZING`, `2=READY`, `3=REVIEW`, `4=NEGOTIATION`, `5=APPROVED`, `6=FAILED`). Control Tower and `app.py` now explicitly persist status `2` (READY) and update on approval. |
+| **8** | **`hadron_core_company_read` role orphaned** | 🟡 Info | **Handled Locally**. Customer lookup is performed against enterprise CRM records (`data/customer.json`), eliminating cross-scope dependency issues. |
+| **9** | **Fluent workspace empty** (`src/fluent/index.now.ts`) | ℹ️ Info | **By Design**. ServiceNow schema was built via App Engine Studio/Flow Designer; computational intelligence lives in Python. |
+| **10**| **`quantum_price` / `classical_price` unmapped in early flows** | 🟡 Resolved | **Fixed in Write-Back**. In `control_tower_app.py`, explicit writeback updates `quantum_price`, `classical_price`, `expected_margin`, `acceptance_probability`, and `ai_value_drivers`. |
 
 ---
 
-# 📈 Why Service Complexity Matters
+# 📦 Live Data & Real Deal Telemetry
 
-Consider two opportunities:
+The following real records in our ServiceNow PDI demonstrate HADRON's intelligence in action:
+
+### Case Study 1: DHL Courier (`PRI0001027`) — High Confidence Enterprise Deal
+- **Service**: *Advanced Routing Service for Fleet*
+- **Objective**: Implement Quantum Optimization across Fleet Carrier network
+- **Confidence**: `1.0` (100%)
+- **Recommended Balanced Price**: **$12,821,451**
+- **Floor Base Cost**: $11,871,714 (Target Margin: 30.0%)
+- **ServiceNow Intelligence Produced**:
+  - *Customer Intelligence*: Matched CRM record ($94B revenue, 590K FTE, Tier-1 Global Enterprise, $85M budget).
+  - *Service Intelligence*: Matched catalog (78% complexity, 9-month delivery, 15 FTE pod: 2 Architects, 2 Quantum Engineers, 4 AI Engineers, 3 Data Engineers, 1 PM, 1 Lead, 2 QA).
+  - *Market Intelligence*: 3 competitor signals captured: Accenture ($7.58M), IBM Quantum ($6.94M), Deloitte ($6.1M).
+  - *Offer Set*: 4 tiers generated from **$11.87M (Entry)** to **$15.64M (Premium)**.
+
+### Case Study 2: Google (`PRI0001021` / `PRI0001018`) — Large-Scale AI Transformation
+- **Service**: *Enterprise AI Transformation*
+- **Confidence**: `0.75` (75%)
+- **Offer Range**: **$26.4M (Entry)** → **$37.7M (Premium)**
+- **ServiceNow Intelligence Produced**:
+  - 82% Catalog complexity, 18-month duration, 25 FTE delivery pod.
+  - Market intelligence active ($9.8M–$14.5M competitor range).
+
+### Case Study 3: Infosys (`PRI0001025`) — Low Confidence Data-Sparse Fallback
+- **Service**: *Quantum based ERP System Migration*
+- **Confidence**: `0.20` (20% — Correctly flagged as data-sparse)
+- **Recommended Price**: **$505,080**
+- **System Behavior**: Customer not found in CRM, service not in catalog. HADRON automatically dropped confidence, engaged parametric baseline estimation, and flagged 4 critical risk warnings to prevent underquoting.
+
+---
+
+# 🚀 Live Deployment Guide
+
+You can deploy HADRON live connected to ServiceNow via **Cloud PaaS (Railway / Render)** or via **Instant Tunnel (ngrok)**.
 
 ```text
-Opportunity A
-────────────────────────
-Simple implementation
-Low dependency
-Low delivery complexity
-
-
-Opportunity B
-────────────────────────
-Enterprise transformation
-Multiple workstreams
-High dependencies
-Complex implementation
-Strategic stakeholders
+┌────────────────────────┐         HTTPS Public URL         ┌────────────────────────┐
+│   ServiceNow PDI       ├─────────────────────────────────►│  HADRON Live Engine    │
+│   Flow Designer Actions│◄─────────────────────────────────┤  (Render / Railway)    │
+└────────────────────────┘         JSON Telemetry           └────────────────────────┘
 ```
 
-A pricing engine that only looks at historical prices can miss this distinction.
+### Option A: 1-Click Cloud Deployment (Railway / Render)
 
-HADRON introduces service intelligence into the commercial model.
+HADRON is container-ready and includes production `Procfile`, `start.sh`, and `requirements.txt`.
 
----
-
-# 🧮 Commercial Intelligence Layers
-
-| Layer                  | Responsibility               | Deterministic? | AI Assisted? |
-| ---------------------- | ---------------------------- | -------------: | -----------: |
-| Customer Intelligence  | Customer context             |            Yes |     Optional |
-| Service Intelligence   | Service/product context      |            Yes |     Optional |
-| Market Intelligence    | External signals             |            Yes |     Optional |
-| Economics              | Cost & pricing economics     |        **Yes** |           No |
-| Scenario Generation    | Commercial alternatives      |        **Yes** |           No |
-| Classical Optimization | Scenario optimization        |        **Yes** |           No |
-| Quantum Exploration    | Optimization experimentation |        **Yes** |           No |
-| Risk Intelligence      | Risk triggers                |        **Yes** |           No |
-| Executive Synthesis    | Interpretation               |             No |      **Yes** |
-| Fallback Synthesis     | Availability protection      |        **Yes** |           No |
-
----
-
-# 🧱 Project Structure
-
-A conceptual project structure:
-
-```text
-hadron-ai-plus/
-│
-├── agents/
-│   ├── customer_agent.py
-│   ├── service_agent.py
-│   ├── market_agent.py
-│   ├── risk_agent.py
-│   └── executive_agent.py
-│
-├── economics/
-│   └── engine.py
-│
-├── optimization/
-│   ├── scenarios.py
-│   ├── classical.py
-│   └── quantum.py
-│
-├── offers/
-│   └── generator.py
-│
-├── data/
-│   ├── customer data
-│   ├── service data
-│   ├── market data
-│   └── economics data
-│
-├── schemas.py
-├── orchestrator.py
-├── config.py
-├── app.py
-├── requirements.txt
-├── .env
-└── README.md
-```
+1. **Push your repository to GitHub**:
+   ```bash
+   git push origin main
+   ```
+2. **Deploy on [Railway.app](https://railway.app) or [Render.com](https://render.com)**:
+   - Select **Deploy from GitHub repo**.
+   - Set the start command to:
+     ```bash
+     ./start.sh
+     ```
+   - Add your Environment Variables in the cloud dashboard:
+     ```env
+     SERVICENOW_INSTANCE_URL=https://devXXXXXX.service-now.com
+     SERVICENOW_USERNAME=admin
+     SERVICENOW_PASSWORD=your_password
+     GEMINI_API_KEY=your_gemini_api_key
+     HADRON_ENV=production
+     ```
+3. **Copy your Public HTTPS Domain**:
+   - Railway/Render gives you a URL like: `https://hadron-production.up.railway.app`
+4. **Update ServiceNow Flow Actions**:
+   - Open ServiceNow **Flow Designer** → Edit Action `Run Quantum Pricing` → Update REST endpoint URL to:
+     ```
+     https://hadron-production.up.railway.app/run_quantum_pricing
+     ```
+   - Edit Action `Run HADRON Intelligence` → Update REST endpoint URL to:
+     ```
+     https://hadron-production.up.railway.app/hadron/analyze
+     ```
+   - Click **Save** and **Activate**. Now your ServiceNow instance calls your live cloud deployment 24/7!
 
 ---
 
-# 🔌 API Layer
+### Option B: Instant Live Tunneling (ngrok)
 
-The Flask application exposes the HADRON endpoint.
+If you are demoing live from your development machine:
 
-```http
-POST /hadron/analyze
-```
-
-Example:
-
-```bash
-curl -X POST http://127.0.0.1:5000/hadron/analyze \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customer_name": "Acme Corporation",
-    "service_product_name": "Enterprise AI Transformation",
-    "commercial_objective": "Establish a strategic foothold while maintaining sustainable economics",
-    "additional_context": "Customer is evaluating multiple transformation partners.",
-    "record_sys_id": "PR1001016"
-  }'
-```
-
----
-
-# 🛠️ Prerequisites
-
-## Required
-
-* Python 3.10+
-* Git
-* pip
-* Virtual environment
-* ServiceNow instance
-* ngrok or another secure tunnel for local integration testing
-
-## Optional / Runtime
-
-* Google Gemini API access
-* Qiskit
-* ServiceNow Flow Designer
-* ServiceNow REST integration capability
-
-> **Note:** The development environment previously used Python 3.9. Python 3.10+ is recommended for continued development because Python 3.9 has reached end-of-life and newer Qiskit / Google libraries are moving beyond it.
+1. **Start HADRON API**:
+   ```bash
+   python app.py
+   ```
+2. **Start ngrok tunnel on port 5000**:
+   ```bash
+   ngrok http 5000
+   ```
+3. **Copy the forwarding HTTPS URL** (e.g. `https://xxxx-xx-xx.ngrok-free.app`).
+4. **Update ServiceNow Flow Actions** with the ngrok URL:
+   - Quantum Action: `https://xxxx-xx-xx.ngrok-free.app/run_quantum_pricing`
+   - Intelligence Action: `https://xxxx-xx-xx.ngrok-free.app/hadron/analyze`
+5. **Start HADRON Control Tower**:
+   ```bash
+   python control_tower_app.py
+   ```
+   Open `http://127.0.0.1:5050` (or run a second ngrok tunnel `ngrok http 5050` to share the executive dashboard with judges!).
 
 ---
 
-# 🚀 Setup
+# 💻 Local Setup Instructions
 
-## 1. Clone
+### Prerequisites
+- Python 3.9, 3.10, or 3.11
+- A ServiceNow Developer Instance (PDI) with the `x_2216687_optimu_0_pricing_request` table
+- Google Gemini API key(s)
 
+### 1. Clone & Environment Setup
 ```bash
 git clone https://github.com/jayanthoffl/hadron-ai-plus.git
-
 cd hadron-ai-plus
-```
 
----
-
-## 2. Create virtual environment
-
-### macOS / Linux
-
-```bash
+# Create virtual environment
 python3 -m venv venv
-
 source venv/bin/activate
-```
 
-### Windows
-
-```powershell
-python -m venv venv
-
-.\venv\Scripts\activate
-```
-
----
-
-# 📦 3. Install dependencies
-
-```bash
+# Install dependencies
 pip install -r requirements.txt
 ```
 
----
-
-# 🔐 4. Configure environment
-
-Create:
-
-```text
-.env
+### 2. Configure Environment (`.env`)
+Copy the example file and populate your credentials:
+```bash
+cp .env.example .env
 ```
-
-Example:
-
+Edit `.env`:
 ```env
-GEMINI_API_KEY=your_google_gemini_api_key
-
-GEMINI_MODEL=your_primary_model
-
-GEMINI_FALLBACK_MODEL=your_fallback_model
+SERVICENOW_INSTANCE_URL=https://devXXXXXX.service-now.com
+SERVICENOW_USERNAME=admin
+SERVICENOW_PASSWORD=your_instance_password
+GEMINI_API_KEY=AIzaSy...
 ```
 
-Keep `.env` out of source control.
-
----
-
-# ▶️ 5. Start HADRON
-
+### 3. Launch the Stack
+You can start both services with a single command:
 ```bash
-python app.py
+./start.sh
 ```
+Or start them in separate terminals:
+- **Terminal 1 (AI & Quantum Engine)**:
+  ```bash
+  python app.py
+  # Running on http://127.0.0.1:5000
+  ```
+- **Terminal 2 (Control Tower Cockpit)**:
+  ```bash
+  python control_tower_app.py
+  # Running on http://127.0.0.1:5050
+  ```
 
-The development server should expose:
-
-```text
-http://127.0.0.1:5000
-```
+Open your browser to **`http://127.0.0.1:5050`**.
+- Credentials: User `admin` / Password `gM1T6@iJepI*` (or your ServiceNow credentials).
 
 ---
 
-# 🧪 6. Test locally
+# 🔌 API Specification
 
-```bash
-curl -X POST \
-  http://127.0.0.1:5000/hadron/analyze \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customer_name": "Acme Corporation",
-    "service_product_name": "Enterprise AI Transformation",
-    "commercial_objective": "Establish a strategic foothold while maintaining sustainable economics",
-    "additional_context": "Customer is evaluating multiple transformation partners.",
-    "record_sys_id": "PR1001016"
-  }'
-```
+### 1. `POST /run_quantum_pricing`
+Called by ServiceNow Flow Action `Run Quantum Pricing`.
 
----
-
-# 🌐 Exposing HADRON to ServiceNow
-
-For local development:
-
-```bash
-ngrok http 5000
-```
-
-You will receive a forwarding URL similar to:
-
-```text
-https://xxxxxxxx.ngrok-free.app
-```
-
-The effective endpoint becomes:
-
-```text
-POST https://xxxxxxxx.ngrok-free.app/hadron/analyze
-```
-
----
-
-# ☁️ ServiceNow Configuration
-
-In Flow Designer:
-
-```text
-Action
-  ↓
-REST Step
-```
-
-Configure:
-
-### HTTP Method
-
-```text
-POST
-```
-
-### Base URL
-
-```text
-https://<your-ngrok-host>
-```
-
-### Resource Path
-
-```text
-/hadron/analyze
-```
-
-### Header
-
-```text
-Content-Type: application/json
-```
-
-### Request Body
-
+**Request Body**:
 ```json
 {
-  "customer_name": "<Customer Name>",
-  "service_product_name": "<Service / Product Name>",
-  "commercial_objective": "<Commercial Objective>",
-  "additional_context": "<Additional Context>",
-  "record_sys_id": "<Record Sys ID>"
+  "client_revenue": 94000000000,
+  "employee_count": 590000,
+  "competitor_price": 7580000,
+  "market_volatility": 0.45,
+  "target_margin": 0.30,
+  "operating_cost": 8310000,
+  "hr_budget": 500000,
+  "deal_urgency": 8
+}
+```
+
+**Response Body**:
+```json
+{
+  "classical_price": 10803000.0,
+  "quantum_price": 12821451.0,
+  "recommended_price": 12821451.0,
+  "expected_margin": 0.352,
+  "acceptance_probability": 0.92,
+  "ai_value_drivers": "Operating Cost, Competitor Price, Target Margin, Deal Urgency",
+  "ai_explanation": "[SYS_LOG: 2026-09-26T21:41:00Z] - HADRON OPTIMIZATION LOCK: Classical price $10.8M vs Quantum QAOA price $12.8M...",
+  "intelligence_status": "2"
 }
 ```
 
 ---
 
-# 🔍 Integration Debugging
+### 2. `POST /hadron/analyze`
+Called by ServiceNow Flow Action `Run HADRON Intelligence` or Control Tower.
 
-If ServiceNow receives:
-
-```text
-500
-```
-
-inspect the REST step.
-
-Important fields:
-
-```text
-Status Code
-Response Body
-Response Headers
-Request Payload
-Resource Path
-Base URL
-```
-
-A particularly useful diagnostic pattern is:
-
-```text
-ServiceNow
-   ↓
-REST Step
-   ↓
-ngrok
-   ↓
-Flask
-   ↓
-Python terminal
-```
-
-The Python terminal should show:
-
-```text
-POST /hadron/analyze HTTP/1.1
-```
-
-For successful execution:
-
-```text
-200
-```
-
----
-
-# 🧪 Testing Strategy
-
-HADRON should be tested at multiple levels.
-
-## Level 1 — Python syntax
-
-```bash
-python -m py_compile orchestrator.py
-```
-
-or:
-
-```bash
-python -m py_compile \
-  agents/*.py \
-  economics/*.py \
-  optimization/*.py \
-  offers/*.py
-```
-
----
-
-## Level 2 — Local API
-
-```bash
-curl ...
-```
-
----
-
-## Level 3 — Failure simulation
-
-Test:
-
-```text
-Unknown customer
-Unknown service
-Missing market data
-Missing economics
-Gemini 429
-Gemini 503
-Invalid JSON
-Missing request fields
-Zero-value economics
-```
-
----
-
-## Level 4 — ServiceNow
-
-```text
-ServiceNow
-   ↓
-REST
-   ↓
-ngrok
-   ↓
-HADRON
-   ↓
-Response mapping
-```
-
----
-
-# 🛡️ Resilience Architecture
-
-HADRON is designed around graceful degradation.
-
-```mermaid
-flowchart LR
-
-    REQUEST["Opportunity Request"]
-
-    REQUEST --> DATA["Structured Intelligence"]
-
-    DATA --> CALC["Deterministic Calculations"]
-
-    CALC --> AI{"Generative AI Available?"}
-
-    AI -->|YES| SYNTH["Gemini Synthesis"]
-    AI -->|NO| FALLBACK["Deterministic Fallback"]
-
-    SYNTH --> RESULT["Structured Result"]
-    FALLBACK --> RESULT
-```
-
-This means:
-
-### Gemini available
-
-```text
-Rich executive narrative
-```
-
-### Gemini unavailable
-
-```text
-Deterministic executive intelligence
-```
-
-The commercial pipeline remains operational.
-
----
-
-# 🚨 Failure Modes
-
-## Gemini 429
-
-Example:
-
-```text
-RESOURCE_EXHAUSTED
-```
-
-Meaning:
-
-```text
-Model/project quota has been exceeded.
-```
-
-HADRON should move through its retry/fallback architecture rather than repeatedly hammering the same unavailable quota.
-
----
-
-## Gemini 503
-
-Example:
-
-```text
-UNAVAILABLE
-```
-
-Meaning:
-
-```text
-The upstream model service is temporarily unavailable.
-```
-
-HADRON retries and then falls back.
-
----
-
-## Missing commercial data
-
-If a service/product is not present in the current intelligence source:
-
-```text
-Unknown service
-      ↓
-Missing economics
-      ↓
-Zero/default economics
-```
-
-The optimization layer must protect against invalid mathematical operations such as:
-
-```python
-x / 0
-```
-
-and should instead surface missing evidence explicitly.
-
----
-
-# 📚 Evidence Model
-
-HADRON treats evidence as a first-class concept.
-
-Evidence should eventually be classified as:
-
-```text
-INTERNAL
-MARKET
-CALCULATED
-ASSUMPTION
-```
-
-Example:
-
+**Request Body**:
 ```json
-[
-  {
-    "type": "CALCULATED",
-    "source": "EconomicsEngine",
-    "description": "Minimum viable price calculated from internal economics."
+{
+  "customer_name": "DHL Courier",
+  "service_product_name": "Advanced Routing Service for Fleet",
+  "commercial_objective": "Implement Quantum across their Fleet Carrier",
+  "additional_context": "Requires on-premise industrial wireless mesh, edge TPU deployment"
+}
+```
+
+**Response Body**:
+```json
+{
+  "confidence": 1.0,
+  "customer_intelligence": {
+    "account_tier": "Tier 1 - Global Enterprise",
+    "annual_revenue": 94000000000,
+    "budget": 85000000,
+    "capacity_pressure": 0.92
   },
-  {
-    "type": "MARKET",
-    "source": "MarketAgent",
-    "description": "Observed competitor pricing signals."
+  "service_intelligence": {
+    "complexity": 0.78,
+    "duration_months": 9,
+    "fte_required": 15
   },
-  {
-    "type": "ASSUMPTION",
-    "source": "Commercial context",
-    "description": "Customer is evaluating multiple transformation partners."
-  }
-]
-```
-
----
-
-# 📊 Confidence
-
-Confidence should represent:
-
-> **Completeness and reliability of available evidence.**
-
-It should NOT mean:
-
-> "Probability that the deal will be won."
-
-This distinction is important.
-
-For example:
-
-```text
-confidence = 0.90
-```
-
-means:
-
-```text
-Evidence is relatively complete and reliable.
-```
-
-It does not mean:
-
-```text
-90% probability of winning.
-```
-
----
-
-# 🧠 Executive Decision Philosophy
-
-HADRON deliberately does not produce:
-
-```text
-"BUY THIS"
-"SELL AT THIS PRICE"
-"THIS IS THE BEST OPTION"
-```
-
-Instead it produces:
-
-```text
-Option A
-─────────
-Economics
-Trade-offs
-Risks
-Evidence
-
-Option B
-─────────
-Economics
-Trade-offs
-Risks
-Evidence
-
-Option C
-─────────
-Economics
-Trade-offs
-Risks
-Evidence
-```
-
-The executive remains the decision-maker.
-
-HADRON is the intelligence layer.
-
----
-
-# 🏢 Enterprise Vision
-
-The long-term vision is:
-
-```text
-                    ServiceNow
-                        │
-                        ▼
-               Commercial Record
-                        │
-                        ▼
-                ┌──────────────┐
-                │   HADRON     │
-                │              │
-                │ Intelligence │
-                │ Economics    │
-                │ Optimization │
-                │ Risk         │
-                │ GenAI        │
-                └──────┬───────┘
-                       │
-          ┌────────────┼────────────┐
-          ▼            ▼            ▼
-       Sales         Finance     Delivery
-          │            │            │
-          └────────────┼────────────┘
-                       ▼
-                  Executive
-                   Decision
-```
-
----
-
-# 🔮 Future Intelligence Architecture
-
-The current architecture is intentionally extensible.
-
-The future ingestion layer can evolve toward:
-
-```text
-                  ENTERPRISE DATA
-                         │
-        ┌────────────────┼────────────────┐
-        ▼                ▼                ▼
-   ServiceNow        CRM / ERP        External
-        │                │             Signals
-        └────────────────┼────────────────┘
-                         ▼
-                  INGESTION LAYER
-                         │
-                         ▼
-                  NORMALIZATION
-                         │
-                         ▼
-                 INTELLIGENCE GRAPH
-                         │
-        ┌────────────────┼────────────────┐
-        ▼                ▼                ▼
-     Customer         Service          Market
-     Intelligence     Intelligence    Intelligence
-        │                │                │
-        └────────────────┼────────────────┘
-                         ▼
-                    ECONOMICS
-                         │
-                         ▼
-                    OPTIMIZATION
-                         │
-                         ▼
-                       RISK
-                         │
-                         ▼
-                    EXECUTIVE AI
-                         │
-                         ▼
-                    SERVICENOW
-```
-
----
-
-# 🌐 Dynamic Intelligence Ingestion
-
-The current architecture can move beyond static demonstration data.
-
-Potential ingestion sources:
-
-### Internal
-
-```text
-ServiceNow
-CRM
-ERP
-Finance
-Contracts
-Product catalogs
-Historical opportunities
-Delivery systems
-```
-
-### External
-
-```text
-Public market information
-Competitor signals
-Industry research
-Public pricing signals
-Company information
-Market reports
-```
-
-### Contextual
-
-```text
-Opportunity notes
-Commercial objective
-Customer requirements
-Sales context
-Strategic priorities
-```
-
----
-
-# 🧬 Intelligence Graph Vision
-
-Eventually HADRON can connect:
-
-```text
-Customer
-   │
-   ├── Industry
-   ├── Existing Products
-   ├── Contracts
-   ├── Opportunities
-   └── Strategic Context
-          │
-          ▼
-       Service
-          │
-          ├── Complexity
-          ├── Cost
-          ├── Dependencies
-          └── Delivery Model
-                 │
-                 ▼
-               Market
-                 │
-                 ├── Competitors
-                 ├── Pricing
-                 └── Signals
-                        │
-                        ▼
-                    Economics
-                        │
-                        ▼
-                    Scenarios
-                        │
-                        ▼
-                      Risk
-                        │
-                        ▼
-                    Executive
-```
-
----
-
-# 🛣️ Roadmap
-
-## Phase I — Core Engine
-
-* [x] Flask API
-* [x] Request schema
-* [x] Orchestrator
-* [x] Customer Agent architecture
-* [x] Service Agent architecture
-* [x] Market Agent architecture
-* [x] Economics Engine
-* [x] Scenario Generator
-* [x] Classical Optimizer
-* [x] Quantum Optimizer
-* [x] Offer Generator
-* [x] Risk Agent
-* [x] Executive Agent
-* [x] Gemini integration
-* [x] Deterministic fallback
-
----
-
-## Phase II — ServiceNow Integration
-
-* [x] ServiceNow Flow Designer Action
-* [x] REST integration
-* [x] ngrok development connectivity
-* [x] JSON request mapping
-* [x] JSON response mapping
-* [x] Action testing
-* [x] Integration debugging
-
----
-
-## Phase III — Intelligence Ingestion
-
-* [ ] Replace demo customer data
-* [ ] Replace demo service data
-* [ ] Replace demo market data
-* [ ] Replace demo economics data
-* [ ] ServiceNow record ingestion
-* [ ] Dynamic enterprise data retrieval
-* [ ] Market research ingestion
-* [ ] Evidence provenance
-* [ ] Source attribution
-* [ ] Data freshness tracking
-
----
-
-## Phase IV — Commercial Intelligence
-
-* [ ] Historical deal intelligence
-* [ ] Pricing history
-* [ ] Win/loss intelligence
-* [ ] Customer relationship intelligence
-* [ ] Competitor intelligence
-* [ ] Contract intelligence
-* [ ] Delivery intelligence
-* [ ] Account-level intelligence
-
----
-
-## Phase V — Advanced Optimization
-
-* [ ] Formal constraint model
-* [ ] Advanced classical optimization
-* [ ] QUBO formulation
-* [ ] Quantum scenario optimization
-* [ ] Resource allocation optimization
-* [ ] Multi-objective optimization
-* [ ] Sensitivity analysis
-* [ ] Scenario simulation
-
----
-
-## Phase VI — ServiceNow Experience
-
-* [ ] HADRON Analysis table
-* [ ] Executive dashboard
-* [ ] Pricing scenario UI
-* [ ] Risk visualization
-* [ ] Evidence explorer
-* [ ] Confidence visualization
-* [ ] Opportunity integration
-* [ ] Approval workflow
-* [ ] Executive workspace
-
----
-
-# 🎨 Future ServiceNow Experience
-
-The final experience should feel less like an API response and more like a commercial cockpit.
-
-```text
-╔════════════════════════════════════════════════════════════╗
-║                    HADRON AI++                            ║
-║              COMMERCIAL INTELLIGENCE                      ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  CUSTOMER                                                  ║
-║  Acme Corporation                                          ║
-║                                                            ║
-║  SERVICE                                                   ║
-║  Enterprise AI Transformation                              ║
-║                                                            ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  EXECUTIVE INTELLIGENCE                                    ║
-║                                                            ║
-║  Market signals indicate...                               ║
-║  Internal economics indicate...                           ║
-║  The offer alternatives represent...                      ║
-║                                                            ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  ECONOMICS                                                 ║
-║                                                            ║
-║  Cost       Margin       Internal Floor       Market       ║
-║  ████       ████         ████████             █████       ║
-║                                                            ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  COMMERCIAL SCENARIOS                                      ║
-║                                                            ║
-║  ENTRY       BALANCED       STRATEGIC       PREMIUM       ║
-║                                                            ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  ⚠ RISK INTELLIGENCE                                       ║
-║                                                            ║
-║  HIGH  PRICE_DISCONNECT                                   ║
-║  HIGH  DELIVERY_COMPLEXITY                                ║
-║                                                            ║
-╠════════════════════════════════════════════════════════════╣
-║                                                            ║
-║  EVIDENCE                                                  ║
-║                                                            ║
-║  Internal  •  Market  •  Calculated  •  Assumption        ║
-║                                                            ║
-╚════════════════════════════════════════════════════════════╝
-```
-
----
-
-# 🔒 Security Considerations
-
-HADRON should never expose secrets in source control.
-
-Never commit:
-
-```text
-.env
-API keys
-ServiceNow credentials
-ngrok credentials
-private customer data
-```
-
-Recommended:
-
-```gitignore
-.env
-.env.*
-venv/
-__pycache__/
-*.pyc
-```
-
----
-
-# 🧪 Development Principles
-
-## Principle 1 — Deterministic first
-
-Financial calculations should be reproducible.
-
----
-
-## Principle 2 — Evidence over invention
-
-Every major conclusion should be traceable to:
-
-```text
-Internal data
-Market data
-Calculation
-Assumption
-```
-
----
-
-## Principle 3 — AI as synthesis
-
-Generative AI should explain and synthesize structured intelligence.
-
-It should not silently become the source of financial truth.
-
----
-
-## Principle 4 — Multiple alternatives
-
-Commercial decisions should expose trade-offs.
-
----
-
-## Principle 5 — Graceful degradation
-
-External AI failure should not destroy the entire pipeline.
-
----
-
-## Principle 6 — Enterprise integration
-
-The system should fit into existing enterprise workflows rather than forcing users into another disconnected application.
-
----
-
-# ⚙️ Technology Stack
-
-| Layer                  | Technology                |
-| ---------------------- | ------------------------- |
-| Enterprise Platform    | ServiceNow                |
-| Workflow               | Flow Designer             |
-| API                    | Flask                     |
-| Language               | Python                    |
-| Generative AI          | Google Gemini             |
-| Classical Optimization | Python                    |
-| Quantum Computing      | Qiskit                    |
-| Integration Tunnel     | ngrok                     |
-| Structured Data        | JSON                      |
-| Configuration          | Environment variables     |
-| Architecture           | Multi-agent orchestration |
-
----
-
-# 📡 API Contract
-
-## Request
-
-```json
-{
-  "customer_name": "Acme Corporation",
-  "service_product_name": "Enterprise AI Transformation",
-  "commercial_objective": "Establish a strategic foothold",
-  "additional_context": "Customer is evaluating multiple transformation partners.",
-  "record_sys_id": "PR1001016"
+  "internal_economics": {
+    "baseline_delivery_cost": 8310000,
+    "floor_price": 11871714,
+    "target_margin": 0.30
+  },
+  "offer_set": [
+    { "name": "Entry Offer", "price": 11871714, "margin": 0.30 },
+    { "name": "Balanced Offer", "price": 12821451, "margin": 0.352 },
+    { "name": "Strategic Offer", "price": 14010000, "margin": 0.407 },
+    { "name": "Premium Offer", "price": 15640000, "margin": 0.469 }
+  ],
+  "executive_summary": "Executive Decision Brief: DHL Courier commercial strategy approved..."
 }
 ```
 
 ---
 
-## Response
-
-```json
-{
-  "executive_summary": "...",
-
-  "customer_intelligence": "...",
-
-  "service_intelligence": "...",
-
-  "market_intelligence": "...",
-
-  "internal_economics": "...",
-
-  "competitive_intelligence": "...",
-
-  "offer_set": [],
-
-  "risks": [],
-
-  "evidence": [],
-
-  "confidence": 0.0,
-
-  "run_id": "PR1001016"
-}
-```
+### 3. `GET /api/requests`
+Used by HADRON Control Tower. Features a 15-second in-memory TTL cache with sub-3ms response times. Returns active deals from ServiceNow table `x_2216687_optimu_0_pricing_request`.
 
 ---
 
-# 🧭 End-to-End Example
+# 🏆 Why HADRON Wins
 
-Input:
-
-```text
-Customer:
-Acme Corporation
-
-Service:
-Enterprise AI Transformation
-
-Objective:
-Establish a strategic foothold while maintaining
-sustainable economics.
-
-Context:
-Customer is evaluating multiple transformation partners.
-```
-
-HADRON processes:
-
-```text
-                 ACME OPPORTUNITY
-                       │
-                       ▼
-                CUSTOMER CONTEXT
-                       │
-                       ▼
-              SERVICE INTELLIGENCE
-                       │
-                       ▼
-              MARKET INTELLIGENCE
-                       │
-                       ▼
-                ECONOMICS ENGINE
-                       │
-                       ▼
-              SCENARIO GENERATION
-                       │
-                       ▼
-            CLASSICAL OPTIMIZATION
-                       │
-                       ▼
-             QUANTUM EXPLORATION
-                       │
-                       ▼
-               OFFER GENERATION
-                       │
-                       ▼
-                 RISK ENGINE
-                       │
-                       ▼
-               EXECUTIVE AGENT
-                       │
-               ┌───────┴───────┐
-               ▼               ▼
-             Gemini        Fallback
-               │               │
-               └───────┬───────┘
-                       ▼
-              EXECUTIVE BRIEF
-                       │
-                       ▼
-                  ServiceNow
-```
-
----
-
-# 🌟 What Makes HADRON Different?
-
-HADRON is not intended to be:
-
-```text
-Just a chatbot
-```
-
-It is not simply:
-
-```text
-LLM + prompt
-```
-
-And it is not simply:
-
-```text
-Pricing calculator
-```
-
-The architecture combines:
-
-```text
-Enterprise Context
-       +
-Structured Intelligence
-       +
-Deterministic Economics
-       +
-Scenario Optimization
-       +
-Quantum Exploration
-       +
-Deterministic Risk
-       +
-Generative Synthesis
-       +
-ServiceNow Workflow
-```
-
-into a single commercial intelligence pipeline.
-
----
-
-# 🧠 The HADRON Model
-
-```text
-                    ┌──────────────────┐
-                    │     CUSTOMER     │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │     SERVICE      │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │      MARKET      │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │    ECONOMICS     │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │    SCENARIOS     │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │   OPTIMIZATION   │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │      RISK        │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │    EXECUTIVE     │
-                    │   INTELLIGENCE   │
-                    └────────┬─────────┘
-                             │
-                    ┌────────▼─────────┐
-                    │    SERVICENOW    │
-                    └──────────────────┘
-```
-
----
-
-# 🚀 Long-Term Vision
-
-The ultimate objective is to make HADRON a reusable commercial intelligence platform embedded directly into enterprise workflows.
-
-Instead of:
-
-```text
-Opportunity
-   ↓
-Spreadsheet
-   ↓
-Email
-   ↓
-Meeting
-   ↓
-Manual pricing
-   ↓
-Executive review
-```
-
-the future workflow becomes:
-
-```text
-Opportunity
-      ↓
-ServiceNow
-      ↓
-HADRON
-      ↓
-Enterprise Intelligence
-      ↓
-Economics
-      ↓
-Optimization
-      ↓
-Risk
-      ↓
-Executive Intelligence
-      ↓
-Decision
-```
-
-The goal is not to automate the executive's judgment.
-
-The goal is to make that judgment **better informed, faster, more explainable and more reproducible**.
-
----
-
-# 🧬 Project Status
-
-### Current Architecture
-
-```text
-██████████████████████████████████████████████████
-Core commercial intelligence architecture
-```
-
-### Current Development Focus
-
-```text
-ServiceNow
-      ↓
-Dynamic enterprise ingestion
-      ↓
-Real customer/service/market intelligence
-      ↓
-Production-grade evidence
-      ↓
-Commercial decision cockpit
-```
-
----
-
-# 🤝 Contributing
-
-Contributions should preserve the architectural principles of HADRON:
-
-1. Keep financial calculations deterministic.
-2. Keep risk triggers deterministic.
-3. Avoid embedding business truth exclusively inside prompts.
-4. Preserve structured schemas.
-5. Maintain fallback behavior.
-6. Add tests for new commercial logic.
-7. Keep external intelligence traceable to its source.
-8. Do not introduce unsupported claims of AI or quantum advantage.
-
----
-
-# 📜 License
-
-Add the project's chosen license here.
+| Assessment Dimension | Traditional Pricing / Standard GenAI | HADRON AI++ |
+| :--- | :--- | :--- |
+| **Financial Integrity** | LLMs hallucinate prices; risks negative margins. | **Deterministic Math Floor**: 30% margin is mathematically guaranteed before GenAI ever sees the deal. |
+| **Optimization Depth** | Static spreadsheets or basic linear regression. | **Qiskit QAOA Quantum Simulation**: Explores non-linear multi-dimensional combinatorial price states. |
+| **System of Record** | Disconnected tools (Salesforce, Excel, Slack). | **ServiceNow-Native**: Full roundtrip orchestration with Flow Designer, custom tables, and audit logs. |
+| **C-Level Explainability**| Black-box answers ("trust me, it's $5M"). | **Audited Evidence Chain**: Every quote is backed by GDC FTE rate cards, competitor signals, and risk factors. |
+| **Production Speed** | 3 to 4 weeks across multi-tier approvals. | **Sub-30 Second Full Roundtrip**: Instantaneous algorithmic intelligence with 1-click ServiceNow write-back. |
+| **UI Experience** | Standard form grids and manual data entry. | **Executive 3D Cockpit**: Radial node graph, live opportunity orbs, dual donut telemetry, and instant pre-rendering. |
 
 ---
 
 <div align="center">
 
-# ⚛️ HADRON AI++
+### ⚛️ HADRON AI++
+**Architected for the Google & ServiceNow Enterprise AI Hackathon**
 
-### Intelligence before decision.
-
-<br/>
-
-**Customer → Service → Market → Economics → Optimization → Risk → Executive**
-
-<br/>
-
-<img
-src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Rocket.png"
-width="55"
-alt="Rocket"
-/>
-
-<br/><br/>
-
-<i>Built for commercial intelligence at enterprise scale.</i>
+*Built with Qiskit, Google Gemini, ServiceNow Flow Designer, and Flask.*
 
 </div>

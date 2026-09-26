@@ -184,8 +184,9 @@ Return ONLY valid JSON (no markdown formatting):
                             f"(attempt {attempt + 1}/3)"
                         )
 
-                        response = (
-                            self.client.models.generate_content(
+                        from gemini_pool import gemini_key_pool
+                        response = gemini_key_pool.execute_with_failover(
+                            lambda client: client.models.generate_content(
                                 model=model,
                                 contents=prompt
                             )

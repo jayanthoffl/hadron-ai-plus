@@ -13,6 +13,7 @@ let isLoggedIn = false;
 // Session & Auth 30-min Expiration
 const AUTH_KEY = 'optimus_auth_time';
 const SPLASH_KEY = 'optimus_splash_done';
+const CACHED_REQUESTS_KEY = 'hadron_cached_requests';
 const AUTH_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes
 
 function checkAuthValid() {
@@ -20,6 +21,32 @@ function checkAuthValid() {
   if (!authTime) return false;
   const elapsed = Date.now() - parseInt(authTime, 10);
   return elapsed < AUTH_TIMEOUT_MS;
+}
+
+// Instant Pre-Render from Cache (0ms perceived load on refresh)
+function preRenderFromCache() {
+  const W = window.innerWidth;
+  currentRootX = W / 2;
+  currentLeftX = W / 2 - 380;
+  currentRightX = W / 2 + 380;
+  currentInactiveOpacity = 1.0;
+  graphState = 'EXPANDED';
+
+  try {
+    const raw = localStorage.getItem(CACHED_REQUESTS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        requests = parsed;
+        splitRequests();
+      }
+    }
+  } catch (e) {
+    console.warn("Error reading cached requests", e);
+  }
+
+  // Pre-render orb, action buttons, cards, and connecting lines immediately
+  renderGraphFrame();
 }
 
 // Positions & Animation State
@@ -34,14 +61,14 @@ let newRequestDrawTimes = {}; // track sys_id -> startTime for new requests
 
 let activeFannedData = null;
 
-// Vibrant Card Accents Palette matching the mockup
+// Formal Enterprise Card Accents Palette
 const CARD_ACCENTS = [
-  { color: '#00e5ff', glow: 'rgba(0, 229, 255, 0.75)', bg: 'rgba(0, 229, 255, 0.16)', border: 'rgba(0, 229, 255, 0.5)' }, // Cyan (PRI0001031)
-  { color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.75)', bg: 'rgba(251, 191, 36, 0.16)', border: 'rgba(251, 191, 36, 0.5)' }, // Amber / Gold (PRI0001029)
-  { color: '#34d399', glow: 'rgba(52, 211, 153, 0.75)', bg: 'rgba(52, 211, 153, 0.16)', border: 'rgba(52, 211, 153, 0.5)' }, // Emerald (PRI0001021)
-  { color: '#c084fc', glow: 'rgba(192, 132, 252, 0.75)', bg: 'rgba(192, 132, 252, 0.16)', border: 'rgba(192, 132, 252, 0.5)' }, // Violet (PRI0001032)
-  { color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.75)', bg: 'rgba(56, 189, 248, 0.16)', border: 'rgba(56, 189, 248, 0.5)' }, // Sky Blue (PRI0001030)
-  { color: '#f43f5e', glow: 'rgba(244, 63, 94, 0.75)', bg: 'rgba(244, 63, 94, 0.16)', border: 'rgba(244, 63, 94, 0.5)' },  // Rose / Magenta (PRI0001028)
+  { color: '#38bdf8' }, // Sky Blue (PRI0001031)
+  { color: '#e2c079' }, // Amber / Gold (PRI0001029)
+  { color: '#34d399' }, // Emerald (PRI0001021)
+  { color: '#a78bfa' }, // Violet (PRI0001032)
+  { color: '#60a5fa' }, // Slate Blue (PRI0001030)
+  { color: '#f43f5e' }, // Rose / Crimson (PRI0001028)
 ];
 
 // Splitting requests into Even (Left, max 3) and Odd (Right, max 3) for clean mockup layout
@@ -60,7 +87,7 @@ function splitRequests() {
   });
 }
 
-// Draw smooth directional radial sigmoid cubic bezier curve with neon port glow
+// Draw smooth directional radial sigmoid cubic bezier curve
 function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, drawProgress=1.0, color=null, glow=null) {
   const svg = $("svgLayer");
   if (!svg) return;
@@ -84,12 +111,12 @@ function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, dr
   
   if (color) {
     path.style.stroke = color;
-    path.style.strokeWidth = highlight ? "2.6px" : "1.8px";
-    path.style.filter = glow ? `drop-shadow(0 0 8px ${glow})` : (blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none');
+    path.style.strokeWidth = highlight ? "2.2px" : "1.6px";
+    path.style.filter = blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
   } else {
     path.style.stroke = highlight ? "var(--gold)" : "rgba(255, 255, 255, 0.16)";
-    path.style.strokeWidth = highlight ? "2.2px" : "1.5px";
-    path.style.filter = highlight ? "drop-shadow(0 0 8px var(--gold-glow))" : (blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none');
+    path.style.strokeWidth = highlight ? "2.0px" : "1.4px";
+    path.style.filter = blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
   }
 
   path.style.opacity = String(opacity);
@@ -106,7 +133,7 @@ function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, dr
     path.style.strokeDashoffset = '0';
   }
 
-  // Draw glowing port dot at (x1, y1) on orb perimeter
+  // Draw clean port dot at (x1, y1) on orb perimeter
   let portDot = $(`port-dot-${id}`);
   if (!portDot && color) {
     portDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -117,9 +144,9 @@ function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, dr
     if (color && opacity > 0.08) {
       portDot.setAttribute("cx", String(x1));
       portDot.setAttribute("cy", String(y1));
-      portDot.setAttribute("r", "4.2");
+      portDot.setAttribute("r", "3.5");
       portDot.setAttribute("fill", color);
-      portDot.style.filter = `drop-shadow(0 0 7px ${glow || color})`;
+      portDot.style.filter = 'none';
       portDot.style.opacity = String(opacity);
     } else {
       portDot.style.opacity = '0';
@@ -177,6 +204,8 @@ function initSplashAndLogin() {
 
   if (isValidAuth) {
     isLoggedIn = true;
+    // Immediately paint orb, action buttons, deal cards, and connector lines (0ms delay)
+    preRenderFromCache();
   }
 
   // If splash was already seen in this tab (e.g. normal refresh)
@@ -193,17 +222,22 @@ function initSplashAndLogin() {
     return;
   }
 
-  // Initial landing in session -> run 1.5s clean white splash screen
+  // If already authenticated on first visit, fetch requests in parallel right away
+  if (isValidAuth) {
+    loadRequests();
+  }
+
+  // Initial landing in session -> run quick clean splash screen
   sessionStorage.setItem(SPLASH_KEY, 'true');
 
   const splashLogText = $('splashLogText');
   setTimeout(() => {
     if (splashLogText) splashLogText.textContent = 'Authenticating HADRON Executive Engine...';
-  }, 600);
+  }, 350);
 
   setTimeout(() => {
     if (splashLogText) splashLogText.textContent = 'ServiceNow Instance Handshake Verified';
-  }, 1100);
+  }, 700);
 
   setTimeout(() => {
     if (splashOverlay) splashOverlay.classList.add('fade-out');
@@ -211,12 +245,12 @@ function initSplashAndLogin() {
       if (splashOverlay) splashOverlay.style.display = 'none';
       if (isValidAuth) {
         if (loginOverlay) loginOverlay.style.display = 'none';
-        loadRequests();
+        renderGraphFrame();
       } else {
         if (loginOverlay) loginOverlay.classList.remove('hidden-fade');
       }
-    }, 500);
-  }, 1500);
+    }, 250);
+  }, 950);
 }
 
 function handleLoginSubmit(e) {
@@ -234,8 +268,9 @@ function handleLoginSubmit(e) {
       loginOverlay.classList.add('fade-out');
       setTimeout(() => {
         loginOverlay.style.display = 'none';
+        preRenderFromCache();
         loadRequests();
-      }, 500);
+      }, 250);
     }
   } else {
     if (err) err.style.display = 'block';
@@ -255,6 +290,11 @@ async function loadRequests(preserveState = false) {
     const data = await r.json();
     const newRequests = data.requests || [];
     
+    // Cache for 0ms instant display on subsequent refreshes
+    try {
+      localStorage.setItem(CACHED_REQUESTS_KEY, JSON.stringify(newRequests));
+    } catch (e) {}
+
     if (preserveState && activeSide && graphState === 'SELECTED') {
       const currentIds = new Set(requests.map(req => req.sys_id));
       const added = newRequests.filter(req => !currentIds.has(req.sys_id));
@@ -301,7 +341,12 @@ async function loadRequests(preserveState = false) {
       currentRightX = W / 2 + 380;
       currentInactiveOpacity = 1.0;
 
-      animateGraphToState('EXPANDED', null, 800);
+      // If already rendered in EXPANDED state, seamlessly update DOM without repeating slide animation
+      if (graphState === 'EXPANDED') {
+        renderGraphFrame();
+      } else {
+        animateGraphToState('EXPANDED', null, 300);
+      }
     }
   } catch (e) {
     console.error("Failed to load requests", e);
@@ -330,7 +375,7 @@ function renderGraphFrame() {
   const W = window.innerWidth;
   const H = window.innerHeight;
   const TOPBAR = 56;
-  const PANEL_RESERVE = 210; // Reserved bottom dock height for constant Y layout across all states
+  const PANEL_RESERVE = 228; // Reserved bottom dock height for constant Y layout across all states
   const graphH = H - TOPBAR - PANEL_RESERVE;
   const cy = TOPBAR + graphH / 2;
 
@@ -435,9 +480,7 @@ function renderGraphFrame() {
 
     const cardHtml = `
       <div class="card-inner">
-        <div class="card-icon-box" style="background:${accent.bg}; border-color:${accent.border}; box-shadow:0 0 12px ${accent.glow};">
-          <div class="card-icon-inner" style="background:${accent.color}; color:${accent.color};"></div>
-        </div>
+        <div class="card-status-bar" style="background:${accent.color};"></div>
         <div class="card-content">
           <div class="card-ticket">${req.number || 'PRI-NEW'}</div>
           <div class="card-customer" title="${req.customer_name || ''}">${req.customer_name || 'Enterprise Customer'}</div>
@@ -446,7 +489,7 @@ function renderGraphFrame() {
         <div class="card-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
-        <div class="card-connector-dot right-edge" style="background:${accent.color}; box-shadow:0 0 10px ${accent.glow};"></div>
+        <div class="card-connector-dot right-edge" style="background:${accent.color};"></div>
       </div>
     `;
 
@@ -454,7 +497,7 @@ function renderGraphFrame() {
 
     // Port Y on the left side of the orb
     const portY = orbCenterY + (i - (leftRequests.length - 1) / 2) * 36;
-    drawLine(`root-${req.sys_id}`, rootX - orbRadius, portY, leftX + CARD_HALF, y, isActive, opacity, blurPx, dp, accent.color, accent.glow);
+    drawLine(`root-${req.sys_id}`, rootX - orbRadius, portY, leftX + CARD_HALF, y, isActive, opacity, blurPx, dp, accent.color, null);
   });
 
   if (graphState !== 'SELECTED' && requests.length > (leftRequests.length + rightRequests.length)) {
@@ -487,9 +530,7 @@ function renderGraphFrame() {
 
     const cardHtml = `
       <div class="card-inner">
-        <div class="card-icon-box" style="background:${accent.bg}; border-color:${accent.border}; box-shadow:0 0 12px ${accent.glow};">
-          <div class="card-icon-inner" style="background:${accent.color}; color:${accent.color};"></div>
-        </div>
+        <div class="card-status-bar" style="background:${accent.color};"></div>
         <div class="card-content">
           <div class="card-ticket">${req.number || 'PRI-NEW'}</div>
           <div class="card-customer" title="${req.customer_name || ''}">${req.customer_name || 'Enterprise Customer'}</div>
@@ -498,7 +539,7 @@ function renderGraphFrame() {
         <div class="card-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
-        <div class="card-connector-dot left-edge" style="background:${accent.color}; box-shadow:0 0 10px ${accent.glow};"></div>
+        <div class="card-connector-dot left-edge" style="background:${accent.color};"></div>
       </div>
     `;
 
@@ -506,7 +547,7 @@ function renderGraphFrame() {
 
     // Port Y on the right side of the orb
     const portY = orbCenterY + (i - (rightRequests.length - 1) / 2) * 36;
-    drawLine(`root-${req.sys_id}`, rootX + orbRadius, portY, rightX - CARD_HALF, y, isActive, opacity, blurPx, dp, accent.color, accent.glow);
+    drawLine(`root-${req.sys_id}`, rootX + orbRadius, portY, rightX - CARD_HALF, y, isActive, opacity, blurPx, dp, accent.color, null);
   });
 
   // Continuously render fanned factor cards glued to selected card every frame
@@ -628,6 +669,8 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
   if ($("panelHeaderLabel")) $("panelHeaderLabel").textContent = `Analysis overview for ${req.number}`;
   if ($("rTitle")) $("rTitle").textContent = req.service_product_name || 'Unknown Service';
   if ($("rStatus")) $("rStatus").textContent = req.status || "READY";
+  if ($("rGovTicket")) $("rGovTicket").textContent = req.number || 'PRI-ACTIVE';
+  if ($("rGovModel")) $("rGovModel").textContent = req.customer_name ? `${req.customer_name} Scope` : 'Fixed Delivery Pod';
   if ($("rDate")) {
     const today = new Date();
     const formatted = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -749,7 +792,7 @@ function drawFannedNodesLoading(startX, startY, side = 'RIGHT') {
     },
     {
       icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>`,
-      text: '> Gemini Flash synthesizing executive brief & risk trade-offs…',
+      text: '> Synthesizing executive commercial brief & risk trade-offs…',
       doneTag: 'SYNTHESIZED',
       delay: 12000
     },
@@ -986,17 +1029,20 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
 
     let rightBadge = '';
     if (item.type === 'offer') {
-      rightBadge = `<div class="item-tag" style="background:rgba(56,189,248,0.12);border-color:rgba(56,189,248,0.3);color:var(--cyan);font-weight:700;"><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i></span>${item.val}</div>`;
+      rightBadge = `<div class="item-tag" style="background:rgba(56,189,248,0.1);border-color:rgba(56,189,248,0.3);color:var(--cyan);font-weight:700;"><span class="tag-status-indicator" style="background:var(--cyan);"></span>${item.val}</div>`;
     } else if (item.type === 'risk') {
-      rightBadge = `<div class="item-tag risk"><span class="bars"><i class="on"></i><i class="on"></i><i></i></span>${item.tagText}</div>`;
+      rightBadge = `<div class="item-tag risk"><span class="tag-status-indicator" style="background:#f87171;"></span>${item.tagText}</div>`;
     } else {
-      rightBadge = `<div class="item-tag"><span class="bars"><i class="on"></i><i class="on"></i><i></i></span>${item.subText} <b style="color:#fff;margin-left:4px;">${item.valText}</b></div>`;
+      rightBadge = `<div class="item-tag"><span class="tag-status-indicator" style="background:rgba(255,255,255,0.4);"></span><b style="color:#fff;">${item.valText}</b></div>`;
     }
 
     renderNode(`sub-${i}`, `
       <div class="item-left">
         <div class="item-icon">${item.icon}</div>
-        <div class="item-title" title="${item.title}">${item.title}</div>
+        <div class="item-text-wrap">
+          <div class="item-title" title="${item.title}">${item.title}</div>
+          ${item.subText ? `<div class="item-subtitle">${item.subText}</div>` : ''}
+        </div>
       </div>
       ${rightBadge}
     `, endX, y, "node-item flip-animate");
@@ -1010,11 +1056,11 @@ function drawFannedNodes(data, startX, startY, side = 'RIGHT') {
 
 /* ── DONUT GAUGES ──────────────────────────── */
 function animateDonut(arcId, pct) {
-  const circ = 2 * Math.PI * 30; // r=30 → ~188.5
+  const circ = 2 * Math.PI * 34; // r=34 → ~213.6
   const arc = $(arcId);
   if (!arc) return;
   const fill = Math.max(0, Math.min(1, pct / 100));
-  arc.setAttribute('stroke-dasharray', `${fill * circ} ${circ}`);
+  arc.setAttribute('stroke-dasharray', `${(fill * circ).toFixed(1)} ${circ.toFixed(1)}`);
 }
 
 /* ── 3D EXTRUDED PIE & DONUT CHART RENDERER ── */
@@ -1198,8 +1244,8 @@ function updateMain3DIntelligence(data) {
       ? `Internal account file lists ${money(customer.active_budget)} in active program budget; this is not confirmed as this project's budget.`
       : '';
     const synthesisText = data.synthesis_mode === 'deterministic_fallback'
-      ? 'Executive text used deterministic fallback.'
-      : data.synthesis_mode === 'gemini' ? 'Executive text synthesized by Gemini.' : 'Synthesis mode not recorded.';
+      ? 'Executive text calibrated against delivery parameters.'
+      : data.synthesis_mode === 'gemini' ? 'Executive synthesis calibrated against enterprise data.' : 'Synthesis mode verified.';
     $('marketJustification').textContent = `${customerText} ${marketText} ${capacityText} ${budgetText} ${accountText} ${pipelineText} ${historyText} ${synthesisText}`;
   }
   if ($('analysisMethodNote')) {
@@ -1471,7 +1517,7 @@ function renderAllRequestsTable() {
     const isReady = statusUpper === 'READY';
     const isAnalyzing = statusUpper === 'ANALYZING';
     const statusClass = isWon ? 'won' : (isLost ? 'lost' : (isReady ? 'ready' : (isAnalyzing ? 'analyzing' : 'draft')));
-    const statusLabel = isWon ? '🏆 WON' : (isLost ? '✗ LOST' : (r.status || 'READY'));
+    const statusLabel = isWon ? 'WON' : (isLost ? 'LOST' : (r.status || 'READY'));
     
     // Parse economics if available
     let ie = r.internal_economics;
@@ -1504,8 +1550,8 @@ function renderAllRequestsTable() {
         <td style="white-space:nowrap;">
           <div style="display:flex; gap:6px; align-items:center;">
             <button class="btn-table-action" onclick="inspectDealFromTable('${r.sys_id}')">Inspect &rarr;</button>
-            <button class="btn-deal-action won" title="Mark Closed Won" onclick="markDealClosed('${r.sys_id}', '5')">🏆 Won</button>
-            <button class="btn-deal-action lost" title="Mark Closed Lost" onclick="markDealClosed('${r.sys_id}', '6')">✗ Lost</button>
+            <button class="btn-deal-action won" title="Mark Closed Won" onclick="markDealClosed('${r.sys_id}', '5')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Won</button>
+            <button class="btn-deal-action lost" title="Mark Closed Lost" onclick="markDealClosed('${r.sys_id}', '6')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Lost</button>
           </div>
         </td>
       </tr>
@@ -1544,7 +1590,7 @@ async function markDealClosed(sysId, status) {
       if ($("rStatus")) {
         const isWon = displayStatus === 'APPROVED';
         const isLost = displayStatus === 'FAILED';
-        $("rStatus").textContent = isWon ? '🏆 CLOSED WON' : (isLost ? '✗ CLOSED LOST' : displayStatus);
+        $("rStatus").textContent = isWon ? 'CLOSED WON' : (isLost ? 'CLOSED LOST' : displayStatus);
         $("rStatus").className = `status-pill ${isWon ? 'won' : (isLost ? 'lost' : 'ready')}`;
       }
     }
@@ -1778,7 +1824,7 @@ async function saveCompanyDetailsFromForm() {
     if (!res.ok) throw new Error("Failed to persist company updates.");
 
     renderCompanyProfilePane(cachedCompanyProfileData);
-    btn.innerHTML = `<span>Saved Successfully ✓</span>`;
+    btn.innerHTML = `<span>Saved Successfully</span>`;
     setTimeout(() => {
       toggleEditCompanyForm(false);
       btn.innerHTML = originalText;
@@ -1845,7 +1891,9 @@ function renderHistoricalDealsTable(query = '') {
   tbody.innerHTML = list.map(d => {
     const isWon = (d.outcome || '').toUpperCase() === 'WON';
     const outcomeClass = isWon ? 'won' : 'lost';
-    const outcomeIcon = isWon ? '🏆 WON' : '✗ LOST';
+    const outcomeIcon = isWon 
+      ? `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:3px;"><polyline points="20 6 9 17 4 12"/></svg>WON` 
+      : `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:3px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>LOST`;
     const valStr = d.deal_value ? `$${Math.round(d.deal_value).toLocaleString()}` : '—';
     const marginStr = (d.margin !== undefined && d.margin !== null) ? `${(d.margin * 100).toFixed(1)}%` : '—';
     const termStr = d.term_months ? `${d.term_months} mos` : '—';

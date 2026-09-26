@@ -20,6 +20,7 @@ It DOES:
 
 import json
 import os
+import re
 from pathlib import Path
 
 from google import genai
@@ -47,21 +48,29 @@ class ExtractionAgent:
 
         prompt = self._build_prompt(request)
 
-        try:
-            response = self._client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=prompt,
-            )
-            text = (response.text or "").strip()
-            if text.startswith("```"):
-                text = text.replace("```json", "").replace("```", "").strip()
+        from gemini_pool import gemini_key_pool
 
-            data = json.loads(text)
-            return HadronIntent(**data)
+        for model_name in ["gemini-3.8-flash", "gemini-flash-latest"]:
+            try:
+                response = gemini_key_pool.execute_with_failover(
+                    lambda client: client.models.generate_content(
+                        model=model_name,
+                        contents=prompt,
+                    )
+                )
+                text = (response.text or "").strip()
+                json_match = re.search(r"\{.*\}", text, re.DOTALL)
+                if json_match:
+                    text = json_match.group(0)
 
-        except Exception as exc:
-            print(f"[ExtractionAgent] Gemini error: {exc}. Using deterministic fallback.")
-            return self._deterministic_fallback(request)
+                data = json.loads(text)
+                return HadronIntent(**data)
+            except Exception as exc:
+                print(f"[ExtractionAgent] {model_name} error: {exc}.")
+                continue
+
+        print("[ExtractionAgent] All Gemini models unavailable. Using deterministic fallback.")
+        return self._deterministic_fallback(request)
 
     # ------------------------------------------------------------------
     # Helpers
