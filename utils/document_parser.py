@@ -1,5 +1,7 @@
-import io
-import fitz  # PyMuPDF
+try:
+    import pymupdf as fitz
+except ImportError:
+    import fitz
 
 def parse_document(file_bytes: bytes, file_name: str) -> str:
     """

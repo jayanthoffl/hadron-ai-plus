@@ -153,4 +153,5 @@ def run_quantum_pricing():
     return jsonify(response_payload)
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    backend_port = int(os.getenv("HADRON_API_PORT", 5000))
+    app.run(host="0.0.0.0", port=backend_port, debug=False)
