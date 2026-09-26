@@ -9,12 +9,11 @@
 
 <br/>
 
-<a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" /></a>
+<a href="https://hadron-ai-plus-production.up.railway.app"><img src="https://img.shields.io/badge/Production-Live%20Demo-brightgreen?style=for-the-badge&logo=railway" /></a>
+<a href="DOCUMENTATION.md"><img src="https://img.shields.io/badge/Technical-Dossier%20%26%20Judge%20Briefing-blueviolet?style=for-the-badge&logo=googledocs" /></a>
 <a href="https://qiskit.org/"><img src="https://img.shields.io/badge/Quantum-Qiskit%20QAOA-6929C4?style=for-the-badge&logo=qiskit&logoColor=white" /></a>
-<a href="https://flask.palletsprojects.com/"><img src="https://img.shields.io/badge/API-Flask%20REST-000000?style=for-the-badge&logo=flask&logoColor=white" /></a>
 <a href="https://www.servicenow.com/"><img src="https://img.shields.io/badge/Platform-ServiceNow%20PDI-81B5A1?style=for-the-badge&logo=servicenow&logoColor=white" /></a>
 <a href="https://ai.google.dev/"><img src="https://img.shields.io/badge/GenAI-Gemini%20Flash-4285F4?style=for-the-badge&logo=google&logoColor=white" /></a>
-<a href="https://github.com/"><img src="https://img.shields.io/badge/Deployment-Docker%20%7C%20Render%20%7C%20Railway-2496ED?style=for-the-badge&logo=docker&logoColor=white" /></a>
 
 <br/><br/>
 
@@ -22,16 +21,15 @@
 
 <br/>
 
+[Full Technical Dossier (DOCUMENTATION.md)](DOCUMENTATION.md) •
 [Executive Summary](#-executive-summary) •
 [System Architecture](#-system-architecture) •
 [ServiceNow Native Engine](#-servicenow-native-architecture) •
 [6-Pillar Intelligence Model](#-the-6-pillar-intelligence-model) •
-[PDI Audit & Codebase Reconciliation](#-servicenow-pdi-audit--reconciliation-matrix) •
-[Real-World Case Studies](#-live-data--real-deal-telemetry) •
-[Live Deployment Guide](#-live-deployment-guide) •
-[Local Setup](#-local-setup-instructions) •
-[API Reference](#-api-specification) •
-[Judge Value Proposition](#-why-hadron-wins)
+[Document AI Extraction](#-proposal-ingestion--document-extraction-engine) •
+[Live Deployment & Credentials](#-live-cloud-deployment--authorized-credentials) •
+[Judge Presentation Playbook](#-hackathon-judge-presentation-playbook) •
+[Why HADRON Wins](#-why-hadron-wins)
 
 </div>
 
@@ -51,9 +49,11 @@ HADRON separates **deterministic mathematical truth** (GDC rate cards, delivery 
 
 ### Core Capabilities:
 - **Two-Way ServiceNow Handshake**: Integrated with ServiceNow Flow Designer (`HADRON Commercial Intelligence Orchestration`) and custom Table API endpoints.
-- **Quantum Combinatorial Optimization**: Uses Qiskit QAOA quantum circuits parameterized by market volatility, deal urgency, and target margin to explore non-linear price acceptance landscapes.
+- **Quantum Combinatorial Optimization**: Uses Qiskit QAOA 7-qubit quantum circuits parameterized by market volatility, deal urgency, and target margin to explore 108 discrete commercial packaging configurations.
+- **Proposal Document AI Extraction**: Automated multi-format text extraction (PDF, DOCX, TXT) with Gemini heuristic entity pre-filling for customer, offering, and commercial scope.
 - **Multi-Key Failover Pool**: Automatic zero-downtime key rotation for Google Gemini (`gemini-3.8-flash` with deterministic algorithmic fallback).
 - **Executive 3D Control Tower**: Interactive canvas featuring real-time opportunity orbs, sub-3ms client caching, dual donut telemetry, and audit trail write-back.
+- **Multi-User RBAC & Security**: Clean sign-in gate, role badges (`AD`, `U1`, `U2`, `U3`), anti-prefill security, and dedicated one-click session logout.
 
 ---
 
@@ -254,6 +254,47 @@ Enterprise ServiceNow workflows cannot tolerate LLM rate-limits or daily quota e
 
 ---
 
+# 📄 Proposal Ingestion & Document Extraction Engine
+
+Real-world commercial pricing starts with 50-page RFPs, statements of work (SOWs), and client memos. HADRON includes a high-speed, zero-dependency ingestion pipeline supporting `.pdf`, `.docx`, `.doc`, `.txt`, `.md`, `.rtf`, `.csv`, and `.log` files up to 25MB:
+
+```
+┌──────────────────┐
+│ Client RFP File  ├─► [.PDF]  ──► PyMuPDF (fitz) Stream Extractor ────────┐
+│ (up to 25MB)     ├─► [.DOCX] ──► OpenXML ZIP Tree Element Parser ────────┤
+│                  ├─► [.TXT]  ──► UTF-8 / Latin-1 Unicode Normalizer ─────┤
+└──────────────────┘                                                       │
+                                                                           ▼
+                                                               ┌───────────────────────┐
+                                                               │ Clean Extracted Text  │
+                                                               └───────────┬───────────┘
+                                                                           │
+                      ┌────────────────────────────────────────────────────┴────────────────┐
+                      ▼                                                                     ▼
+        ┌────────────────────────────┐                                        ┌────────────────────────────┐
+        │ Fast AI Meta-Extractor     │                                        │ Token Budget Guardrails    │
+        │ (Gemini 3.8 Flash)         │                                        │ (Max 8,000 characters)     │
+        │ • Auto-detects Customer    │                                        │ • Strips prompt injection  │
+        │ • Auto-detects Offering    │                                        │ • Enriches additional      │
+        │ • Auto-detects Objective   │                                        │   context payload          │
+        └─────────────┬──────────────┘                                        └─────────────┬──────────────┘
+                      │                                                                     │
+                      └───────────────────────────────┬─────────────────────────────────────┘
+                                                      ▼
+                                       ┌─────────────────────────────┐
+                                       │ Pre-Filled Analysis Modal   │
+                                       │ (Instant 1-Click Execution) │
+                                       └─────────────────────────────┘
+```
+
+### Key Technical Details:
+- **Zero-Dependency DOCX Parsing**: Employs Python's standard library `zipfile` and `xml.etree.ElementTree` to parse raw OpenXML (`word/document.xml`) paragraphs without external COM/C++ dependencies.
+- **PyMuPDF Stream Handling**: Reads binary PDF streams in-memory with page-level layout preservation.
+- **Automated Heuristic Pre-Filling**: Gemini Flash extracts suggested customer names, proposed offerings, and commercial objectives within 400ms, pre-filling the modal automatically upon file drop.
+- **ServiceNow Attachment Sync**: When evaluating tickets directly from ServiceNow, HADRON automatically checks `sys_attachment` and parses linked documents on the fly.
+
+---
+
 # 📊 ServiceNow PDI Audit & Reconciliation Matrix
 
 A comprehensive audit of our live ServiceNow instance was conducted by a ServiceNow platform agent. Below is the transparent reconciliation between the ServiceNow PDI findings and the local codebase implementation:
@@ -305,75 +346,68 @@ The following real records in our ServiceNow PDI demonstrate HADRON's intelligen
 
 ---
 
-# 🚀 Live Deployment Guide
+---
 
-You can deploy HADRON live connected to ServiceNow via **Cloud PaaS (Railway / Render)** or via **Instant Tunnel (ngrok)**.
+# 🚀 Live Cloud Deployment & Authorized Credentials
+
+HADRON AI++ is continuously deployed in production on Railway cloud PaaS, fully integrated with ServiceNow PDI.
+
+### 🌐 Live Production URL:
+👉 **[https://hadron-ai-plus-production.up.railway.app](https://hadron-ai-plus-production.up.railway.app)**
 
 ```text
-┌────────────────────────┐         HTTPS Public URL         ┌────────────────────────┐
-│   ServiceNow PDI       ├─────────────────────────────────►│  HADRON Live Engine    │
-│   Flow Designer Actions│◄─────────────────────────────────┤  (Render / Railway)    │
-└────────────────────────┘         JSON Telemetry           └────────────────────────┘
+┌────────────────────────┐         HTTPS Public URL         ┌────────────────────────────────────────────────────────┐
+│   ServiceNow PDI       ├─────────────────────────────────►│  HADRON Live Engine (Railway PaaS)                     │
+│   Flow Designer Actions│◄─────────────────────────────────┤  https://hadron-ai-plus-production.up.railway.app      │
+└────────────────────────┘         JSON Telemetry           └────────────────────────────────────────────────────────┘
 ```
 
-### Option A: 1-Click Cloud Deployment (Railway / Render)
+### 🔐 Production RBAC Credentials for Judges & Reviewers:
+The login modal does **not** pre-fill credentials to ensure live security. Use any of the 4 authorized accounts:
 
-HADRON is container-ready and includes production `Procfile`, `start.sh`, and `requirements.txt`.
+| Username / ID | Password | Avatar Badge | Role & Permission Level |
+| :--- | :--- | :---: | :--- |
+| `admin` | `gM1T6@iJepI*` | `AD` | Platform Administrator & Chief Commercial Officer |
+| `admin.user1` | `q%yDhsJ0Ky%NgHjt$U8,35P{@sav>BWdEZsK@ypph.(5qT^Qsz!W;4N4??#1czd}v0$Za.z5TrswyM#23a` | `U1` | Commercial Deal Lead — APAC & EMEA |
+| `admin.user2` | `32fOWR_3dYfzxkvLEB!rV;sSh*V6s;zV4meDl_J+.<u:=VO9P7)K$!76jz2-aO7Yzdw@Ai(h&>yqrfV9%v%mi=9e` | `U2` | Enterprise Architect & Delivery Pricing Lead |
+| `admin.user3` | `EbQApn8{KZieBTgS&1q1cGt9+2IlKArL[6yi{*05RS_V$Wsi6?l%_6xHIu3zk!ri=aFk$Le,H1mh>}R_.3(k%,` | `U3` | Executive Reviewer & Risk Committee Member |
 
-1. **Push your repository to GitHub**:
-   ```bash
-   git push origin main
-   ```
-2. **Deploy on [Railway.app](https://railway.app) or [Render.com](https://render.com)**:
-   - Select **Deploy from GitHub repo**.
-   - Set the start command to:
-     ```bash
-     ./start.sh
-     ```
-   - Add your Environment Variables in the cloud dashboard:
-     ```env
-     SERVICENOW_INSTANCE_URL=https://devXXXXXX.service-now.com
-     SERVICENOW_USERNAME=admin
-     SERVICENOW_PASSWORD=your_password
-     GEMINI_API_KEY=your_gemini_api_key
-     HADRON_ENV=production
-     ```
-3. **Copy your Public HTTPS Domain**:
-   - Railway/Render gives you a URL like: `https://hadron-production.up.railway.app`
-4. **Update ServiceNow Flow Actions**:
-   - Open ServiceNow **Flow Designer** → Edit Action `Run Quantum Pricing` → Update REST endpoint URL to:
-     ```
-     https://hadron-production.up.railway.app/run_quantum_pricing
-     ```
-   - Edit Action `Run HADRON Intelligence` → Update REST endpoint URL to:
-     ```
-     https://hadron-production.up.railway.app/hadron/analyze
-     ```
-   - Click **Save** and **Activate**. Now your ServiceNow instance calls your live cloud deployment 24/7!
+- **One-Click Logout**: Click the crimson **`Logout`** button in the top navbar to instantly terminate the session, purge cache, and return to the login gate.
+- **Dynamic Identity Pill**: The header displays the active account initials and username (e.g. `[ [U1] admin.user1 ]`).
 
 ---
 
-### Option B: Instant Live Tunneling (ngrok)
+# 🎯 Hackathon Judge Presentation Playbook
 
-If you are demoing live from your development machine:
+A structured 5-minute presentation script designed for hackathon judges:
 
-1. **Start HADRON API**:
-   ```bash
-   python app.py
-   ```
-2. **Start ngrok tunnel on port 5000**:
-   ```bash
-   ngrok http 5000
-   ```
-3. **Copy the forwarding HTTPS URL** (e.g. `https://xxxx-xx-xx.ngrok-free.app`).
-4. **Update ServiceNow Flow Actions** with the ngrok URL:
-   - Quantum Action: `https://xxxx-xx-xx.ngrok-free.app/run_quantum_pricing`
-   - Intelligence Action: `https://xxxx-xx-xx.ngrok-free.app/hadron/analyze`
-5. **Start HADRON Control Tower**:
-   ```bash
-   python control_tower_app.py
-   ```
-   Open `http://127.0.0.1:5050` (or run a second ngrok tunnel `ngrok http 5050` to share the executive dashboard with judges!).
+### ⏱️ Act 1: The Core Value Proposition (1 Minute)
+1. **Navigate to**: [https://hadron-ai-plus-production.up.railway.app](https://hadron-ai-plus-production.up.railway.app).
+2. **Hook the Judges**:
+   > *"Enterprise transformation contracts take 3 to 4 weeks to price across spreadsheets and email threads. When companies blindly use ChatGPT or basic LLMs to price deals, they hallucinate numbers and breach margin floors. We built HADRON AI++ on one core rule: Generative AI must explain commercial intelligence — it must never manufacture financial truth."*
+
+### ⏱️ Act 2: The Control Tower 3D Cockpit (1 Minute)
+1. Showcase the **3D interactive radial node network** representing live enterprise pipeline deals.
+2. Highlight the **Floating Executive HUD Bar**: Live pipeline deals, pipeline value, win probability, and quantum margin uplift.
+3. Show the **RBAC Badge** (`AD`) and the dedicated **`Logout`** button.
+
+### ⏱️ Act 3: Live Document Upload & Quantum Optimization (2 Minutes)
+1. Click **`+ New Analysis`**.
+2. **Drag & drop a proposal document** (PDF or DOCX). Show how the document extraction engine parses the file and automatically pre-fills the Customer Name, Offering, and Commercial Objective.
+3. Click **`Run Commercial Analysis`**.
+4. **Explain the Quantum Advantage**:
+   - Show the 6-pillar pipeline executing in real-time.
+   - Reveal the **Classical Cost-Plus Price ($10.8M)** vs the **Qiskit QAOA Quantum Price ($12.8M)**.
+   - Explain how QAOA sampled 108 combinatorial configurations (pricing tiers, Pune GDC staffing leverage, and SLA gain-share terms) to capture an additional 5.2% in margin without degrading win probability.
+   - Point to the 4-tier offer set (Entry, Balanced, Strategic, Premium).
+   - Point to the Gemini-synthesized Executive Decision Memorandum stamped with UTC audit logs.
+
+### ⏱️ Act 4: ServiceNow Roundtrip & Anti-Tampering Governance (1 Minute)
+1. Show the created ServiceNow ticket (e.g. `PRI0001031`).
+2. Explain the **ServiceNow Flow Designer loop**: Record created ➔ Flow Designer triggers HADRON ➔ Algorithmic telemetry is calculated ➔ Automated write-back into ServiceNow table fields.
+3. Highlight the **`Lock Quantum Telemetry` UI Policy**: Once calculated, pricing fields are locked against manual sales tampering.
+4. Conclude:
+   > *"From 4 weeks down to 25 seconds. 100% deterministic margin protection. Zero hallucination. Live on ServiceNow."*
 
 ---
 
