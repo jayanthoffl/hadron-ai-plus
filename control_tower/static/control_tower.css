@@ -2283,4 +2283,121 @@ textarea { min-height: 75px; resize: vertical; }
   box-shadow: 0 2px 8px rgba(248, 113, 113, 0.3);
 }
 
+/* ── PROPOSAL / RFP DOCUMENT UPLOAD CARD ─────────────────────── */
+.proposal-upload-card {
+  margin: 12px 0 16px 0;
+  border: 1px dashed rgba(226, 192, 121, 0.35);
+  border-radius: 12px;
+  background: rgba(14, 25, 48, 0.45);
+  transition: all 0.25s ease;
+  overflow: hidden;
+}
+.proposal-upload-card:hover, .proposal-upload-card.drag-over {
+  border-color: var(--gold);
+  background: rgba(226, 192, 121, 0.08);
+}
+.upload-idle-state {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.upload-icon-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(226, 192, 121, 0.12);
+  border: 1px solid rgba(226, 192, 121, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.upload-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.upload-main-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.upload-badge-opt {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.upload-sub-title {
+  font-size: 0.70rem;
+  color: #94a3b8;
+}
+.upload-extracting-state {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  font-size: 0.78rem;
+  color: var(--cyan);
+  font-weight: 600;
+  background: rgba(56, 189, 248, 0.06);
+}
+.upload-success-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(52, 211, 153, 0.08);
+  border-left: 3px solid #34d399;
+}
+.upload-success-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.upload-doc-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #34d399;
+}
+.upload-doc-meta {
+  font-size: 0.70rem;
+  color: #94a3b8;
+}
+.upload-doc-remove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 6px;
+  transition: color 0.2s;
+}
+.upload-doc-remove:hover {
+  color: #f87171;
+}
+.spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(56, 189, 248, 0.2);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spinSmall 0.8s linear infinite;
+}
+@keyframes spinSmall {
+  to { transform: rotate(360deg); }
+}
+
+
 

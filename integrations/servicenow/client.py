@@ -153,3 +153,23 @@ class ServiceNowClient:
         response.raise_for_status()
         return response.content
 
+    def upload_attachment(self, table_name: str, table_sys_id: str, file_name: str, file_bytes: bytes) -> Dict[str, Any]:
+        """Upload a binary file attachment to a specific ServiceNow record."""
+        url = f"{self.instance_url}/api/now/attachment/file"
+        params = {
+            "table_name": table_name,
+            "table_sys_id": table_sys_id,
+            "file_name": file_name
+        }
+        headers = {
+            "Content-Type": "application/octet-stream",
+            "Accept": "application/json"
+        }
+        try:
+            resp = self.session.post(url, params=params, headers=headers, data=file_bytes, timeout=self.timeout)
+            if resp.status_code in [200, 201]:
+                return resp.json().get("result", {})
+        except Exception as exc:
+            print(f"[ServiceNowClient] Upload attachment error: {exc}")
+        return {}
+

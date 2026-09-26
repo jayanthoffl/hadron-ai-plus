@@ -1396,12 +1396,107 @@ window.addEventListener('resize', () => {
   }
 });
 
+// Proposal Document Upload State & Handlers
+let attachedProposalDoc = {
+  filename: null,
+  text: null,
+  wordCount: 0
+};
+
+function resetProposalAttachment() {
+  attachedProposalDoc = { filename: null, text: null, wordCount: 0 };
+  if ($("proposalFileInput")) $("proposalFileInput").value = "";
+  if ($("uploadIdleState")) $("uploadIdleState").classList.remove("hidden");
+  if ($("uploadExtractingState")) $("uploadExtractingState").classList.add("hidden");
+  if ($("uploadSuccessState")) $("uploadSuccessState").classList.add("hidden");
+}
+
+function removeAttachedProposal() {
+  resetProposalAttachment();
+}
+
+async function handleProposalFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if ($("uploadIdleState")) $("uploadIdleState").classList.add("hidden");
+  if ($("uploadExtractingState")) $("uploadExtractingState").classList.remove("hidden");
+  if ($("uploadSuccessState")) $("uploadSuccessState").classList.add("hidden");
+  if ($("extractingStatusText")) $("extractingStatusText").textContent = `Extracting intelligence from ${file.name}...`;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch("/api/extract_document", {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok) {
+      throw new Error(data.error || "Failed to parse document");
+    }
+
+    attachedProposalDoc = {
+      filename: data.filename,
+      text: data.extracted_text,
+      wordCount: data.word_count
+    };
+
+    // Smart auto-fill if fields are empty
+    if (data.suggested_customer && $("fCustomer") && !$("fCustomer").value.trim()) {
+      $("fCustomer").value = data.suggested_customer;
+    }
+    if (data.suggested_service && $("fService") && !$("fService").value.trim()) {
+      $("fService").value = data.suggested_service;
+    }
+    if (data.suggested_objective && $("fObjective") && !$("fObjective").value.trim()) {
+      $("fObjective").value = data.suggested_objective;
+    }
+
+    // Auto-enrich additional context
+    if ($("fContext")) {
+      const curCtx = $("fContext").value.trim();
+      const snippet = data.extracted_text.slice(0, 800).trim();
+      if (!curCtx) {
+        $("fContext").value = `[Extracted from ${data.filename} (${data.word_count.toLocaleString()} words)]:\n${snippet}...`;
+      }
+    }
+
+    if ($("uploadExtractingState")) $("uploadExtractingState").classList.add("hidden");
+    if ($("uploadSuccessState")) $("uploadSuccessState").classList.remove("hidden");
+    if ($("uploadedDocName")) $("uploadedDocName").textContent = data.filename;
+    if ($("uploadedDocMeta")) $("uploadedDocMeta").textContent = `${data.word_count.toLocaleString()} words extracted • Proposal scope ingested`;
+
+  } catch (err) {
+    alert("Document Extraction Notice: " + err.message);
+    resetProposalAttachment();
+  }
+}
+
+// Drag and drop attachment support
+setTimeout(() => {
+  const dropzone = $("proposalDropzone");
+  if (dropzone) {
+    dropzone.ondragover = (e) => { e.preventDefault(); dropzone.classList.add("drag-over"); };
+    dropzone.ondragleave = () => { dropzone.classList.remove("drag-over"); };
+    dropzone.ondrop = (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("drag-over");
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        handleProposalFileUpload({ target: { files: e.dataTransfer.files } });
+      }
+    };
+  }
+}, 500);
+
 // Modal bindings & reset
 function resetModalInputs() {
   if ($("fCustomer")) $("fCustomer").value = "";
   if ($("fService")) $("fService").value = "";
   if ($("fObjective")) $("fObjective").value = "";
   if ($("fContext")) $("fContext").value = "";
+  resetProposalAttachment();
 }
 
 if ($("newBtn")) $("newBtn").onclick = () => {
@@ -1426,13 +1521,16 @@ if ($("createBtn")) $("createBtn").onclick = async () => {
         customer_name: $("fCustomer").value,
         service_product_name: $("fService").value,
         commercial_objective: $("fObjective").value,
-        additional_context: $("fContext").value
+        additional_context: $("fContext").value,
+        document_text: attachedProposalDoc.text || "",
+        document_name: attachedProposalDoc.filename || ""
       })
     });
     if(!res.ok) throw new Error("Failed to create");
     const createdReq = await res.json();
     resetModalInputs();
     $("modal").classList.add("hidden");
+
     const wasSelected = (graphState === 'SELECTED');
     await loadRequests(wasSelected);
     

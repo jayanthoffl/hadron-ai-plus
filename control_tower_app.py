@@ -140,16 +140,101 @@ def requests_list():
             "source": "error"
         }), 502
 
+
+@app.post("/api/extract_document")
+def extract_document():
+    """Extract text from uploaded proposal/RFP document (PDF, Word docx, TXT, etc.)."""
+    if "file" not in request.files:
+        return jsonify({"error": "No document file uploaded"}), 400
+    
+    file = request.files["file"]
+    if not file.filename:
+        return jsonify({"error": "No file selected"}), 400
+    
+    file_bytes = file.read()
+    if len(file_bytes) > 25 * 1024 * 1024:
+        return jsonify({"error": "File size exceeds 25MB limit"}), 400
+    
+    try:
+        from utils.document_parser import parse_document
+        extracted_text = parse_document(file_bytes, file.filename)
+        if not extracted_text or extracted_text.startswith("[Error"):
+            return jsonify({"error": extracted_text or "Failed to extract text from document"}), 422
+        
+        words = len(extracted_text.split())
+        
+        # Fast AI heuristic extraction for form pre-filling
+        suggested_customer = ""
+        suggested_service = ""
+        suggested_objective = ""
+        
+        try:
+            from gemini_pool import gemini_key_pool
+            lines = [l.strip() for l in extracted_text.splitlines() if l.strip()]
+            snippet = "\n".join(lines[:20])[:2500]
+            
+            prompt = f"""
+            Analyze this proposal/RFP document snippet and extract 3 fields:
+            1. Customer/Client Name
+            2. Proposed Product or Service Title
+            3. Commercial Objective (1 brief sentence)
+
+            Document Snippet:
+            {snippet}
+
+            Return JSON ONLY:
+            {{"customer": "string", "service": "string", "objective": "string"}}
+            """
+            resp = gemini_key_pool.execute_with_failover(
+                lambda c: c.models.generate_content(
+                    model='gemini-3.8-flash',
+                    contents=prompt
+                )
+            )
+            import json as _json, re as _re
+            m = _re.search(r'\{.*\}', resp.text or "", _re.DOTALL)
+            if m:
+                meta = _json.loads(m.group(0))
+                suggested_customer = meta.get("customer", "")
+                suggested_service = meta.get("service", "")
+                suggested_objective = meta.get("objective", "")
+        except Exception as e:
+            print(f"[ExtractDocument] AI extraction note: {e}")
+
+        return jsonify({
+            "ok": True,
+            "filename": file.filename,
+            "word_count": words,
+            "char_count": len(extracted_text),
+            "extracted_text": extracted_text[:35000],
+            "suggested_customer": suggested_customer,
+            "suggested_service": suggested_service,
+            "suggested_objective": suggested_objective
+        })
+    except Exception as exc:
+        return jsonify({"error": f"Extraction failed: {str(exc)}"}), 500
+
+
 @app.post("/api/requests")
 def create_request():
     try:
         payload = request.get_json(force=True)
         client = ServiceNowClient()
+        
+        doc_text = payload.get("document_text", "")
+        doc_name = payload.get("document_name", "")
+        add_context = payload.get("additional_context", "")
+        
+        # Append proposal document telemetry into context if attached
+        if doc_text and "[PROPOSAL DOCUMENT" not in add_context:
+            doc_header = f"[PROPOSAL DOCUMENT: {doc_name}]" if doc_name else "[PROPOSAL DOCUMENT]"
+            add_context = f"{add_context}\n\n{doc_header}\n{doc_text[:8000]}".strip()
+
         sn_payload = {
             "customer_name": payload.get("customer_name", ""),
             "service_product_name": payload.get("service_product_name", ""),
             "commercial_objective": payload.get("commercial_objective", ""),
-            "additional_context": payload.get("additional_context", ""),
+            "additional_context": add_context,
             "intelligence_status": "NEW"
         }
         record = client.create_record(
@@ -164,7 +249,8 @@ def create_request():
             "service_product_name": record.get("service_product_name", ""),
             "status": record.get("intelligence_status", "") or "NEW",
             "commercial_objective": record.get("commercial_objective", ""),
-            "additional_context": record.get("additional_context", "")
+            "additional_context": record.get("additional_context", ""),
+            "document_text": doc_text
         }), 201
     except Exception as exc:
         return jsonify({"error": "Failed to create ServiceNow request", "detail": str(exc)}), 502
