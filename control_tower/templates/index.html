@@ -41,17 +41,18 @@
     <form id="loginForm" onsubmit="handleLoginSubmit(event)" class="login-form">
       <div class="input-field-group">
         <label>User ID</label>
-        <input type="text" id="loginUser" class="form-input" value="admin" required placeholder="User ID">
+        <input type="text" id="loginUser" class="form-input" value="" required placeholder="Enter User ID" autocomplete="username">
       </div>
       <div class="input-field-group">
         <label>Password</label>
-        <input type="password" id="loginPass" class="form-input" value="gM1T6@iJepI*" required placeholder="Password">
+        <input type="password" id="loginPass" class="form-input" value="" required placeholder="Enter Password" autocomplete="current-password">
       </div>
-      <div id="loginError" class="login-error-text" style="display:none;">Invalid ServiceNow credentials. Try again.</div>
+      <div id="loginError" class="login-error-text" style="display:none;">Invalid credentials. Please enter an authorized User ID and Password.</div>
       <button type="submit" class="btn-login-submit">
         <span>Sign In</span>
       </button>
     </form>
+
   </div>
 </div>
 
@@ -776,6 +777,6 @@
   </div>
 </div>
 
-<script src="/static/control_tower.js?v=19"></script>
+<script src="/static/control_tower.js?v=20"></script>
 </body>
 </html>

@@ -204,9 +204,11 @@ function initSplashAndLogin() {
 
   if (isValidAuth) {
     isLoggedIn = true;
+    updateUserAvatar();
     // Immediately paint orb, action buttons, deal cards, and connector lines (0ms delay)
     preRenderFromCache();
   }
+
 
   // If splash was already seen in this tab (e.g. normal refresh)
   if (hasSeenSplash) {
@@ -253,16 +255,39 @@ function initSplashAndLogin() {
   }, 950);
 }
 
+const AUTHORIZED_CREDENTIALS = {
+  'admin': 'gM1T6@iJepI*',
+  'admin.user1': 'q%yDhsJ0Ky%NgHjt$U8,35P{@sav>BWdEZsK@ypph.(5qT^Qsz!W;4N4??#1czd}v0$Za.z5TrswyM#23a',
+  'admin.user2': '32fOWR_3dYfzxkvLEB!rV;sSh*V6s;zV4meDl_J+.<u:=VO9P7)K$!76jz2-aO7Yzdw@Ai(h&>yqrfV9%v%mi=9e',
+  'admin.user3': 'EbQApn8{KZieBTgS&1q1cGt9+2IlKArL[6yi{*05RS_V$Wsi6?l%_6xHIu3zk!ri=aFk$Le,H1mh>}R_.3(k%,'
+};
+
+function updateUserAvatar(username) {
+  const avatar = document.querySelector('.avatar-in');
+  if (!avatar) return;
+  const user = username || localStorage.getItem('hadron_user') || 'admin';
+  let label = 'AD';
+  if (user === 'admin.user1') label = 'U1';
+  else if (user === 'admin.user2') label = 'U2';
+  else if (user === 'admin.user3') label = 'U3';
+  else if (user === 'admin') label = 'AD';
+  else label = user.slice(0, 2).toUpperCase();
+  avatar.textContent = label;
+  avatar.title = `Logged in as ${user} (Click to Logout)`;
+}
+
 function handleLoginSubmit(e) {
   if (e) e.preventDefault();
   const u = $('loginUser')?.value.trim();
   const p = $('loginPass')?.value.trim();
   const err = $('loginError');
 
-  if (u === 'admin' && p === 'gM1T6@iJepI*') {
+  if (u && AUTHORIZED_CREDENTIALS[u] && AUTHORIZED_CREDENTIALS[u] === p) {
     if (err) err.style.display = 'none';
     localStorage.setItem(AUTH_KEY, Date.now().toString());
+    localStorage.setItem('hadron_user', u);
     isLoggedIn = true;
+    updateUserAvatar(u);
     const loginOverlay = $('loginOverlay');
     if (loginOverlay) {
       loginOverlay.classList.add('fade-out');
@@ -279,10 +304,12 @@ function handleLoginSubmit(e) {
 
 function handleLogout() {
   localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem('hadron_user');
   sessionStorage.removeItem(SPLASH_KEY);
   isLoggedIn = false;
   location.reload(); // Hard reload to reset state and show login
 }
+
 
 async function loadRequests(preserveState = false) {
   try {
