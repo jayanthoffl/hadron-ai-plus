@@ -264,7 +264,7 @@ const AUTHORIZED_CREDENTIALS = {
 
 function updateUserAvatar(username) {
   const avatar = document.querySelector('.avatar-in');
-  if (!avatar) return;
+  const userText = document.getElementById('userIdText');
   const user = username || localStorage.getItem('hadron_user') || 'admin';
   let label = 'AD';
   if (user === 'admin.user1') label = 'U1';
@@ -272,8 +272,13 @@ function updateUserAvatar(username) {
   else if (user === 'admin.user3') label = 'U3';
   else if (user === 'admin') label = 'AD';
   else label = user.slice(0, 2).toUpperCase();
-  avatar.textContent = label;
-  avatar.title = `Logged in as ${user} (Click to Logout)`;
+  if (avatar) {
+    avatar.textContent = label;
+    avatar.title = `Logged in as ${user}`;
+  }
+  if (userText) {
+    userText.textContent = user;
+  }
 }
 
 function handleLoginSubmit(e) {

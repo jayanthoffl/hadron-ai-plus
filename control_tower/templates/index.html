@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HADRON Control Tower — Pricing Intelligence</title>
-  <link rel="stylesheet" href="/static/control_tower.css?v=17">
+  <link rel="stylesheet" href="/static/control_tower.css?v=21">
   <script>
     if (sessionStorage.getItem('optimus_splash_done') === 'true') {
       document.documentElement.classList.add('splash-bypassed');
@@ -82,17 +82,21 @@
   </div>
 
   <div class="top-right">
-    <button id="newBtn" class="btn-pill-gold">
+    <button id="newBtn" class="btn-pill-gold" title="Create New Pricing Analysis & Proposal">
       <span style="font-weight:800; font-size:1.05rem; line-height:1; margin-right:4px;">+</span> New Analysis
     </button>
-    <button class="btn-pill-glass" onclick="loadRequests()" title="Sync ServiceNow Requests">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
-      Sync ServiceNow
+    <div class="user-session-badge" title="Active Authenticated Session">
+      <div class="avatar-in" id="userAvatar">AD</div>
+      <span class="user-id-text" id="userIdText">admin</span>
+    </div>
+    <button id="logoutBtn" class="btn-pill-logout" onclick="handleLogout()" title="Log out of Hadron">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+        <polyline points="16 17 21 12 16 7"></polyline>
+        <line x1="21" y1="12" x2="9" y2="12"></line>
+      </svg>
+      <span>Logout</span>
     </button>
-    <button class="icon-btn" title="Toggle Theme">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
-    <div class="avatar-in" onclick="handleLogout()" title="Logged in as IN (Click to Logout)">IN</div>
   </div>
 </div>
 
@@ -777,6 +781,6 @@
   </div>
 </div>
 
-<script src="/static/control_tower.js?v=20"></script>
+<script src="/static/control_tower.js?v=21"></script>
 </body>
 </html>
