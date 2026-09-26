@@ -29,6 +29,7 @@ _FILES = {
     "rates":      _DATA_DIR / "rate_card.json",
     "services":   _DATA_DIR / "services.json",
     "company":    _DATA_DIR / "company_profile.json",
+    "customers":  _DATA_DIR / "customer.json",
 }
 
 # ── defaults written on first run ──────────────────────────────────────────────
@@ -154,8 +155,13 @@ def get_services():
     return jsonify(_load("services"))
 
 
-# ── Company profile (Hadron GBS) ──────────────────────────────────────────────
+# ── Customers directory ────────────────────────────────────────────────────────
+@intel_bp.get("/api/intelligence/customers")
+def get_customers():
+    return jsonify(_load("customers"))
 
+
+# ── Company profile (Hadron GBS) ──────────────────────────────────────────────
 @intel_bp.get("/api/intelligence/company")
 def get_company():
     return jsonify(_load("company"))
@@ -166,4 +172,5 @@ def save_company():
     data = request.get_json(force=True)
     _save("company", data)
     return jsonify({"ok": True})
+
 

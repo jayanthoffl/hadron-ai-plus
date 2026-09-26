@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HADRON Control Tower — Pricing Intelligence</title>
-  <link rel="stylesheet" href="/static/control_tower.css?v=4">
+  <link rel="stylesheet" href="/static/control_tower.css?v=5">
 </head>
 <body>
 
@@ -76,6 +76,14 @@
   </div>
 
   <div class="top-right">
+    <button id="viewAllBtn" class="btn-outline" onclick="openAllRequestsModal()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg>
+      All Requests <span id="navReqBadge" class="nav-count-badge"></span>
+    </button>
+    <button id="companyDirectoryBtn" class="btn-outline" onclick="openCompanyDirectoryModal()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6M3 15h6M15 9h6M15 15h6"/></svg>
+      Internal Directory
+    </button>
     <button id="newBtn" class="btn-outline gold">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       New Analysis
@@ -105,6 +113,26 @@
   <div class="graph-section-wrap" id="graphSection">
     <svg id="svgLayer" class="svg-layer"></svg>
     <div id="nodesLayer" class="nodes-layer"></div>
+
+    <!-- Floating Homepage Executive Live Metrics Strip -->
+    <div id="homeHudStrip" class="home-hud-strip">
+      <div class="hud-item" onclick="openAllRequestsModal()" title="View all active deals in pipeline">
+        <div class="hud-item-icon">📋</div>
+        <div><span>Pipeline Deals: </span><strong id="hudDealCount">—</strong></div>
+      </div>
+      <div class="hud-item" onclick="openCompanyDirectoryModal('companies')" title="Open Client & Partner Directory">
+        <div class="hud-item-icon">🏢</div>
+        <div><span>Client Accounts: </span><strong id="hudCompanyCount">51</strong></div>
+      </div>
+      <div class="hud-item" onclick="openCompanyDirectoryModal('services')" title="Open Delivery Catalog">
+        <div class="hud-item-icon">📦</div>
+        <div><span>Delivery Catalog: </span><strong id="hudServiceCount">20</strong></div>
+      </div>
+      <div class="hud-item" onclick="openCompanyDirectoryModal('economics')" title="View Hadron GBS Delivery Rate Cards">
+        <div class="hud-item-icon">⚡</div>
+        <div><span>Quantum Solver: </span><strong style="color:var(--gold)">QAOA Active</strong></div>
+      </div>
+    </div>
 
     <!-- Bottom Dock Bar -->
     <div class="bottom-panel-wrapper" id="rightPanel" style="display:none; opacity:0;">
@@ -417,6 +445,131 @@
   </div>
 </div>
 
-<script src="/static/control_tower.js?v=5"></script>
+<!-- All Requests Data Grid Modal -->
+<div id="allRequestsModal" class="modal hidden">
+  <div class="modal-card modal-card-wide">
+    <div class="modal-header-row">
+      <div>
+        <div class="modal-sub-label">PIPELINE OPPORTUNITY DIRECTORY</div>
+        <h2>All Active Pricing Requests</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <input id="allReqSearchInput" class="hub-search-input" placeholder="Search ticket, customer, or service..." oninput="filterAllRequestsTable()">
+        <button id="closeAllRequestsModal" class="modal-close-btn" onclick="closeAllRequestsModal()">×</button>
+      </div>
+    </div>
+    <div class="modal-filter-row">
+      <div class="filter-pills" id="allReqFilterPills">
+        <button class="filter-pill active" onclick="setReqStatusFilter('ALL', this)">All Deals</button>
+        <button class="filter-pill" onclick="setReqStatusFilter('READY', this)">Ready / Analyzed</button>
+        <button class="filter-pill" onclick="setReqStatusFilter('ANALYZING', this)">Analyzing</button>
+        <button class="filter-pill" onclick="setReqStatusFilter('DRAFT', this)">Draft / New</button>
+      </div>
+      <div class="deal-count-tag" id="allReqCountTag">Showing 0 Deals</div>
+    </div>
+    <div class="modal-table-wrap">
+      <table class="glass-table">
+        <thead>
+          <tr>
+            <th>Ticket</th>
+            <th>Customer</th>
+            <th>Service / Product</th>
+            <th>Status</th>
+            <th>Economics</th>
+            <th>MVP Floor</th>
+            <th>Balanced Offer</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="allRequestsTableBody">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Internal Enterprise Intelligence & Company Directory Modal -->
+<div id="companyDirectoryModal" class="modal hidden">
+  <div class="modal-card modal-card-wide modal-card-tall">
+    <div class="modal-header-row">
+      <div>
+        <div class="modal-sub-label">HADRON GBS ENTERPRISE KNOWLEDGE</div>
+        <h2>Internal Intelligence & Directory</h2>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <input id="hubSearchInput" class="hub-search-input" placeholder="Search company or service..." oninput="filterHubData()">
+        <button id="closeCompanyDirectoryModal" class="modal-close-btn" onclick="closeCompanyDirectoryModal()">×</button>
+      </div>
+    </div>
+    
+    <!-- Tab Controls -->
+    <div class="hub-tab-bar">
+      <button class="hub-tab-btn active" id="tabBtnCompanies" onclick="switchHubTab('companies')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M3 7v14M21 7v14M9 3h6v4H9zM9 11h2M9 15h2M13 11h2M13 15h2"/></svg>
+        Client Accounts (<span id="hubCountCustomers">51</span>)
+      </button>
+      <button class="hub-tab-btn" id="tabBtnServices" onclick="switchHubTab('services')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        Service Catalog (<span id="hubCountServices">20</span>)
+      </button>
+      <button class="hub-tab-btn" id="tabBtnEconomics" onclick="switchHubTab('economics')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M17 10h-7.5a2.5 2.5 0 0 0 0 5H15"/></svg>
+        Rate Card & Margin Policies
+      </button>
+    </div>
+
+    <!-- Tab 1: Companies Grid -->
+    <div class="hub-tab-pane active" id="paneCompanies">
+      <div class="hub-grid" id="companiesGrid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- Tab 2: Service Delivery Catalog -->
+    <div class="hub-tab-pane" id="paneServices" style="display:none;">
+      <div class="hub-grid" id="servicesGrid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- Tab 3: Rate Cards & Economics -->
+    <div class="hub-tab-pane" id="paneEconomics" style="display:none;">
+      <div class="economics-layout">
+        <div class="econ-card">
+          <div class="econ-title">Global Delivery Role Rates ($/hr)</div>
+          <table class="glass-table rates-table" id="ratesTable">
+            <!-- Rendered via JS -->
+          </table>
+        </div>
+        <div class="econ-card">
+          <div class="econ-title">HADRON Commercial Costing Policies</div>
+          <div class="policy-item">
+            <strong>Target Margin Baseline</strong>
+            <span>25.0% - 40.0% governed by QAOA QUBO</span>
+          </div>
+          <div class="policy-item">
+            <strong>Delivery Management Overhead</strong>
+            <span>15% of direct labor burn</span>
+          </div>
+          <div class="policy-item">
+            <strong>Tooling & Infrastructure Allocation</strong>
+            <span>10% of engineering burn</span>
+          </div>
+          <div class="policy-item">
+            <strong>Standard Monthly Hours</strong>
+            <span>160 billable hours / FTE</span>
+          </div>
+          <div class="policy-item">
+            <strong>Custom Pod Estimation</strong>
+            <span>Gemini Solution Architect Scoping</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/control_tower.js?v=6"></script>
 </body>
 </html>

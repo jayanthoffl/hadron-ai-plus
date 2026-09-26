@@ -34,15 +34,16 @@ let newRequestDrawTimes = {}; // track sys_id -> startTime for new requests
 
 let activeFannedData = null;
 
-// Splitting requests into Even (Left, max 3) and Odd (Right, max 3)
+// Splitting requests into Even (Left, max 4) and Odd (Right, max 4)
 function splitRequests() {
   leftRequests = [];
   rightRequests = [];
+  const maxPerSide = 4;
   requests.forEach((req, idx) => {
     if (idx % 2 === 0) {
-      if (rightRequests.length < 3) rightRequests.push(req);
+      if (rightRequests.length < maxPerSide) rightRequests.push(req);
     } else {
-      if (leftRequests.length < 3) leftRequests.push(req);
+      if (leftRequests.length < maxPerSide) leftRequests.push(req);
     }
   });
 }
@@ -98,6 +99,7 @@ function renderNode(id, html, x, y, className, onClick=null, opacity=1.0, blurPx
     $("nodesLayer").appendChild(el);
     el.getBoundingClientRect();
   }
+  el.style.display = 'flex';
   el.className = className;
   el.innerHTML = html;
   el.style.left = `${Math.round(x)}px`;
@@ -112,6 +114,7 @@ function hideNode(id) {
   const el = $(`node-${id}`);
   if(el) {
     el.style.opacity = '0';
+    el.style.display = 'none';
     el.style.pointerEvents = 'none';
     el.classList.remove('flip-animate');
   }
@@ -214,12 +217,27 @@ async function loadRequests(preserveState = false) {
         const newReq = added[0];
         // Record creation time for draw animation of root line
         newRequestDrawTimes[newReq.sys_id] = performance.now();
+        const maxPerSide = 4;
         if (activeSide === 'LEFT') {
           leftRequests.unshift(newReq);
-          if (leftRequests.length > 3) leftRequests.pop();
+          while (leftRequests.length > maxPerSide) {
+            const popped = leftRequests.pop();
+            if (popped) {
+              hideNode(popped.sys_id);
+              const line = $(`line-root-${popped.sys_id}`);
+              if (line) line.style.opacity = '0';
+            }
+          }
         } else {
           rightRequests.unshift(newReq);
-          if (rightRequests.length > 3) rightRequests.pop();
+          while (rightRequests.length > maxPerSide) {
+            const popped = rightRequests.pop();
+            if (popped) {
+              hideNode(popped.sys_id);
+              const line = $(`line-root-${popped.sys_id}`);
+              if (line) line.style.opacity = '0';
+            }
+          }
         }
       }
       renderGraphFrame();
@@ -285,13 +303,47 @@ function renderGraphFrame() {
       <p>HADRON Executive</p>
       <div class="orb-tag"><span class="dot-live"></span> ${activeCount} Active Deals</div>
     </div>
-    <button class="orb-add-btn" onclick="event.stopPropagation(); if ($('modal')) $('modal').classList.remove('hidden');">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add Request
-    </button>
+    <div class="orb-btn-group" onclick="event.stopPropagation();">
+      <button class="orb-action-btn primary" onclick="if ($('modal')) $('modal').classList.remove('hidden');">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Request
+      </button>
+      <button class="orb-action-btn" onclick="openAllRequestsModal();">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>
+        View All (${activeCount})
+      </button>
+      <button class="orb-action-btn" onclick="openCompanyDirectoryModal('companies');">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+        Internal Hub
+      </button>
+    </div>
   `, rootX, rootY, "node-orb", handleOrbClick);
 
   hideNode('orb-add-btn');
+
+  // Update top nav badge & homepage HUD
+  if ($("navReqBadge")) $("navReqBadge").textContent = requests.length;
+  if ($("hudDealCount")) $("hudDealCount").textContent = `${requests.length} Deals`;
+  if ($("homeHudStrip")) {
+    if (graphState === 'SELECTED') {
+      $("homeHudStrip").classList.add("hidden-hud");
+    } else {
+      $("homeHudStrip").classList.remove("hidden-hud");
+    }
+  }
+
+  // Cleanup any request DOM nodes and lines that are no longer in visible columns
+  const visibleIds = new Set([
+    ...leftRequests.map(r => r.sys_id),
+    ...rightRequests.map(r => r.sys_id)
+  ]);
+  requests.forEach(r => {
+    if (!visibleIds.has(r.sys_id)) {
+      hideNode(r.sys_id);
+      const line = $(`line-root-${r.sys_id}`);
+      if (line) line.style.opacity = '0';
+    }
+  });
 
   if (graphState === 'INITIAL') return;
 
@@ -303,7 +355,7 @@ function renderGraphFrame() {
   
   const lastReqId = requests.length > 0 ? requests[requests.length - 1].sys_id : null;
 
-  // Render LEFT Column Cards (Even - Max 3)
+  // Render LEFT Column Cards (Even - Max 4)
   const leftTotalH = Math.max(0, (leftRequests.length - 1) * V_GAP);
   const leftStartY = cy - leftTotalH / 2;
 
@@ -342,18 +394,18 @@ function renderGraphFrame() {
     drawLine(`root-${req.sys_id}`, rootX - 32, orbCenterY, leftX + HALF, y, isActive, opacity, blurPx, dp);
   });
 
-  if (graphState !== 'SELECTED' && requests.length > 6) {
-    const extraCount = requests.length - 6;
+  if (graphState !== 'SELECTED' && requests.length > (leftRequests.length + rightRequests.length)) {
+    const extraCount = requests.length - (leftRequests.length + rightRequests.length);
     renderNode('show-more', `
-      <div class="orb-label" style="padding:4px 12px; border-radius:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(10px); cursor:default; pointer-events:auto;">
-        <span style="font-size:0.75rem; color:#94a3b8; font-weight:700; text-transform:uppercase;">+${extraCount} More Deals</span>
+      <div class="orb-label" style="padding:6px 14px; border-radius:100px; background:rgba(255,255,255,0.06); border:1px solid rgba(226, 192, 121, 0.35); backdrop-filter:blur(10px); cursor:pointer; pointer-events:auto;" onclick="openAllRequestsModal()">
+        <span style="font-size:0.75rem; color:var(--gold); font-weight:700; text-transform:uppercase;">📋 +${extraCount} More Deals in Pipeline</span>
       </div>
-    `, rootX, cy + 180, "node-orb", null, 1.0, 0);
+    `, rootX, cy + 195, "node-orb", null, 1.0, 0);
   } else {
     hideNode('show-more');
   }
 
-  // Render RIGHT Column Cards (Odd - Max 3)
+  // Render RIGHT Column Cards (Odd - Max 4)
   const rightTotalH = Math.max(0, (rightRequests.length - 1) * V_GAP);
   const rightStartY = cy - rightTotalH / 2;
 
@@ -1272,5 +1324,289 @@ if ($("createBtn")) $("createBtn").onclick = async () => {
   }
 };
 
+// ── ALL REQUESTS DATA GRID MODAL ──────────────────────────────────────
+let currentReqStatusFilter = 'ALL';
+
+function openAllRequestsModal() {
+  const modal = $("allRequestsModal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  renderAllRequestsTable();
+}
+
+function closeAllRequestsModal() {
+  const modal = $("allRequestsModal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function setReqStatusFilter(status, btn) {
+  currentReqStatusFilter = status;
+  if ($("allReqFilterPills")) {
+    $("allReqFilterPills").querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+  }
+  renderAllRequestsTable();
+}
+
+function filterAllRequestsTable() {
+  renderAllRequestsTable();
+}
+
+function renderAllRequestsTable() {
+  const tbody = $("allRequestsTableBody");
+  if (!tbody) return;
+  const query = ($("allReqSearchInput") ? $("allReqSearchInput").value : "").toLowerCase().trim();
+  
+  let list = requests.slice();
+  if (currentReqStatusFilter !== 'ALL') {
+    list = list.filter(r => (r.status || 'READY').toUpperCase() === currentReqStatusFilter);
+  }
+  if (query) {
+    list = list.filter(r => 
+      (r.number || '').toLowerCase().includes(query) ||
+      (r.customer_name || '').toLowerCase().includes(query) ||
+      (r.service_product_name || '').toLowerCase().includes(query) ||
+      (r.commercial_objective || '').toLowerCase().includes(query)
+    );
+  }
+
+  if ($("allReqCountTag")) {
+    $("allReqCountTag").textContent = `Showing ${list.length} of ${requests.length} Deals`;
+  }
+
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--muted);">No matching pricing requests found.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map(r => {
+    const isReady = (r.status || 'READY').toUpperCase() === 'READY';
+    const isAnalyzing = (r.status || '').toUpperCase() === 'ANALYZING';
+    const statusClass = isReady ? 'ready' : (isAnalyzing ? 'analyzing' : 'draft');
+    
+    // Parse economics if available
+    let ie = r.internal_economics;
+    if (typeof ie === 'string') {
+      try { ie = JSON.parse(ie); } catch(_) { ie = null; }
+    }
+    const econSource = ie ? (ie.economics_source || 'CATALOG') : '—';
+    const mvpFloor = ie && ie.minimum_viable_price ? `$${Math.round(ie.minimum_viable_price).toLocaleString()}` : '—';
+
+    // Parse offers
+    let offers = r.offer_set;
+    if (typeof offers === 'string') {
+      try { offers = JSON.parse(offers); } catch(_) { offers = null; }
+    }
+    let balancedPrice = '—';
+    if (Array.isArray(offers)) {
+      const b = offers.find(o => (o.name || '').toLowerCase().includes('balanced')) || offers[0];
+      if (b && b.price) balancedPrice = `$${Math.round(b.price).toLocaleString()}`;
+    }
+
+    return `
+      <tr>
+        <td style="font-family:monospace; font-weight:700; color:var(--gold);">${r.number || 'PRI-NEW'}</td>
+        <td style="font-weight:600; color:#fff;">${r.customer_name || 'Unknown'}</td>
+        <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.service_product_name || ''}">${r.service_product_name || 'Custom Service'}</td>
+        <td><span class="status-pill ${statusClass}">${r.status || 'READY'}</span></td>
+        <td style="font-size:0.75rem; color:#94a3b8;"><span style="font-family:monospace;">${econSource}</span></td>
+        <td style="font-family:monospace; color:#cbd5e1;">${mvpFloor}</td>
+        <td style="font-family:monospace; font-weight:700; color:var(--gold);">${balancedPrice}</td>
+        <td>
+          <button class="btn-table-action" onclick="inspectDealFromTable('${r.sys_id}')">Inspect &rarr;</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function inspectDealFromTable(sysId) {
+  closeAllRequestsModal();
+  const req = requests.find(r => r.sys_id === sysId);
+  if (!req) return;
+  const isLeft = leftRequests.some(r => r.sys_id === req.sys_id);
+  selectRequest(req, 0, 0, isLeft ? 'LEFT' : 'RIGHT', false);
+}
+
+// ── INTERNAL COMPANY INTELLIGENCE & KNOWLEDGE HUB ─────────────────────
+let cachedCustomersData = null;
+let cachedServicesData = null;
+let cachedRatesData = null;
+let currentHubTab = 'companies';
+
+async function openCompanyDirectoryModal(initialTab = 'companies') {
+  const modal = $("companyDirectoryModal");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  switchHubTab(initialTab);
+  await loadCompanyDirectoryData();
+}
+
+function closeCompanyDirectoryModal() {
+  const modal = $("companyDirectoryModal");
+  if (modal) modal.classList.add("hidden");
+}
+
+function switchHubTab(tabName) {
+  currentHubTab = tabName;
+  ['companies', 'services', 'economics'].forEach(t => {
+    const pane = $(`pane${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const btn = $(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (pane) pane.style.display = (t === tabName) ? 'block' : 'none';
+    if (btn) {
+      if (t === tabName) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+  filterHubData();
+}
+
+async function loadCompanyDirectoryData() {
+  try {
+    if (!cachedCustomersData) {
+      const res = await fetch("/api/intelligence/customers");
+      if (res.ok) cachedCustomersData = await res.json();
+    }
+    if (!cachedServicesData) {
+      const res = await fetch("/api/intelligence/services");
+      if (res.ok) cachedServicesData = await res.json();
+    }
+    if (!cachedRatesData) {
+      const res = await fetch("/api/intelligence/rates");
+      if (res.ok) cachedRatesData = await res.json();
+    }
+    renderCompaniesGrid();
+    renderServicesGrid();
+    renderRatesTable();
+  } catch(e) {
+    console.error("Failed to load company intelligence data:", e);
+  }
+}
+
+function filterHubData() {
+  const query = ($("hubSearchInput") ? $("hubSearchInput").value : "").toLowerCase().trim();
+  if (currentHubTab === 'companies') {
+    renderCompaniesGrid(query);
+  } else if (currentHubTab === 'services') {
+    renderServicesGrid(query);
+  }
+}
+
+function renderCompaniesGrid(query = '') {
+  const grid = $("companiesGrid");
+  if (!grid || !cachedCustomersData) return;
+  
+  const entries = Object.entries(cachedCustomersData).filter(([name, data]) => {
+    if (!query) return true;
+    return name.toLowerCase().includes(query) || (data.industry || '').toLowerCase().includes(query);
+  });
+
+  if ($("hubCountCustomers")) $("hubCountCustomers").textContent = Object.keys(cachedCustomersData).length;
+
+  if (entries.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--muted);">No matching companies found.</div>`;
+    return;
+  }
+
+  grid.innerHTML = entries.map(([name, data]) => {
+    const strat = (data.strategic_importance || 'High').toLowerCase();
+    const stratClass = strat.includes('critical') ? 'critical' : (strat.includes('medium') ? 'medium' : 'high');
+    const rev = data.revenue ? `$${(data.revenue / 1e9).toFixed(1)}B` : '—';
+    const fte = data.employee_count ? `${(data.employee_count / 1000).toFixed(0)}k FTEs` : '—';
+    const activeProjects = (data.active_projects || []).slice(0, 2);
+    const needs = (data.known_needs || []).slice(0, 2);
+
+    return `
+      <div class="hub-card">
+        <div class="hub-card-header">
+          <div>
+            <div class="hub-card-title">${name}</div>
+            <div style="font-size:0.72rem; color:var(--muted);">${data.industry || 'Technology'}</div>
+          </div>
+          <span class="hub-badge ${stratClass}">${data.strategic_importance || 'Partner'}</span>
+        </div>
+        <div class="hub-metrics-row">
+          <div>Revenue: <strong>${rev}</strong></div>
+          <div>Size: <strong>${fte}</strong></div>
+        </div>
+        <div style="font-size:0.72rem; color:var(--gold); font-weight:600; margin-top:4px;">Active Programs:</div>
+        <ul class="hub-list">
+          ${activeProjects.map(p => `<li>${p}</li>`).join('')}
+        </ul>
+        <div style="font-size:0.72rem; color:#38bdf8; font-weight:600; margin-top:8px;">Identified Needs:</div>
+        <ul class="hub-list">
+          ${needs.map(n => `<li>${n}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderServicesGrid(query = '') {
+  const grid = $("servicesGrid");
+  if (!grid || !cachedServicesData) return;
+
+  const entries = Object.entries(cachedServicesData).filter(([name, data]) => {
+    if (!query) return true;
+    return name.toLowerCase().includes(query) || (data.description || '').toLowerCase().includes(query);
+  });
+
+  if ($("hubCountServices")) $("hubCountServices").textContent = Object.keys(cachedServicesData).length;
+
+  if (entries.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--muted);">No matching services found.</div>`;
+    return;
+  }
+
+  grid.innerHTML = entries.map(([name, data]) => {
+    const complexityPct = Math.round((data.complexity || 0.7) * 100);
+    const duration = data.estimated_duration_months || 6;
+    const resources = Object.entries(data.resource_requirements || {}).map(([r, c]) => `${c} ${r.replace(/_/g, ' ')}`).slice(0, 3).join(', ');
+    const drivers = (data.value_drivers || []).slice(0, 2);
+
+    return `
+      <div class="hub-card">
+        <div class="hub-card-header">
+          <div class="hub-card-title">${name}</div>
+          <span class="hub-badge high">${complexityPct}% Complexity</span>
+        </div>
+        <div style="font-size:0.74rem; color:#cbd5e1; line-height:1.4; margin-bottom:8px;">${data.description || ''}</div>
+        <div class="hub-metrics-row">
+          <div>Duration: <strong>${duration} Months</strong></div>
+        </div>
+        <div style="font-size:0.72rem; color:#94a3b8; margin-top:4px;">Core Delivery Roles: <strong style="color:#e2e8f0;">${resources || 'Standard Pod'}</strong></div>
+        <div style="font-size:0.72rem; color:var(--gold); font-weight:600; margin-top:8px;">Key Value Realization:</div>
+        <ul class="hub-list">
+          ${drivers.map(d => `<li>${d}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderRatesTable() {
+  const table = $("ratesTable");
+  if (!table || !cachedRatesData) return;
+
+  const entries = Object.entries(cachedRatesData);
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Certified Delivery Role</th>
+        <th style="text-align:right;">Global Billing Rate ($/hr)</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${entries.map(([role, rate]) => `
+        <tr>
+          <td style="font-weight:600; color:#fff;">${role}</td>
+          <td style="text-align:right; font-family:monospace; font-weight:700; color:var(--gold);">$${rate}/hr</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  `;
+}
+
 // Initialize Splash Screen & Login Gateway
 initSplashAndLogin();
+
