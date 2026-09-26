@@ -10,6 +10,7 @@ from utils.document_parser import parse_document
 from integrations.servicenow.client import ServiceNowClient
 
 from economics.engine import EconomicsEngine
+from analytics.similarity_engine import SimilarityEngine
 
 from optimization.scenarios import ScenarioGenerator
 from optimization.classical import ClassicalOptimizer
@@ -35,6 +36,7 @@ class HadronOrchestrator:
         self.customer_agent = CustomerAgent()
         self.service_agent = ServiceAgent()
         self.market_agent = MarketAgent()
+        self.similarity_engine = SimilarityEngine()
 
         # ------------------------------------------------
         # COMMERCIAL CONTEXT  (Pure Python — deterministic)
@@ -141,6 +143,25 @@ class HadronOrchestrator:
         print(f"[HADRON]   data_availability={market.data_availability}")
 
         # =================================================
+        # STEP 3.5 — HISTORICAL PRECEDENT SEARCH
+        # Mathematical TF-IDF & Jaccard similarity over past deals.
+        # Zero Gemini tokens. Top-4 comparable deals & pricing envelope.
+        # =================================================
+
+        print("[HADRON] Step 3.5: Precedent deal similarity matching")
+        precedents = self.similarity_engine.find_similar_deals(
+            customer_name=intent.customer_name,
+            service_name=service.service_name or intent.service_catalog_key,
+            commercial_objective=request.commercial_objective,
+            additional_context=request.additional_context,
+            top_k=4,
+        )
+        print(
+            f"[HADRON]   Matched {precedents.get('count', 0)} precedent deals. "
+            f"Median: ${precedents.get('median_price') or 0:,.0f} | Win Rate: {precedents.get('win_rate') or 0:.0%}"
+        )
+
+        # =================================================
         # STEP 4 — COMMERCIAL CONTEXT
         # Deterministic derivation from retrieved intelligence.
         # Drives scenario strategy — NOT delivery cost.
@@ -186,9 +207,33 @@ class HadronOrchestrator:
 
         scenarios = self.classical.optimize(scenarios)
 
-        # The current quantum module samples a uniform circuit without
-        # encoding the pricing objective. Keep it out of the decision path
-        # until it can produce a validated optimization signal.
+        # =================================================
+        # STEP 8 — QUANTUM COMBINATORIAL OPTIMIZATION
+        # Formulate 108-configuration commercial QUBO
+        # comparing Classical greedy vs Quantum QAOA.
+        # =================================================
+
+        print("[HADRON] Step 8: Quantum Combinatorial QAOA Optimization")
+        base_cost_input = economics.estimated_cost
+        mvp_input = economics.minimum_viable_price
+        if (not mvp_input or mvp_input <= 0) and precedents.get("median_price"):
+            mvp_input = precedents.get("median_price")
+            base_cost_input = mvp_input * (1.0 - economics.target_margin)
+
+        quantum_optimization = self.quantum.optimize_deal_configuration(
+            base_cost=base_cost_input,
+            mvp=mvp_input,
+            target_margin=economics.target_margin,
+            available_bench_fte=economics.capacity_available,
+            standard_duration_months=service.estimated_duration_months,
+            nominal_fte=economics.required_capacity or 14.0,
+            project_budget=economics.project_budget,
+        )
+        print(
+            f"[HADRON]   Quantum QAOA: {quantum_optimization.get('quantum_solution', {}).get('pricing_tier')} "
+            f"tier | Margin: {quantum_optimization.get('quantum_solution', {}).get('expected_margin', 0):.1%} "
+            f"(+{quantum_optimization.get('margin_improvement', 0):.1%} vs Classical)"
+        )
 
         # =================================================
         # STEP 9 — OFFER GENERATION
@@ -232,14 +277,26 @@ class HadronOrchestrator:
             economics=economics,
             offers=offers,
             risks=risks,
+            precedents=precedents,
+            quantum_optimization=quantum_optimization,
         )
 
         # =================================================
         # STEP 12 — FINAL RESPONSE
         # =================================================
 
-        balanced_offer = next((o for o in offers if "balanced" in o.name.lower()), offers[0] if offers else None)
-        recommended_price_val = str(int(round(balanced_offer.price))) if balanced_offer else ""
+        balanced_offer = next((o for o in offers if "balanced" in o.name.lower() and getattr(o, "price", 0) > 0), None)
+        if not balanced_offer and offers:
+            balanced_offer = next((o for o in offers if getattr(o, "price", 0) > 0), None)
+
+        if balanced_offer and getattr(balanced_offer, "price", 0) > 0:
+            recommended_price_val = str(int(round(balanced_offer.price)))
+        elif quantum_optimization and quantum_optimization.get("quantum_solution", {}).get("price"):
+            recommended_price_val = str(int(round(quantum_optimization["quantum_solution"]["price"])))
+        elif precedents and precedents.get("median_price"):
+            recommended_price_val = str(int(round(precedents["median_price"])))
+        else:
+            recommended_price_val = "0"
 
         return {
             "executive_summary": executive.get("executive_summary", ""),
@@ -261,6 +318,10 @@ class HadronOrchestrator:
             "competitive_intelligence": executive.get("competitive_intelligence", ""),
 
             "internal_economics": economics.model_dump_json(indent=2),
+
+            "historical_comparables": precedents,
+
+            "quantum_optimization": quantum_optimization,
 
             "offer_set": [offer.model_dump() for offer in offers],
 

@@ -182,6 +182,10 @@ def analyze():
                 balanced_price = (
                     str(int(round(float(balanced.get("price", 0))))) if balanced else ""
                 )
+                q_opt = data.get("quantum_optimization") or {}
+                q_sol = q_opt.get("quantum_solution") or {}
+                c_sol = q_opt.get("classical_solution") or {}
+
                 sn_payload = {
                     "executive_summary": data.get("executive_summary", ""),
                     "internal_economics": data.get("internal_economics", ""),
@@ -200,6 +204,14 @@ def analyze():
                     "ai_justification": data.get("executive_summary", ""),
                     "u_ai_justification": data.get("executive_summary", ""),
                 }
+                if q_sol:
+                    sn_payload.update({
+                        "quantum_price": str(int(round(float(q_sol.get("price", balanced_price or 0))))),
+                        "classical_price": str(int(round(float(c_sol.get("price", balanced_price or 0))))),
+                        "expected_margin": str(q_sol.get("expected_margin", "")),
+                        "acceptance_probability": str(q_sol.get("win_probability", "")),
+                        "ai_value_drivers": f"Pune GDC FTE: {q_sol.get('pune_fte_required', '')}, Staffing: {q_sol.get('staffing_mix', '')}, Terms: {q_sol.get('risk_structure', '')}"
+                    })
                 ServiceNowClient().update_record(
                     table="x_2216687_optimu_0_pricing_request",
                     sys_id=sys_id,
