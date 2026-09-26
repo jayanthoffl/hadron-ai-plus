@@ -270,5 +270,28 @@ def analyze():
         }), 502
 
 
+@app.post("/hadron/analyze")
+def hadron_analyze_endpoint():
+    """ServiceNow Flow Action 2: Run HADRON Intelligence."""
+    return analyze()
+
+
+@app.post("/run_quantum_pricing")
+def run_quantum_pricing_endpoint():
+    """ServiceNow Flow Action 1: Run Quantum Pricing."""
+    try:
+        payload = request.get_json(force=True)
+        resp = requests.post(
+            f"{HADRON_API.rstrip('/')}/run_quantum_pricing",
+            json=payload,
+            timeout=TIMEOUT,
+        )
+        return (resp.content, resp.status_code,
+                {"Content-Type": resp.headers.get("Content-Type", "application/json")})
+    except Exception as exc:
+        return jsonify({"error": str(exc), "status": "failed"}), 502
+
+
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5050, debug=True)
+    listen_port = int(os.getenv("PORT", 5050))
+    app.run(host="0.0.0.0", port=listen_port, debug=False)
