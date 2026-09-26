@@ -238,8 +238,15 @@ class HadronOrchestrator:
         # STEP 12 — FINAL RESPONSE
         # =================================================
 
+        balanced_offer = next((o for o in offers if "balanced" in o.name.lower()), offers[0] if offers else None)
+        recommended_price_val = str(int(round(balanced_offer.price))) if balanced_offer else ""
+
         return {
             "executive_summary": executive.get("executive_summary", ""),
+
+            "recommended_price": recommended_price_val,
+            "recommend_price": recommended_price_val,
+            "intelligence_status": "2",
 
             "request_intent": intent.model_dump_json(indent=2),
 

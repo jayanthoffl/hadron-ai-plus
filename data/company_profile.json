@@ -1,0 +1,59 @@
+{
+    "company_name": "Hadron GBS",
+    "legal_name": "Hadron Global Business Solutions Pvt. Ltd.",
+    "location": {
+        "city": "Pune",
+        "state": "Maharashtra",
+        "country": "India",
+        "headquarters": "EON Free Zone, Kharadi, Pune, India",
+        "delivery_model": "Global Delivery Model (Pune HQ with Global Client Onsite Presence)"
+    },
+    "industry": "Information Technology & Enterprise Services",
+    "company_type": "IT Service & Enterprise Consulting Firm",
+    "employee_summary": {
+        "total_employees": 200,
+        "billable_delivery_consultants": 155,
+        "non_billable_leadership_and_ops": 45,
+        "practice_distribution": {
+            "servicenow_practice": 68,
+            "salesforce_practice": 26,
+            "microsoft_cloud_practice": 24,
+            "legacy_itsm_migration_bmc_ivanti": 17,
+            "ai_and_quantum_innovation_lab": 12,
+            "global_pmo_and_qa": 8
+        }
+    },
+    "core_specializations": [
+        "ServiceNow End-to-End Implementation (ITSM, ITOM, CSM, HRSD, SPM, App Engine)",
+        "Salesforce CRM & Revenue Cloud Implementation",
+        "Legacy Service Desk Modernization (BMC Remedy/Helix to ServiceNow Migration)",
+        "Ivanti to ServiceNow ESM Consolidation",
+        "Microsoft Azure Cloud Architecture & Power Platform Integration",
+        "AI-Driven Commercial Intelligence & Quantum Decision Optimization"
+    ],
+    "financials_and_targets": {
+        "currency": "USD",
+        "fiscal_year": "FY2026-2027",
+        "annual_revenue_target": 20000000,
+        "quarterly_revenue_target": 5000000,
+        "confirmed_pipeline_value": 3850000,
+        "pipeline_gap": 1150000,
+        "target_gross_margin": 0.32,
+        "target_ebitda": 0.22
+    },
+    "departmental_operating_budgets": {
+        "servicenow_partner_instances_and_lab": 280000,
+        "cloud_compute_azure_aws_and_quantum_api": 350000,
+        "talent_upskilling_and_certifications": 220000,
+        "global_sales_and_bid_pursuits": 850000,
+        "delivery_operations_and_facilities_pune": 650000
+    },
+    "servicenow_cost_centers": [
+        {"code": "CC-101", "name": "ServiceNow Implementation Practice", "lead": "Practice Director"},
+        {"code": "CC-102", "name": "Salesforce & CRM Practice", "lead": "CRM Practice Lead"},
+        {"code": "CC-103", "name": "BMC & Ivanti Legacy Modernization", "lead": "Migration Lead"},
+        {"code": "CC-104", "name": "Microsoft Cloud & Integration", "lead": "Cloud Architect Lead"},
+        {"code": "CC-105", "name": "AI & Quantum Solutions Lab", "lead": "Principal Scientist"},
+        {"code": "CC-106", "name": "Pune Global Delivery Center Operations", "lead": "VP of Operations"}
+    ]
+}

@@ -115,21 +115,33 @@ def run_quantum_pricing():
     Keep it under 4 sentences, sound highly advanced, precise, and authoritative.
     """
     
-    response = client.models.generate_content(
-        model='gemini-3.6-flash',
-        contents=prompt
-    )
-    ai_explanation = response.text
+    try:
+        response = client.models.generate_content(
+            model='gemini-3.8-flash',
+            contents=prompt
+        )
+        ai_explanation = response.text or ""
+    except Exception as gemini_err:
+        print(f"[QuantumPricing] Gemini fallback: {gemini_err}")
+        ai_explanation = (
+            f"[SYS_LOG: {utc_now}] - HADRON OPTIMIZATION LOCK: "
+            f"Classical AI suggested price ${classical_price:,.2f} versus "
+            f"Quantum QAOA Optimized Price ${quantum_price:,.2f}. "
+            f"Expected margin achieved: {expected_margin:.1%} with win probability {acceptance_prob:.1%}, "
+            f"governed by drivers: {ai_driver_string}."
+        )
     print(f"Gemini Output: {ai_explanation}")
 
     # 5. Return Data to ServiceNow
     response_payload = {
         "classical_price": classical_price,
+        "quantum_price": quantum_price,
         "recommended_price": quantum_price,
         "expected_margin": expected_margin,
         "acceptance_probability": acceptance_prob,
         "ai_value_drivers": ai_driver_string,
-        "ai_explanation": ai_explanation
+        "ai_explanation": ai_explanation,
+        "intelligence_status": "2"
     }
     
     print("Returning AI/Quantum payload to ServiceNow.")

@@ -28,6 +28,7 @@ _FILES = {
     "deals":      _DATA_DIR / "historical_deals.json",
     "rates":      _DATA_DIR / "rate_card.json",
     "services":   _DATA_DIR / "services.json",
+    "company":    _DATA_DIR / "company_profile.json",
 }
 
 # ── defaults written on first run ──────────────────────────────────────────────
@@ -151,3 +152,18 @@ def save_economics():
 @intel_bp.get("/api/intelligence/services")
 def get_services():
     return jsonify(_load("services"))
+
+
+# ── Company profile (Hadron GBS) ──────────────────────────────────────────────
+
+@intel_bp.get("/api/intelligence/company")
+def get_company():
+    return jsonify(_load("company"))
+
+
+@intel_bp.put("/api/intelligence/company")
+def save_company():
+    data = request.get_json(force=True)
+    _save("company", data)
+    return jsonify({"ok": True})
+

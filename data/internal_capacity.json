@@ -1,31 +1,31 @@
 {
-    "overall_utilization": 0.72,
-    "available_billable_capacity": 0.28,
-    "quarterly_revenue_target": 35000000,
-    "confirmed_pipeline_value": 26800000,
-    "pipeline_gap": 8200000,
+    "company_name": "Hadron GBS",
+    "location": "Pune, Maharashtra, India",
+    "total_company_headcount": 200,
+    "overall_utilization": 0.74,
+    "available_billable_capacity": 0.26,
+    "quarterly_revenue_target": 5000000,
+    "confirmed_pipeline_value": 3850000,
+    "pipeline_gap": 1150000,
     "headcount": {
-        "solution_architects": 28,
-        "principal_consultants": 14,
-        "quantum_engineers": 16,
-        "ai_engineers": 82,
-        "data_engineers": 64,
-        "cloud_architects": 32,
-        "devops_engineers": 38,
-        "project_managers": 24,
-        "delivery_leads": 18,
-        "business_analysts": 26,
-        "qa_engineers": 35,
-        "domain_specialists": 15,
-        "cybersecurity_specialists": 12,
-        "total_billable": 404
+        "servicenow_architects": 12,
+        "servicenow_developers": 45,
+        "salesforce_consultants": 24,
+        "microsoft_cloud_engineers": 22,
+        "legacy_migration_specialists_bmc_ivanti": 17,
+        "ai_quantum_engineers": 12,
+        "project_managers": 10,
+        "delivery_leads": 7,
+        "qa_engineers": 12,
+        "total_billable": 155
     },
     "bench_fte_by_discipline": {
-        "quantum_computing": 4.5,
-        "applied_ai": 22.0,
-        "data_engineering": 17.5,
-        "architecture_and_cloud": 16.0,
-        "delivery_management": 11.5
+        "servicenow_practice": 14.8,
+        "salesforce_practice": 6.2,
+        "microsoft_cloud": 5.7,
+        "bmc_ivanti_migration": 4.4,
+        "ai_and_quantum_lab": 3.1,
+        "delivery_and_qa": 6.1
     },
-    "notes": "Capacity constrained in Quantum Algorithm Specialists and Principal Architects for Q3/Q4."
+    "notes": "Hadron GBS Delivery Center (Pune): Strong bench availability in ServiceNow developers and Cloud engineers; peak demand in ServiceNow ITOM and Architect roles."
 }
