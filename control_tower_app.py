@@ -292,6 +292,66 @@ def run_quantum_pricing_endpoint():
         return jsonify({"error": str(exc), "status": "failed"}), 502
 
 
+def _start_tcp_forwarder(from_port: int, to_port: int):
+    import socket
+    import threading
+
+    def _bridge(src, dst):
+        try:
+            while True:
+                buf = src.recv(8192)
+                if not buf:
+                    break
+                dst.sendall(buf)
+        except Exception:
+            pass
+        finally:
+            try:
+                src.close()
+            except Exception:
+                pass
+            try:
+                dst.close()
+            except Exception:
+                pass
+
+    def _handle_client(client_sock):
+        try:
+            target_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            target_sock.connect(("127.0.0.1", to_port))
+            threading.Thread(target=_bridge, args=(client_sock, target_sock), daemon=True).start()
+            threading.Thread(target=_bridge, args=(target_sock, client_sock), daemon=True).start()
+        except Exception:
+            try:
+                client_sock.close()
+            except Exception:
+                pass
+
+    def _listener():
+        try:
+            srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            srv.bind(("0.0.0.0", from_port))
+            srv.listen(128)
+            print(f"[HADRON Bridge] Active: Forwarding 0.0.0.0:{from_port} -> 127.0.0.1:{to_port}")
+            while True:
+                sock, _ = srv.accept()
+                threading.Thread(target=_handle_client, args=(sock,), daemon=True).start()
+        except Exception as exc:
+            print(f"[HADRON Bridge] Forwarder on port {from_port} not bound ({exc})")
+
+    t = threading.Thread(target=_listener, daemon=True)
+    t.start()
+
+
 if __name__ == "__main__":
-    listen_port = int(os.getenv("PORT", 5050))
-    app.run(host="0.0.0.0", port=listen_port, debug=False)
+    primary_port = int(os.getenv("PORT", 5050))
+    # Ensure both 5050 (Control Tower) and 8080 (Railway default) accept traffic
+    candidate_ports = [5050, 8080]
+    for p in candidate_ports:
+        if p != primary_port:
+            _start_tcp_forwarder(from_port=p, to_port=primary_port)
+
+    print(f"[HADRON Control Tower] Starting primary server on 0.0.0.0:{primary_port}")
+    app.run(host="0.0.0.0", port=primary_port, debug=False)
+

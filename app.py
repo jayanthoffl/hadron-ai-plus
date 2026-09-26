@@ -16,13 +16,52 @@ app = Flask(__name__)
 
 orchestrator = HadronOrchestrator()
 
+import requests
+
 @app.get("/")
 def health():
+    # If a web browser / judge accesses the root URL on this port, proxy the Control Tower 3D UI
+    if "text/html" in request.headers.get("Accept", ""):
+        ui_port = int(os.getenv("PORT", 5050))
+        try:
+            r = requests.get(f"http://127.0.0.1:{ui_port}/", timeout=10)
+            return (r.content, r.status_code, {"Content-Type": "text/html; charset=utf-8"})
+        except Exception as e:
+            print(f"[app.py] Could not proxy UI from port {ui_port}: {e}")
+
     return jsonify({
         "service": "HADRON AI++",
         "status": "online",
         "engine": "Enterprise Commercial Intelligence"
     })
+
+@app.route("/static/<path:filename>")
+def serve_ui_static(filename):
+    ui_port = int(os.getenv("PORT", 5050))
+    try:
+        r = requests.get(f"http://127.0.0.1:{ui_port}/static/{filename}", timeout=15)
+        return (r.content, r.status_code, {"Content-Type": r.headers.get("Content-Type", "application/octet-stream")})
+    except Exception as e:
+        return str(e), 502
+
+@app.route("/api/<path:endpoint>", methods=["GET", "POST", "PUT", "DELETE"])
+def proxy_ui_api(endpoint):
+    ui_port = int(os.getenv("PORT", 5050))
+    try:
+        url = f"http://127.0.0.1:{ui_port}/api/{endpoint}"
+        r = requests.request(
+            method=request.method,
+            url=url,
+            headers={k: v for k, v in request.headers if k.lower() != 'host'},
+            data=request.get_data(),
+            cookies=request.cookies,
+            params=request.args,
+            timeout=120
+        )
+        return (r.content, r.status_code, {"Content-Type": r.headers.get("Content-Type", "application/json")})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 502
+
 
 @app.post("/hadron/analyze")
 def analyze():
