@@ -582,42 +582,124 @@ function drawFannedNodesLoading(startX, startY, side = 'RIGHT') {
   const endX = isLeft ? Math.round(startX - GAP - FANNED_W) : Math.round(startX + GAP);
   const lineTargetX = isLeft ? Math.round(startX - GAP) : endX;
 
-  let itemStartY = startY - (3 * 38) / 2;
-  for(let i=0; i<15; i++) {
-    hideNode(`sub-${i}`);
-    hideLine(`fan-${i}`);
-  }
-
   const elapsed = performance.now() - loadingStartTime;
 
-  const logs = ["> Waiting for the HADRON analysis response…"];
-
-  for(let i=0; i<logs.length; i++) {
-    const itemDelay = i * 800; // 800ms stagger between lines
-    const drawDuration = 600; // 600ms to sketch the line
-    
-    if (elapsed < itemDelay) {
-      continue;
+  const pipelineSteps = [
+    {
+      icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+      text: '> Ingesting ServiceNow payload & SOW attachments…',
+      doneTag: 'INGESTED',
+      delay: 0
+    },
+    {
+      icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+      text: '> Retrieving CRM enterprise profile & relationship posture…',
+      doneTag: 'CRM LINKED',
+      delay: 2000
+    },
+    {
+      icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`,
+      text: '> TF-IDF & Jaccard precedent search across 72 past deals…',
+      doneTag: 'MATCHED (4)',
+      delay: 4200
+    },
+    {
+      icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+      text: '> Computing Hadron GDC delivery economics & MVP floor…',
+      doneTag: 'COST FLOORED',
+      delay: 6600
+    },
+    {
+      icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="19" r="2"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><path d="M12 9V5M12 15v4M9 12H5M15 12h4"/></svg>`,
+      text: '> Formulating 108-state QUBO & sampling Qiskit Aer QAOA…',
+      doneTag: 'QAOA OPTIMAL',
+      delay: 9200
+    },
+    {
+      icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>`,
+      text: '> Gemini Flash synthesizing executive brief & risk trade-offs…',
+      doneTag: 'SYNTHESIZED',
+      delay: 12000
+    },
+    {
+      icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>`,
+      text: '> Finalizing ServiceNow state resolution & write-back…',
+      doneTag: 'SYNC READY',
+      delay: 15200
     }
-    
-    let dp = (elapsed - itemDelay) / drawDuration;
-    if (dp > 1.0) dp = 1.0;
-    
-    const nodeOpacity = dp; // fade node in as line draws
-    const y = itemStartY + (i * 38);
-    renderNode(`sub-${i}`, `
-      <div class="item-left shimmer-box" style="position:relative; overflow:hidden;">
-        <div class="item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg></div>
-        <div class="item-title term-text" id="term-title-${i}" style="color:#38bdf8; font-family: monospace; font-size:0.75rem;">${logs[i]}<span class="blink-cursor">_</span></div>
-      </div>
-      <div class="item-tag running-tag pulsing-border">
-        <span class="bars running-bars"><i class="pulse-bar"></i><i class="pulse-bar"></i><i class="pulse-bar"></i></span>
-        <span style="font-family: monospace; font-weight: 600; letter-spacing: 0.8px;">RUNNING</span>
-      </div>
-    `, endX, y, "node-item", null, nodeOpacity);
-    drawLine(`fan-${i}`, startX, startY, lineTargetX, y, true, 1.0, 0, dp);
+  ];
+
+  // Count visible steps and identify the active running one
+  let visibleCount = 0;
+  let activeIndex = -1;
+  for (let i = 0; i < pipelineSteps.length; i++) {
+    if (elapsed >= pipelineSteps[i].delay) {
+      visibleCount = i + 1;
+      activeIndex = i;
+    }
+  }
+  if (visibleCount === 0) visibleCount = 1;
+
+  const itemHeight = 36;
+  const itemGap = 6;
+  const totalH = visibleCount * (itemHeight + itemGap) - itemGap;
+  let itemStartY = startY - (totalH / 2) + (itemHeight / 2);
+
+  const topBound = 72;
+  const bottomBound = window.innerHeight - 210 - 20 - totalH;
+  if (itemStartY < topBound) itemStartY = topBound;
+  if (itemStartY > bottomBound && bottomBound > topBound) itemStartY = bottomBound;
+
+  for (let i = 0; i < 15; i++) {
+    if (i >= visibleCount) {
+      hideNode(`sub-${i}`);
+      hideLine(`fan-${i}`);
+    }
   }
 
+  for (let i = 0; i < visibleCount; i++) {
+    const step = pipelineSteps[i];
+    const drawDuration = 500;
+    let dp = (elapsed - step.delay) / drawDuration;
+    if (dp > 1.0) dp = 1.0;
+    if (dp < 0) dp = 0;
+
+    const y = itemStartY + (i * (itemHeight + itemGap));
+    const isCurrent = (i === activeIndex);
+
+    let tagHtml = '';
+    let textStyle = '';
+    let boxClass = 'item-left';
+
+    if (isCurrent) {
+      boxClass = 'item-left shimmer-box';
+      textStyle = 'color: #38bdf8; font-family: monospace; font-size: 0.74rem; font-weight: 600;';
+      tagHtml = `
+        <div class="item-tag running-tag pulsing-border">
+          <span class="bars running-bars"><i class="pulse-bar"></i><i class="pulse-bar"></i><i class="pulse-bar"></i></span>
+          <span style="font-family: monospace; font-weight: 700; letter-spacing: 0.8px;">RUNNING</span>
+        </div>
+      `;
+    } else {
+      textStyle = 'color: #94a3b8; font-family: monospace; font-size: 0.72rem;';
+      tagHtml = `
+        <div class="item-tag" style="background: rgba(34, 197, 94, 0.12); border-color: rgba(34, 197, 94, 0.35); color: #4ade80;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:2px;"><polyline points="20 6 9 17 4 12"/></svg>
+          <span style="font-family: monospace; font-size: 0.65rem; font-weight: 700;">${step.doneTag}</span>
+        </div>
+      `;
+    }
+
+    renderNode(`sub-${i}`, `
+      <div class="${boxClass}" style="position:relative; overflow:hidden;">
+        <div class="item-icon">${step.icon}</div>
+        <div class="item-title term-text" id="term-title-${i}" style="${textStyle}">${step.text}${isCurrent ? '<span class="blink-cursor">_</span>' : ''}</div>
+      </div>
+      ${tagHtml}
+    `, endX, y, "node-item", null, dp);
+
+    drawLine(`fan-${i}`, startX, startY, lineTargetX, y, true, 1.0, 0, dp);
+  }
 }
 
 function drawFannedNodesError(errorMsg, startX, startY, side = 'RIGHT') {
