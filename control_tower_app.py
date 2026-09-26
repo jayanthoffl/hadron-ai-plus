@@ -144,6 +144,17 @@ def create_request():
         return jsonify({"error": "Failed to create ServiceNow request", "detail": str(exc)}), 502
 
 
+@app.post("/api/requests/<sys_id>/status")
+def update_deal_status(sys_id):
+    try:
+        data = request.get_json(force=True)
+        new_status = str(data.get("status", "2"))
+        _set_service_now_status(sys_id, new_status)
+        return jsonify({"ok": True, "sys_id": sys_id, "status": new_status})
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 500
+
+
 @app.post("/api/analyze")
 def analyze():
     payload = request.get_json(force=True)

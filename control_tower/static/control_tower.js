@@ -34,22 +34,34 @@ let newRequestDrawTimes = {}; // track sys_id -> startTime for new requests
 
 let activeFannedData = null;
 
-// Splitting requests into Even (Left, max 4) and Odd (Right, max 4)
+// Vibrant Card Accents Palette matching the mockup
+const CARD_ACCENTS = [
+  { color: '#00e5ff', glow: 'rgba(0, 229, 255, 0.75)', bg: 'rgba(0, 229, 255, 0.16)', border: 'rgba(0, 229, 255, 0.5)' }, // Cyan (PRI0001031)
+  { color: '#fbbf24', glow: 'rgba(251, 191, 36, 0.75)', bg: 'rgba(251, 191, 36, 0.16)', border: 'rgba(251, 191, 36, 0.5)' }, // Amber / Gold (PRI0001029)
+  { color: '#34d399', glow: 'rgba(52, 211, 153, 0.75)', bg: 'rgba(52, 211, 153, 0.16)', border: 'rgba(52, 211, 153, 0.5)' }, // Emerald (PRI0001021)
+  { color: '#c084fc', glow: 'rgba(192, 132, 252, 0.75)', bg: 'rgba(192, 132, 252, 0.16)', border: 'rgba(192, 132, 252, 0.5)' }, // Violet (PRI0001032)
+  { color: '#38bdf8', glow: 'rgba(56, 189, 248, 0.75)', bg: 'rgba(56, 189, 248, 0.16)', border: 'rgba(56, 189, 248, 0.5)' }, // Sky Blue (PRI0001030)
+  { color: '#f43f5e', glow: 'rgba(244, 63, 94, 0.75)', bg: 'rgba(244, 63, 94, 0.16)', border: 'rgba(244, 63, 94, 0.5)' },  // Rose / Magenta (PRI0001028)
+];
+
+// Splitting requests into Even (Left, max 3) and Odd (Right, max 3) for clean mockup layout
 function splitRequests() {
   leftRequests = [];
   rightRequests = [];
-  const maxPerSide = 4;
+  const maxPerSide = 3;
   requests.forEach((req, idx) => {
     if (idx % 2 === 0) {
-      if (rightRequests.length < maxPerSide) rightRequests.push(req);
-    } else {
       if (leftRequests.length < maxPerSide) leftRequests.push(req);
+      else if (rightRequests.length < maxPerSide) rightRequests.push(req);
+    } else {
+      if (rightRequests.length < maxPerSide) rightRequests.push(req);
+      else if (leftRequests.length < maxPerSide) leftRequests.push(req);
     }
   });
 }
 
-// Draw smooth directional radial sigmoid cubic bezier curve
-function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, drawProgress=1.0) {
+// Draw smooth directional radial sigmoid cubic bezier curve with neon port glow
+function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, drawProgress=1.0, color=null, glow=null) {
   const svg = $("svgLayer");
   if (!svg) return;
   let path = $(`line-${id}`);
@@ -61,16 +73,29 @@ function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, dr
   const dx = Math.abs(x2 - x1);
   const dy = y2 - y1;
   const dir = x2 >= x1 ? 1 : -1;
-  const alpha = 0.42;
-  const beta  = 0.18;
+  const alpha = 0.50;
+  const beta  = 0.14;
   const cx1 = x1 + dir * (dx * alpha);
   const cy1 = y1 + dy * beta;
   const cx2 = x2 - dir * (dx * alpha);
   const cy2 = y2 - dy * beta;
   path.setAttribute("d", `M ${x1},${y1} C ${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`);
   path.setAttribute("class", `line-path ${highlight?'highlight':''}`);
+  
+  if (color) {
+    path.style.stroke = color;
+    path.style.strokeWidth = highlight ? "2.6px" : "1.8px";
+    path.style.filter = glow ? `drop-shadow(0 0 8px ${glow})` : (blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none');
+  } else {
+    path.style.stroke = highlight ? "var(--gold)" : "rgba(255, 255, 255, 0.16)";
+    path.style.strokeWidth = highlight ? "2.2px" : "1.5px";
+    path.style.filter = highlight ? "drop-shadow(0 0 8px var(--gold-glow))" : (blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none');
+  }
+
   path.style.opacity = String(opacity);
-  path.style.filter = blurPx > 0 ? `blur(${blurPx.toFixed(1)}px)` : 'none';
+  if (blurPx > 0 && !color) {
+    path.style.filter = `blur(${blurPx.toFixed(1)}px)`;
+  }
 
   if (drawProgress < 1.0) {
     const len = path.getTotalLength ? path.getTotalLength() : 800;
@@ -80,11 +105,33 @@ function drawLine(id, x1, y1, x2, y2, highlight=false, opacity=1.0, blurPx=0, dr
     path.style.strokeDasharray = 'none';
     path.style.strokeDashoffset = '0';
   }
+
+  // Draw glowing port dot at (x1, y1) on orb perimeter
+  let portDot = $(`port-dot-${id}`);
+  if (!portDot && color) {
+    portDot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    portDot.setAttribute("id", `port-dot-${id}`);
+    svg.appendChild(portDot);
+  }
+  if (portDot) {
+    if (color && opacity > 0.08) {
+      portDot.setAttribute("cx", String(x1));
+      portDot.setAttribute("cy", String(y1));
+      portDot.setAttribute("r", "4.2");
+      portDot.setAttribute("fill", color);
+      portDot.style.filter = `drop-shadow(0 0 7px ${glow || color})`;
+      portDot.style.opacity = String(opacity);
+    } else {
+      portDot.style.opacity = '0';
+    }
+  }
 }
 
 function hideLine(id) {
   const path = $(`line-${id}`);
   if(path) path.style.opacity = '0';
+  const portDot = $(`port-dot-${id}`);
+  if(portDot) portDot.style.opacity = '0';
 }
 
 // Draw HTML node
@@ -250,8 +297,8 @@ async function loadRequests(preserveState = false) {
       
       const W = window.innerWidth;
       currentRootX = W / 2;
-      currentLeftX = W / 2 - 320;
-      currentRightX = W / 2 + 320;
+      currentLeftX = W / 2 - 380;
+      currentRightX = W / 2 + 380;
       currentInactiveOpacity = 1.0;
 
       animateGraphToState('EXPANDED', null, 800);
@@ -265,6 +312,7 @@ function handleOrbClick() {
   activeReq = null;
   activeSide = null;
   activeFannedData = null;
+  if ($("canvasHeroText")) $("canvasHeroText").classList.remove("hidden-hero");
   if (logIntervalId) clearInterval(logIntervalId);
   if ($("rightPanel")) {
     $("rightPanel").style.opacity = '0';
@@ -287,43 +335,51 @@ function renderGraphFrame() {
   const cy = TOPBAR + graphH / 2;
 
   if (currentRootX == null) currentRootX = W / 2;
-  if (currentLeftX == null) currentLeftX = W / 2 - 320;
-  if (currentRightX == null) currentRightX = W / 2 + 320;
+  if (currentLeftX == null) currentLeftX = W / 2 - 380;
+  if (currentRightX == null) currentRightX = W / 2 + 380;
 
   const rootX = currentRootX;
   const rootY = cy;
-  const orbCenterY = rootY - 45; // Exact vertical center of the 3D sphere circle (.orb-core)
-  const activeCount = requests.length || 12;
+  const orbRadius = 98; // ~195px diameter sphere
+  const orbCenterY = rootY - 12;
+  const activeCount = requests.length || 7;
 
-  // Render Center Orb with Add Request button built-in for 100% lockstep physical movement
+  // Render Center Orb matching mockup with Opportunity Pipeline typography and live deal tag
   renderNode('root', `
-    <div class="orb-core"></div>
-    <div class="orb-label">
-      <h3>Opportunity Pipeline</h3>
-      <p>HADRON Executive</p>
-      <div class="orb-tag"><span class="dot-live"></span> ${activeCount} Active Deals</div>
+    <div class="opportunity-orb-sphere" onclick="handleOrbClick()" title="Click to view Opportunity Pipeline Overview">
+      <div class="orb-inner-content">
+        <div class="orb-title-sub">Opportunity</div>
+        <div class="orb-title-main">Pipeline</div>
+        <div class="orb-subtext">HADRON Executive</div>
+        <div class="orb-pill-tag">
+          <span class="dot-live"></span>
+          <span>${activeCount} Active Deals</span>
+        </div>
+      </div>
     </div>
-    <div class="orb-btn-group" onclick="event.stopPropagation();">
-      <button class="orb-action-btn primary" onclick="if ($('modal')) $('modal').classList.remove('hidden');">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Request
+    <div class="orb-button-row" onclick="event.stopPropagation();">
+      <button class="orb-pill-btn gold" onclick="if ($('modal')) $('modal').classList.remove('hidden');" title="Add a new pricing analysis request">
+        <span style="font-weight:800; font-size:1.05rem; line-height:1; margin-right:2px;">+</span> Add Request
       </button>
-      <button class="orb-action-btn" onclick="openAllRequestsModal();">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>
+      <button class="orb-pill-btn glass" onclick="openAllRequestsModal();" title="View all pricing requests in pipeline">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>
         View All (${activeCount})
       </button>
-      <button class="orb-action-btn" onclick="openCompanyDirectoryModal('companies');">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
-        Internal Hub
-      </button>
     </div>
-  `, rootX, rootY, "node-orb", handleOrbClick);
+  `, rootX, orbCenterY + 12, "node-orb", null);
 
   hideNode('orb-add-btn');
 
   // Update top nav badge & homepage HUD
   if ($("navReqBadge")) $("navReqBadge").textContent = requests.length;
-  if ($("hudDealCount")) $("hudDealCount").textContent = `${requests.length} Deals`;
+  if ($("hudDealCount")) $("hudDealCount").textContent = requests.length;
+  if ($("canvasHeroText")) {
+    if (graphState === 'SELECTED') {
+      $("canvasHeroText").classList.add("hidden-hero");
+    } else {
+      $("canvasHeroText").classList.remove("hidden-hero");
+    }
+  }
   if ($("homeHudStrip")) {
     if (graphState === 'SELECTED') {
       $("homeHudStrip").classList.add("hidden-hud");
@@ -340,8 +396,7 @@ function renderGraphFrame() {
   requests.forEach(r => {
     if (!visibleIds.has(r.sys_id)) {
       hideNode(r.sys_id);
-      const line = $(`line-root-${r.sys_id}`);
-      if (line) line.style.opacity = '0';
+      hideLine(`root-${r.sys_id}`);
     }
   });
 
@@ -349,13 +404,14 @@ function renderGraphFrame() {
 
   const leftX = currentLeftX;
   const rightX = currentRightX;
+  const CARD_HALF = 145; // Half of 290px card width
 
-  // Uniform Vertical Gap (70px center-to-center)
-  const V_GAP = 70;
+  // Uniform Vertical Gap (96px center-to-center for 72px cards gives 24px clean gap)
+  const V_GAP = 96;
   
   const lastReqId = requests.length > 0 ? requests[requests.length - 1].sys_id : null;
 
-  // Render LEFT Column Cards (Even - Max 4)
+  // Render LEFT Column Cards (Up to 3 cards)
   const leftTotalH = Math.max(0, (leftRequests.length - 1) * V_GAP);
   const leftStartY = cy - leftTotalH / 2;
 
@@ -366,14 +422,7 @@ function renderGraphFrame() {
 
     const opacity = isDimmed ? currentInactiveOpacity : 1.0;
     const blurPx = isDimmed ? Math.max(0, (1.0 - currentInactiveOpacity) / 0.75 * 6) : 0;
-
-    const iconHtml = isActive
-      ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
-      : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>`;
-
     const cardClass = `node-cat ${isActive ? 'active' : ''} ${isDimmed ? 'dimmed-blur' : ''}`;
-
-    const isLast = req.sys_id === lastReqId;
 
     const createTime = newRequestDrawTimes[req.sys_id];
     let dp = 1.0;
@@ -382,30 +431,39 @@ function renderGraphFrame() {
     }
     const nodeOpacity = dp < 1.0 ? dp * opacity : opacity;
 
-    renderNode(req.sys_id, `
-      <div class="cat-icon">${iconHtml}</div>
-      <div class="cat-text">
-        <h3>${req.number}</h3>
-        <p>${req.customer_name || 'Unknown Customer'}</p>
-      </div>
-    `, leftX, y, cardClass, () => selectRequest(req, leftX, y, 'LEFT'), nodeOpacity, blurPx);
+    const accent = CARD_ACCENTS[i % CARD_ACCENTS.length];
 
-    const HALF = 110;
-    drawLine(`root-${req.sys_id}`, rootX - 32, orbCenterY, leftX + HALF, y, isActive, opacity, blurPx, dp);
+    const cardHtml = `
+      <div class="card-inner">
+        <div class="card-icon-box" style="background:${accent.bg}; border-color:${accent.border}; box-shadow:0 0 12px ${accent.glow};">
+          <div class="card-icon-inner" style="background:${accent.color}; color:${accent.color};"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-ticket">${req.number || 'PRI-NEW'}</div>
+          <div class="card-customer" title="${req.customer_name || ''}">${req.customer_name || 'Enterprise Customer'}</div>
+          <div class="card-service" title="${req.service_product_name || ''}">${req.service_product_name || 'Transformation Service'}</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="card-connector-dot right-edge" style="background:${accent.color}; box-shadow:0 0 10px ${accent.glow};"></div>
+      </div>
+    `;
+
+    renderNode(req.sys_id, cardHtml, leftX, y, cardClass, () => selectRequest(req, leftX, y, 'LEFT'), nodeOpacity, blurPx);
+
+    // Port Y on the left side of the orb
+    const portY = orbCenterY + (i - (leftRequests.length - 1) / 2) * 36;
+    drawLine(`root-${req.sys_id}`, rootX - orbRadius, portY, leftX + CARD_HALF, y, isActive, opacity, blurPx, dp, accent.color, accent.glow);
   });
 
   if (graphState !== 'SELECTED' && requests.length > (leftRequests.length + rightRequests.length)) {
-    const extraCount = requests.length - (leftRequests.length + rightRequests.length);
-    renderNode('show-more', `
-      <div class="orb-label" style="padding:6px 14px; border-radius:100px; background:rgba(255,255,255,0.06); border:1px solid rgba(226, 192, 121, 0.35); backdrop-filter:blur(10px); cursor:pointer; pointer-events:auto;" onclick="openAllRequestsModal()">
-        <span style="font-size:0.75rem; color:var(--gold); font-weight:700; text-transform:uppercase;">📋 +${extraCount} More Deals in Pipeline</span>
-      </div>
-    `, rootX, cy + 195, "node-orb", null, 1.0, 0);
+    hideNode('show-more');
   } else {
     hideNode('show-more');
   }
 
-  // Render RIGHT Column Cards (Odd - Max 4)
+  // Render RIGHT Column Cards (Up to 3 cards)
   const rightTotalH = Math.max(0, (rightRequests.length - 1) * V_GAP);
   const rightStartY = cy - rightTotalH / 2;
 
@@ -416,14 +474,7 @@ function renderGraphFrame() {
 
     const opacity = isDimmed ? currentInactiveOpacity : 1.0;
     const blurPx = isDimmed ? Math.max(0, (1.0 - currentInactiveOpacity) / 0.75 * 6) : 0;
-
-    const iconHtml = isActive
-      ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
-      : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>`;
-
     const cardClass = `node-cat ${isActive ? 'active' : ''} ${isDimmed ? 'dimmed-blur' : ''}`;
-
-    const isLast = req.sys_id === lastReqId;
 
     const createTime = newRequestDrawTimes[req.sys_id];
     let dp = 1.0;
@@ -432,16 +483,30 @@ function renderGraphFrame() {
     }
     const nodeOpacity = dp < 1.0 ? dp * opacity : opacity;
 
-    renderNode(req.sys_id, `
-      <div class="cat-icon">${iconHtml}</div>
-      <div class="cat-text">
-        <h3>${req.number}</h3>
-        <p>${req.customer_name || 'Unknown Customer'}</p>
-      </div>
-    `, rightX, y, cardClass, () => selectRequest(req, rightX, y, 'RIGHT'), nodeOpacity, blurPx);
+    const accent = CARD_ACCENTS[(i + 3) % CARD_ACCENTS.length];
 
-    const HALF = 110;
-    drawLine(`root-${req.sys_id}`, rootX + 32, orbCenterY, rightX - HALF, y, isActive, opacity, blurPx, dp);
+    const cardHtml = `
+      <div class="card-inner">
+        <div class="card-icon-box" style="background:${accent.bg}; border-color:${accent.border}; box-shadow:0 0 12px ${accent.glow};">
+          <div class="card-icon-inner" style="background:${accent.color}; color:${accent.color};"></div>
+        </div>
+        <div class="card-content">
+          <div class="card-ticket">${req.number || 'PRI-NEW'}</div>
+          <div class="card-customer" title="${req.customer_name || ''}">${req.customer_name || 'Enterprise Customer'}</div>
+          <div class="card-service" title="${req.service_product_name || ''}">${req.service_product_name || 'Transformation Service'}</div>
+        </div>
+        <div class="card-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="card-connector-dot left-edge" style="background:${accent.color}; box-shadow:0 0 10px ${accent.glow};"></div>
+      </div>
+    `;
+
+    renderNode(req.sys_id, cardHtml, rightX, y, cardClass, () => selectRequest(req, rightX, y, 'RIGHT'), nodeOpacity, blurPx);
+
+    // Port Y on the right side of the orb
+    const portY = orbCenterY + (i - (rightRequests.length - 1) / 2) * 36;
+    drawLine(`root-${req.sys_id}`, rootX + orbRadius, portY, rightX - CARD_HALF, y, isActive, opacity, blurPx, dp, accent.color, accent.glow);
   });
 
   // Continuously render fanned factor cards glued to selected card every frame
@@ -450,7 +515,7 @@ function renderGraphFrame() {
     const cardX = isLeft ? currentLeftX : currentRightX;
     const cardEl = $(`node-${activeReq.sys_id}`);
     const startY = cardEl ? (cardEl.offsetTop + cardEl.offsetHeight / 2) : cy;
-    const startX = isLeft ? (cardX - 110) : (cardX + 110);
+    const startX = isLeft ? (cardX - CARD_HALF) : (cardX + CARD_HALF);
 
     if (activeFannedData) {
       drawFannedNodes(activeFannedData, startX, startY, activeSide);
@@ -466,8 +531,8 @@ function animateGraphToState(targetState, targetSide, duration = 1100) {
   const W = window.innerWidth;
 
   if (currentRootX == null) currentRootX = W / 2;
-  if (currentLeftX == null) currentLeftX = W / 2 - 320;
-  if (currentRightX == null) currentRightX = W / 2 + 320;
+  if (currentLeftX == null) currentLeftX = W / 2 - 380;
+  if (currentRightX == null) currentRightX = W / 2 + 380;
 
   const startRootX = currentRootX;
   const startLeftX = currentLeftX;
@@ -475,25 +540,35 @@ function animateGraphToState(targetState, targetSide, duration = 1100) {
   const startInactiveOpacity = currentInactiveOpacity;
 
   let endRootX = W / 2;
-  let endLeftX = W / 2 - 320;
-  let endRightX = W / 2 + 320;
+  let endLeftX = W / 2 - 380;
+  let endRightX = W / 2 + 380;
   let endInactiveOpacity = 1.0;
 
   if (targetState === 'SELECTED') {
     endInactiveOpacity = 0.25;
     if (targetSide === 'RIGHT') {
-      endRootX = Math.round(W * 0.14);
-      endLeftX = Math.round(endRootX - 220); // Moves in lockstep with Orb
-      endRightX = Math.round(W * 0.32);
+      endRootX = Math.round(W * 0.16);
+      endLeftX = Math.round(endRootX - 260); // Moves in lockstep with Orb
+      endRightX = Math.round(W * 0.35);
     } else {
-      endRootX = Math.round(W * 0.86);
-      endRightX = Math.round(endRootX + 220); // Moves in lockstep with Orb
-      endLeftX = Math.round(W * 0.68);
+      endRootX = Math.round(W * 0.84);
+      endRightX = Math.round(endRootX + 260); // Moves in lockstep with Orb
+      endLeftX = Math.round(W * 0.65);
     }
   }
 
   graphState = targetState;
   activeSide = targetSide;
+
+  const heroEl = $("canvasHeroText");
+  const hudEl = $("homeHudStrip");
+  if (targetState === 'SELECTED') {
+    if (heroEl) heroEl.classList.add("hidden-hero");
+    if (hudEl) hudEl.classList.add("hidden-hud");
+  } else {
+    if (heroEl) heroEl.classList.remove("hidden-hero");
+    if (hudEl) hudEl.classList.remove("hidden-hud");
+  }
 
   if (duration <= 0) {
     currentRootX = endRootX;
@@ -536,6 +611,11 @@ function renderGraph() {
 async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) {
   activeReq = req;
   activeSide = side;
+
+  const heroEl = $("canvasHeroText");
+  if (heroEl) heroEl.classList.add("hidden-hero");
+  const hudEl = $("homeHudStrip");
+  if (hudEl) hudEl.classList.add("hidden-hud");
 
   animateGraphToState('SELECTED', side, 1100);
 
@@ -1359,7 +1439,12 @@ function renderAllRequestsTable() {
   
   let list = requests.slice();
   if (currentReqStatusFilter !== 'ALL') {
-    list = list.filter(r => (r.status || 'READY').toUpperCase() === currentReqStatusFilter);
+    list = list.filter(r => {
+      const st = (r.status || 'READY').toUpperCase();
+      if (currentReqStatusFilter === 'APPROVED') return st === 'APPROVED' || st === 'WON';
+      if (currentReqStatusFilter === 'FAILED') return st === 'FAILED' || st === 'LOST';
+      return st === currentReqStatusFilter;
+    });
   }
   if (query) {
     list = list.filter(r => 
@@ -1380,9 +1465,13 @@ function renderAllRequestsTable() {
   }
 
   tbody.innerHTML = list.map(r => {
-    const isReady = (r.status || 'READY').toUpperCase() === 'READY';
-    const isAnalyzing = (r.status || '').toUpperCase() === 'ANALYZING';
-    const statusClass = isReady ? 'ready' : (isAnalyzing ? 'analyzing' : 'draft');
+    const statusUpper = (r.status || 'READY').toUpperCase();
+    const isWon = statusUpper === 'APPROVED' || statusUpper === 'WON';
+    const isLost = statusUpper === 'FAILED' || statusUpper === 'LOST';
+    const isReady = statusUpper === 'READY';
+    const isAnalyzing = statusUpper === 'ANALYZING';
+    const statusClass = isWon ? 'won' : (isLost ? 'lost' : (isReady ? 'ready' : (isAnalyzing ? 'analyzing' : 'draft')));
+    const statusLabel = isWon ? '🏆 WON' : (isLost ? '✗ LOST' : (r.status || 'READY'));
     
     // Parse economics if available
     let ie = r.internal_economics;
@@ -1407,13 +1496,17 @@ function renderAllRequestsTable() {
       <tr>
         <td style="font-family:monospace; font-weight:700; color:var(--gold);">${r.number || 'PRI-NEW'}</td>
         <td style="font-weight:600; color:#fff;">${r.customer_name || 'Unknown'}</td>
-        <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.service_product_name || ''}">${r.service_product_name || 'Custom Service'}</td>
-        <td><span class="status-pill ${statusClass}">${r.status || 'READY'}</span></td>
+        <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${r.service_product_name || ''}">${r.service_product_name || 'Custom Service'}</td>
+        <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
         <td style="font-size:0.75rem; color:#94a3b8;"><span style="font-family:monospace;">${econSource}</span></td>
         <td style="font-family:monospace; color:#cbd5e1;">${mvpFloor}</td>
         <td style="font-family:monospace; font-weight:700; color:var(--gold);">${balancedPrice}</td>
-        <td>
-          <button class="btn-table-action" onclick="inspectDealFromTable('${r.sys_id}')">Inspect &rarr;</button>
+        <td style="white-space:nowrap;">
+          <div style="display:flex; gap:6px; align-items:center;">
+            <button class="btn-table-action" onclick="inspectDealFromTable('${r.sys_id}')">Inspect &rarr;</button>
+            <button class="btn-deal-action won" title="Mark Closed Won" onclick="markDealClosed('${r.sys_id}', '5')">🏆 Won</button>
+            <button class="btn-deal-action lost" title="Mark Closed Lost" onclick="markDealClosed('${r.sys_id}', '6')">✗ Lost</button>
+          </div>
         </td>
       </tr>
     `;
@@ -1428,13 +1521,57 @@ function inspectDealFromTable(sysId) {
   selectRequest(req, 0, 0, isLeft ? 'LEFT' : 'RIGHT', false);
 }
 
+async function markDealClosed(sysId, status) {
+  try {
+    const res = await fetch(`/api/requests/${sysId}/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status })
+    });
+    if (!res.ok) throw new Error("Failed to update deal status in ServiceNow.");
+    
+    const map = { "2": "READY", "5": "APPROVED", "6": "FAILED" };
+    const displayStatus = map[status] || "READY";
+
+    const req = requests.find(r => r.sys_id === sysId);
+    if (req) {
+      req.status = displayStatus;
+    }
+
+    renderAllRequestsTable();
+    if (activeReq && activeReq.sys_id === sysId) {
+      activeReq.status = displayStatus;
+      if ($("rStatus")) {
+        const isWon = displayStatus === 'APPROVED';
+        const isLost = displayStatus === 'FAILED';
+        $("rStatus").textContent = isWon ? '🏆 CLOSED WON' : (isLost ? '✗ CLOSED LOST' : displayStatus);
+        $("rStatus").className = `status-pill ${isWon ? 'won' : (isLost ? 'lost' : 'ready')}`;
+      }
+    }
+  } catch(e) {
+    console.error("Error setting deal status:", e);
+    alert("Could not update deal outcome: " + e.message);
+  }
+}
+
+function markActiveDealOutcome(status) {
+  if (!activeReq || !activeReq.sys_id) {
+    alert("Please select a deal in the network graph first.");
+    return;
+  }
+  markDealClosed(activeReq.sys_id, status);
+}
+
 // ── INTERNAL COMPANY INTELLIGENCE & KNOWLEDGE HUB ─────────────────────
+let cachedCompanyProfileData = null;
 let cachedCustomersData = null;
 let cachedServicesData = null;
+let cachedDealsData = null;
 let cachedRatesData = null;
-let currentHubTab = 'companies';
+let currentHubTab = 'companyProfile';
+let currentDealsOutcomeFilter = 'ALL';
 
-async function openCompanyDirectoryModal(initialTab = 'companies') {
+async function openCompanyDirectoryModal(initialTab = 'companyProfile') {
   const modal = $("companyDirectoryModal");
   if (!modal) return;
   modal.classList.remove("hidden");
@@ -1449,20 +1586,36 @@ function closeCompanyDirectoryModal() {
 
 function switchHubTab(tabName) {
   currentHubTab = tabName;
-  ['companies', 'services', 'economics'].forEach(t => {
-    const pane = $(`pane${t.charAt(0).toUpperCase() + t.slice(1)}`);
-    const btn = $(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
-    if (pane) pane.style.display = (t === tabName) ? 'block' : 'none';
+  const tabs = [
+    { key: 'companyProfile', paneId: 'paneCompanyProfile', btnId: 'tabBtnCompanyProfile', placeholder: 'Search internal intelligence...' },
+    { key: 'companies', paneId: 'paneCompanies', btnId: 'tabBtnCompanies', placeholder: 'Search client accounts or industry...' },
+    { key: 'services', paneId: 'paneServices', btnId: 'tabBtnServices', placeholder: 'Search delivery catalog services...' },
+    { key: 'deals', paneId: 'paneDeals', btnId: 'tabBtnDeals', placeholder: 'Search precedent deals (customer, service)...' },
+    { key: 'economics', paneId: 'paneEconomics', btnId: 'tabBtnEconomics', placeholder: 'Search rate cards or policies...' }
+  ];
+
+  tabs.forEach(t => {
+    const pane = $(t.paneId);
+    const btn = $(t.btnId);
+    if (pane) pane.style.display = (t.key === tabName) ? 'block' : 'none';
     if (btn) {
-      if (t === tabName) btn.classList.add('active');
+      if (t.key === tabName) btn.classList.add('active');
       else btn.classList.remove('active');
     }
+    if (t.key === tabName && $("hubSearchInput")) {
+      $("hubSearchInput").placeholder = t.placeholder;
+    }
   });
+
   filterHubData();
 }
 
 async function loadCompanyDirectoryData() {
   try {
+    if (!cachedCompanyProfileData) {
+      const res = await fetch("/api/intelligence/company");
+      if (res.ok) cachedCompanyProfileData = await res.json();
+    }
     if (!cachedCustomersData) {
       const res = await fetch("/api/intelligence/customers");
       if (res.ok) cachedCustomersData = await res.json();
@@ -1471,12 +1624,19 @@ async function loadCompanyDirectoryData() {
       const res = await fetch("/api/intelligence/services");
       if (res.ok) cachedServicesData = await res.json();
     }
+    if (!cachedDealsData) {
+      const res = await fetch("/api/intelligence/deals");
+      if (res.ok) cachedDealsData = await res.json();
+    }
     if (!cachedRatesData) {
       const res = await fetch("/api/intelligence/rates");
       if (res.ok) cachedRatesData = await res.json();
     }
+
+    renderCompanyProfilePane(cachedCompanyProfileData);
     renderCompaniesGrid();
     renderServicesGrid();
+    renderHistoricalDealsTable();
     renderRatesTable();
   } catch(e) {
     console.error("Failed to load company intelligence data:", e);
@@ -1489,7 +1649,221 @@ function filterHubData() {
     renderCompaniesGrid(query);
   } else if (currentHubTab === 'services') {
     renderServicesGrid(query);
+  } else if (currentHubTab === 'deals') {
+    renderHistoricalDealsTable(query);
   }
+}
+
+function renderCompanyProfilePane(data) {
+  if (!data) return;
+  const fin = data.financials_and_targets || {};
+  const emp = data.employee_summary || {};
+  const loc = data.location || {};
+
+  if ($("profCompanyName")) $("profCompanyName").textContent = `${data.company_name || 'Hadron GBS'} (Global Delivery Center)`;
+  if ($("profLegalName")) $("profLegalName").textContent = `${data.legal_name || 'Hadron Global Business Solutions Pvt. Ltd.'} • ${data.company_type || 'IT Service & Enterprise Consulting Firm'}`;
+
+  if ($("profAnnualRev")) $("profAnnualRev").textContent = fin.annual_revenue_inr || "₹75.0 Crore";
+  if ($("profAnnualUsd")) $("profAnnualUsd").textContent = fin.annual_revenue_usd ? `${fin.annual_revenue_usd} Base` : "~$9.1M USD Base";
+  
+  if ($("profQuarterlyRev")) {
+    const qTargetInr = fin.quarterly_revenue_target ? `₹${(fin.quarterly_revenue_target / 1e7).toFixed(2)} Crore` : "₹18.75 Crore";
+    $("profQuarterlyRev").textContent = qTargetInr;
+  }
+
+  const totalEmp = emp.total_employees || 200;
+  const billableEmp = emp.billable_delivery_consultants || 155;
+  if ($("profTotalFte")) $("profTotalFte").textContent = `${totalEmp} Employees`;
+  if ($("profBillableFte")) $("profBillableFte").textContent = `${billableEmp} Billable Consultants`;
+
+  const targetMargin = fin.target_gross_margin !== undefined ? `${(fin.target_gross_margin * 100).toFixed(1)}%` : "32.0%";
+  if ($("profTargetMargin")) $("profTargetMargin").textContent = targetMargin;
+
+  if ($("profLocation")) $("profLocation").textContent = loc.headquarters || "EON Free Zone, Kharadi, Pune, Maharashtra, India";
+
+  // Practice Breakdown Grid
+  const practiceGrid = $("practiceChipsGrid");
+  if (practiceGrid && emp.practice_distribution) {
+    const practiceLabels = {
+      servicenow_practice: "ServiceNow Implementation Practice",
+      salesforce_practice: "Salesforce & CRM Practice",
+      microsoft_cloud_practice: "Microsoft Azure & Power Platform",
+      legacy_itsm_migration_bmc_ivanti: "Legacy ITSM Migration (BMC/Ivanti)",
+      ai_and_quantum_innovation_lab: "AI & Quantum Solutions Lab",
+      global_pmo_and_qa: "Global PMO, Delivery & QA"
+    };
+
+    practiceGrid.innerHTML = Object.entries(emp.practice_distribution).map(([key, count]) => {
+      const label = practiceLabels[key] || key.replace(/_/g, ' ').toUpperCase();
+      return `
+        <div class="practice-chip">
+          <span>${label}</span>
+          <strong>${count} FTEs</strong>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+function toggleEditCompanyForm(show) {
+  const formWrap = $("companyEditFormWrap");
+  if (!formWrap) return;
+  const isHidden = formWrap.classList.contains("hidden");
+  const willShow = (typeof show === 'boolean') ? show : isHidden;
+
+  if (willShow) {
+    const data = cachedCompanyProfileData || {};
+    const fin = data.financials_and_targets || {};
+    const emp = data.employee_summary || {};
+    const loc = data.location || {};
+
+    if ($("editCompanyName")) $("editCompanyName").value = data.legal_name || "Hadron Global Business Solutions Pvt. Ltd.";
+    if ($("editAnnualRevenueInr")) $("editAnnualRevenueInr").value = fin.annual_revenue_inr || "₹75.0 Crore";
+    if ($("editAnnualRevenueNum")) $("editAnnualRevenueNum").value = fin.annual_revenue_target || 750000000;
+    if ($("editQuarterlyRevenueNum")) $("editQuarterlyRevenueNum").value = fin.quarterly_revenue_target || 187500000;
+    if ($("editTotalEmployees")) $("editTotalEmployees").value = emp.total_employees || 200;
+    if ($("editBillableEmployees")) $("editBillableEmployees").value = emp.billable_delivery_consultants || 155;
+    if ($("editTargetMargin")) $("editTargetMargin").value = fin.target_gross_margin !== undefined ? fin.target_gross_margin : 0.32;
+    if ($("editTargetEbitda")) $("editTargetEbitda").value = fin.target_ebitda !== undefined ? fin.target_ebitda : 0.22;
+    if ($("editHeadquarters")) $("editHeadquarters").value = loc.headquarters || "EON Free Zone, Kharadi, Pune, India";
+
+    formWrap.classList.remove("hidden");
+  } else {
+    formWrap.classList.add("hidden");
+  }
+}
+
+async function saveCompanyDetailsFromForm() {
+  const btn = $("saveCompanyBtn");
+  if (!btn) return;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = `<span>Saving Changes...</span>`;
+  btn.disabled = true;
+
+  try {
+    if (!cachedCompanyProfileData) cachedCompanyProfileData = {};
+    if (!cachedCompanyProfileData.financials_and_targets) cachedCompanyProfileData.financials_and_targets = {};
+    if (!cachedCompanyProfileData.employee_summary) cachedCompanyProfileData.employee_summary = {};
+    if (!cachedCompanyProfileData.location) cachedCompanyProfileData.location = {};
+
+    cachedCompanyProfileData.legal_name = $("editCompanyName") ? $("editCompanyName").value.trim() : cachedCompanyProfileData.legal_name;
+    
+    const revInr = $("editAnnualRevenueInr") ? $("editAnnualRevenueInr").value.trim() : "₹75.0 Crore";
+    const revTarget = $("editAnnualRevenueNum") ? Number($("editAnnualRevenueNum").value) : 750000000;
+    const qTarget = $("editQuarterlyRevenueNum") ? Number($("editQuarterlyRevenueNum").value) : 187500000;
+    const totEmp = $("editTotalEmployees") ? Number($("editTotalEmployees").value) : 200;
+    const billEmp = $("editBillableEmployees") ? Number($("editBillableEmployees").value) : 155;
+    const targetMargin = $("editTargetMargin") ? parseFloat($("editTargetMargin").value) : 0.32;
+    const targetEbitda = $("editTargetEbitda") ? parseFloat($("editTargetEbitda").value) : 0.22;
+    const hq = $("editHeadquarters") ? $("editHeadquarters").value.trim() : "EON Free Zone, Kharadi, Pune, India";
+
+    cachedCompanyProfileData.financials_and_targets.annual_revenue_inr = revInr;
+    cachedCompanyProfileData.financials_and_targets.annual_revenue_target = revTarget;
+    cachedCompanyProfileData.financials_and_targets.quarterly_revenue_target = qTarget;
+    cachedCompanyProfileData.financials_and_targets.target_gross_margin = targetMargin;
+    cachedCompanyProfileData.financials_and_targets.target_ebitda = targetEbitda;
+
+    cachedCompanyProfileData.employee_summary.total_employees = totEmp;
+    cachedCompanyProfileData.employee_summary.billable_delivery_consultants = billEmp;
+    cachedCompanyProfileData.employee_summary.non_billable_leadership_and_ops = Math.max(0, totEmp - billEmp);
+
+    cachedCompanyProfileData.location.headquarters = hq;
+
+    const res = await fetch("/api/intelligence/company", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(cachedCompanyProfileData)
+    });
+
+    if (!res.ok) throw new Error("Failed to persist company updates.");
+
+    renderCompanyProfilePane(cachedCompanyProfileData);
+    btn.innerHTML = `<span>Saved Successfully ✓</span>`;
+    setTimeout(() => {
+      toggleEditCompanyForm(false);
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 700);
+  } catch(e) {
+    console.error("Save company profile error:", e);
+    alert("Error saving company details: " + e.message);
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
+
+function setDealsOutcomeFilter(filter, btn) {
+  currentDealsOutcomeFilter = filter;
+  if ($("dealsFilterPills")) {
+    $("dealsFilterPills").querySelectorAll(".filter-pill").forEach(p => p.classList.remove("active"));
+    if (btn) btn.classList.add("active");
+  }
+  const query = ($("hubSearchInput") ? $("hubSearchInput").value : "").toLowerCase().trim();
+  renderHistoricalDealsTable(query);
+}
+
+function renderHistoricalDealsTable(query = '') {
+  const tbody = $("historicalDealsTableBody");
+  if (!tbody || !cachedDealsData) return;
+
+  const totalDeals = cachedDealsData.length;
+  const wonDeals = cachedDealsData.filter(d => (d.outcome || '').toUpperCase() === 'WON');
+  const lostDeals = cachedDealsData.filter(d => (d.outcome || '').toUpperCase() === 'LOST');
+  const winRate = totalDeals > 0 ? Math.round((wonDeals.length / totalDeals) * 100) : 0;
+  const totalVal = cachedDealsData.reduce((acc, d) => acc + (d.deal_value || 0), 0);
+  const avgWonMargin = wonDeals.length > 0 
+    ? (wonDeals.reduce((acc, d) => acc + (d.margin || 0), 0) / wonDeals.length * 100).toFixed(1) 
+    : '0.0';
+
+  if ($("hubCountDeals")) $("hubCountDeals").textContent = totalDeals;
+  if ($("dealKpiWinRate")) $("dealKpiWinRate").textContent = `${winRate}%`;
+  if ($("dealKpiWinCounts")) $("dealKpiWinCounts").textContent = `${wonDeals.length} Won / ${lostDeals.length} Lost`;
+  if ($("dealKpiTotalValue")) $("dealKpiTotalValue").textContent = `$${Math.round(totalVal / 1e6)}M+`;
+  if ($("dealKpiMargin")) $("dealKpiMargin").textContent = `${avgWonMargin}%`;
+
+  let list = cachedDealsData.slice();
+  if (currentDealsOutcomeFilter !== 'ALL') {
+    list = list.filter(d => (d.outcome || '').toUpperCase() === currentDealsOutcomeFilter);
+  }
+  if (query) {
+    list = list.filter(d => 
+      (d.deal_id || '').toLowerCase().includes(query) ||
+      (d.customer_name || '').toLowerCase().includes(query) ||
+      (d.service_name || '').toLowerCase().includes(query)
+    );
+  }
+
+  if ($("dealsCountTag")) {
+    $("dealsCountTag").textContent = `Showing ${list.length} of ${totalDeals} Historical Deals`;
+  }
+
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:var(--muted);">No matching historical precedent deals found.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map(d => {
+    const isWon = (d.outcome || '').toUpperCase() === 'WON';
+    const outcomeClass = isWon ? 'won' : 'lost';
+    const outcomeIcon = isWon ? '🏆 WON' : '✗ LOST';
+    const valStr = d.deal_value ? `$${Math.round(d.deal_value).toLocaleString()}` : '—';
+    const marginStr = (d.margin !== undefined && d.margin !== null) ? `${(d.margin * 100).toFixed(1)}%` : '—';
+    const termStr = d.term_months ? `${d.term_months} mos` : '—';
+    const perfStr = (d.delivery_performance || 'ON_TIME').replace(/_/g, ' ');
+
+    return `
+      <tr>
+        <td style="font-family:monospace; font-weight:700; color:var(--gold); font-size:0.75rem;">${d.deal_id || '—'}</td>
+        <td style="font-weight:600; color:#fff;">${d.customer_name || '—'}</td>
+        <td style="max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#cbd5e1;" title="${d.service_name || ''}">${d.service_name || '—'}</td>
+        <td><span class="outcome-pill ${outcomeClass}">${outcomeIcon}</span></td>
+        <td style="font-family:monospace; font-weight:700; color:#f1f5f9;">${valStr}</td>
+        <td style="font-family:monospace; color:${isWon ? '#34d399' : '#f87171'}; font-weight:600;">${marginStr}</td>
+        <td style="font-size:0.75rem; color:#94a3b8;">${termStr}</td>
+        <td style="font-size:0.72rem; color:var(--muted);">${perfStr}</td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function renderCompaniesGrid(query = '') {

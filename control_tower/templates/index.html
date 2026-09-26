@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HADRON Control Tower — Pricing Intelligence</title>
-  <link rel="stylesheet" href="/static/control_tower.css?v=5">
+  <link rel="stylesheet" href="/static/control_tower.css?v=8">
 </head>
 <body>
 
@@ -56,14 +56,16 @@
   </div>
 </div>
 
-<!-- TOP BAR -->
+<!-- TOP BAR (MATCHES MOCKUP) -->
 <div class="top-bar">
   <div class="logo">
-    <button class="icon-btn" style="margin-right:2px;">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <div class="logo-icon"></div>
-    <div class="logo-text">HADRON<br><span>Pricing Platform</span></div>
+    <div class="logo-icon-gold">
+      <div class="logo-icon-inner"></div>
+    </div>
+    <div class="logo-text-wrap">
+      <div class="logo-title">HADRON</div>
+      <div class="logo-sub">Pricing Intelligence Platform</div>
+    </div>
   </div>
 
   <!-- Center Navigation Pills -->
@@ -75,34 +77,25 @@
     <button class="nav-pill" onclick="scrollToSection('secStrategy')">Strategy</button>
   </div>
 
+  <!-- Center Search Bar Pill with ⌘ K -->
+  <div class="top-search-pill" onclick="openAllRequestsModal()" title="Search requests, customers or services (⌘K)">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" placeholder="Search requests, customers or services..." readonly onclick="openAllRequestsModal()">
+    <span class="search-kbd-shortcut">⌘ K</span>
+  </div>
+
   <div class="top-right">
-    <button id="viewAllBtn" class="btn-outline" onclick="openAllRequestsModal()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg>
-      All Requests <span id="navReqBadge" class="nav-count-badge"></span>
+    <button id="newBtn" class="btn-pill-gold">
+      <span style="font-weight:800; font-size:1.05rem; line-height:1; margin-right:4px;">+</span> New Analysis
     </button>
-    <button id="companyDirectoryBtn" class="btn-outline" onclick="openCompanyDirectoryModal()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M3 9h6M3 15h6M15 9h6M15 15h6"/></svg>
-      Internal Directory
-    </button>
-    <button id="newBtn" class="btn-outline gold">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      New Analysis
-    </button>
-    <button class="btn-outline" onclick="loadRequests()">
+    <button class="btn-pill-glass" onclick="loadRequests()" title="Sync ServiceNow Requests">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
       Sync ServiceNow
     </button>
     <button class="icon-btn" title="Toggle Theme">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
-    <button class="icon-btn" title="Search">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </button>
-    <button class="btn-outline" onclick="handleLogout()" style="color: var(--red); border-color: rgba(248, 113, 113, 0.4); margin-right: 12px;">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Logout
-    </button>
-    <div class="avatar"></div>
+    <div class="avatar-in" onclick="handleLogout()" title="Logged in as IN (Click to Logout)">IN</div>
   </div>
 </div>
 
@@ -114,23 +107,54 @@
     <svg id="svgLayer" class="svg-layer"></svg>
     <div id="nodesLayer" class="nodes-layer"></div>
 
-    <!-- Floating Homepage Executive Live Metrics Strip -->
+    <!-- Canvas Hero Header (Matches Mockup) -->
+    <div class="canvas-hero-text" id="canvasHeroText">
+      <div class="hero-kicker"><span class="kicker-dot"></span> COMMERCIAL INTELLIGENCE</div>
+      <h1 class="hero-title">Turn Opportunities<br>into <span class="gradient-text">Profitable Growth</span></h1>
+      <p class="hero-subtitle">AI + Quantum powered pricing, grounded in your data.</p>
+    </div>
+
+    <!-- Floating Homepage Executive Live Metrics Strip (Matches Mockup) -->
     <div id="homeHudStrip" class="home-hud-strip">
       <div class="hud-item" onclick="openAllRequestsModal()" title="View all active deals in pipeline">
-        <div class="hud-item-icon">📋</div>
-        <div><span>Pipeline Deals: </span><strong id="hudDealCount">—</strong></div>
+        <div class="hud-item-icon blue">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="hud-item-text">
+          <strong id="hudDealCount">7</strong>
+          <span>Pipeline Deals</span>
+        </div>
       </div>
+      
       <div class="hud-item" onclick="openCompanyDirectoryModal('companies')" title="Open Client & Partner Directory">
-        <div class="hud-item-icon">🏢</div>
-        <div><span>Client Accounts: </span><strong id="hudCompanyCount">51</strong></div>
+        <div class="hud-item-icon blue">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="hud-item-text">
+          <strong id="hudCompanyCount">51</strong>
+          <span>Client Accounts</span>
+        </div>
       </div>
+
       <div class="hud-item" onclick="openCompanyDirectoryModal('services')" title="Open Delivery Catalog">
-        <div class="hud-item-icon">📦</div>
-        <div><span>Delivery Catalog: </span><strong id="hudServiceCount">20</strong></div>
+        <div class="hud-item-icon blue">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div class="hud-item-text">
+          <strong id="hudServiceCount">20</strong>
+          <span>Delivery Catalog</span>
+        </div>
       </div>
-      <div class="hud-item" onclick="openCompanyDirectoryModal('economics')" title="View Hadron GBS Delivery Rate Cards">
-        <div class="hud-item-icon">⚡</div>
-        <div><span>Quantum Solver: </span><strong style="color:var(--gold)">QAOA Active</strong></div>
+
+      <div class="hud-item" onclick="openCompanyDirectoryModal('economics')" title="View Hadron GBS Delivery Rate Cards & QAOA Solver">
+        <div class="hud-item-icon blue">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="hud-item-text">
+          <strong>QAOA</strong>
+          <span>Quantum Solver</span>
+        </div>
+        <span class="hud-active-pill"><span class="dot-live"></span> Active</span>
       </div>
     </div>
 
@@ -153,9 +177,15 @@
             COMMERCIAL REQUEST
           </div>
           <h2 id="rTitle">Enterprise Platform Modernization</h2>
-          <div class="status-row">
-            <span class="status-pill active" id="rStatus">READY</span>
-            <span class="date-text" id="rDate">Last update today</span>
+          <div class="status-row" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="status-pill active" id="rStatus">READY</span>
+              <span class="date-text" id="rDate">Last update today</span>
+            </div>
+            <div class="deal-status-actions" id="activeDealActions" style="display:flex; gap:6px;">
+              <button class="btn-deal-action won" onclick="markActiveDealOutcome('5')" title="Mark deal as Closed Won in ServiceNow">🏆 Won</button>
+              <button class="btn-deal-action lost" onclick="markActiveDealOutcome('6')" title="Mark deal as Closed Lost in ServiceNow">✗ Lost</button>
+            </div>
           </div>
         </div>
 
@@ -462,6 +492,8 @@
       <div class="filter-pills" id="allReqFilterPills">
         <button class="filter-pill active" onclick="setReqStatusFilter('ALL', this)">All Deals</button>
         <button class="filter-pill" onclick="setReqStatusFilter('READY', this)">Ready / Analyzed</button>
+        <button class="filter-pill" onclick="setReqStatusFilter('APPROVED', this)">🏆 Closed Won</button>
+        <button class="filter-pill" onclick="setReqStatusFilter('FAILED', this)">✗ Closed Lost</button>
         <button class="filter-pill" onclick="setReqStatusFilter('ANALYZING', this)">Analyzing</button>
         <button class="filter-pill" onclick="setReqStatusFilter('DRAFT', this)">Draft / New</button>
       </div>
@@ -505,35 +537,201 @@
     
     <!-- Tab Controls -->
     <div class="hub-tab-bar">
-      <button class="hub-tab-btn active" id="tabBtnCompanies" onclick="switchHubTab('companies')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h18M3 7v14M21 7v14M9 3h6v4H9zM9 11h2M9 15h2M13 11h2M13 15h2"/></svg>
+      <button class="hub-tab-btn active" id="tabBtnCompanyProfile" onclick="switchHubTab('companyProfile')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Our Company Profile (Hadron GBS)
+      </button>
+      <button class="hub-tab-btn" id="tabBtnCompanies" onclick="switchHubTab('companies')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Client Accounts (<span id="hubCountCustomers">51</span>)
       </button>
       <button class="hub-tab-btn" id="tabBtnServices" onclick="switchHubTab('services')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         Service Catalog (<span id="hubCountServices">20</span>)
       </button>
+      <button class="hub-tab-btn" id="tabBtnDeals" onclick="switchHubTab('deals')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        Closed Deals & Precedents (<span id="hubCountDeals">72</span>)
+      </button>
       <button class="hub-tab-btn" id="tabBtnEconomics" onclick="switchHubTab('economics')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M17 10h-7.5a2.5 2.5 0 0 0 0 5H15"/></svg>
-        Rate Card & Margin Policies
+        Rate Card & Policies
       </button>
     </div>
 
-    <!-- Tab 1: Companies Grid -->
-    <div class="hub-tab-pane active" id="paneCompanies">
+    <!-- Tab 1: Our Company Profile & Live Editor -->
+    <div class="hub-tab-pane active" id="paneCompanyProfile">
+      <div class="hub-company-profile-wrap">
+        <div class="profile-header-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <div class="hub-badge high" style="margin-bottom:6px; display:inline-block;">INTERNAL COMPANY PROFILE</div>
+              <h2 id="profCompanyName" style="font-size:1.35rem; color:#fff;">Hadron Global Business Solutions (Hadron GBS)</h2>
+              <div style="color:var(--muted); font-size:0.8rem; margin-top:2px;" id="profLegalName">Hadron Global Business Solutions Pvt. Ltd. • IT Service & Enterprise Consulting Firm</div>
+            </div>
+            <button class="btn-primary" style="width:auto; margin:0; padding:8px 16px; font-size:0.78rem;" onclick="toggleEditCompanyForm()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit Company Details
+            </button>
+          </div>
+
+          <!-- Live Metrics Grid -->
+          <div class="profile-metrics-grid">
+            <div class="prof-metric-box">
+              <span class="prof-metric-label">ANNUAL REVENUE</span>
+              <strong class="prof-metric-val gold" id="profAnnualRev">₹75.0 Crore</strong>
+              <small style="color:var(--muted); font-size:0.68rem;" id="profAnnualUsd">~$9.1M USD Base</small>
+            </div>
+            <div class="prof-metric-box">
+              <span class="prof-metric-label">QUARTERLY TARGET</span>
+              <strong class="prof-metric-val" id="profQuarterlyRev">₹18.75 Crore</strong>
+              <small style="color:var(--muted); font-size:0.68rem;">Run-rate target</small>
+            </div>
+            <div class="prof-metric-box">
+              <span class="prof-metric-label">WORKFORCE SIZE</span>
+              <strong class="prof-metric-val" id="profTotalFte">200 Employees</strong>
+              <small style="color:#34d399; font-size:0.68rem;" id="profBillableFte">155 Billable Consultants</small>
+            </div>
+            <div class="prof-metric-box">
+              <span class="prof-metric-label">TARGET GROSS MARGIN</span>
+              <strong class="prof-metric-val" id="profTargetMargin">32.0%</strong>
+              <small style="color:var(--muted); font-size:0.68rem;">22% Target EBITDA</small>
+            </div>
+          </div>
+
+          <div style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center; font-size:0.78rem; color:#94a3b8;">
+            <div><span>Headquarters: </span><strong style="color:#e2e8f0;" id="profLocation">EON Free Zone, Kharadi, Pune, Maharashtra, India</strong></div>
+            <div><span>Delivery Model: </span><strong style="color:var(--gold);">Global Delivery Model (Pune GDC)</strong></div>
+          </div>
+        </div>
+
+        <!-- Inline Edit Form (Hidden by default, toggled on click) -->
+        <div id="companyEditFormWrap" class="company-edit-card hidden">
+          <div style="font-size:0.86rem; font-weight:700; color:var(--gold); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.06em;">Edit Internal Company Information</div>
+          <div class="edit-fields-grid">
+            <div>
+              <label>Company Legal Name</label>
+              <input id="editCompanyName" class="modal-input" value="Hadron Global Business Solutions Pvt. Ltd.">
+            </div>
+            <div>
+              <label>Annual Revenue (Cr / INR)</label>
+              <input id="editAnnualRevenueInr" class="modal-input" placeholder="e.g. ₹75.0 Crore" value="₹75.0 Crore">
+            </div>
+            <div>
+              <label>Annual Revenue Target ($ USD or Numerical)</label>
+              <input id="editAnnualRevenueNum" type="number" class="modal-input" value="750000000">
+            </div>
+            <div>
+              <label>Quarterly Revenue Target ($ or Numerical)</label>
+              <input id="editQuarterlyRevenueNum" type="number" class="modal-input" value="187500000">
+            </div>
+            <div>
+              <label>Total Employees</label>
+              <input id="editTotalEmployees" type="number" class="modal-input" value="200">
+            </div>
+            <div>
+              <label>Billable Delivery Consultants</label>
+              <input id="editBillableEmployees" type="number" class="modal-input" value="155">
+            </div>
+            <div>
+              <label>Target Gross Margin (0.1 - 0.9)</label>
+              <input id="editTargetMargin" type="number" step="0.01" class="modal-input" value="0.32">
+            </div>
+            <div>
+              <label>Target EBITDA (0.1 - 0.9)</label>
+              <input id="editTargetEbitda" type="number" step="0.01" class="modal-input" value="0.22">
+            </div>
+            <div style="grid-column: 1 / -1;">
+              <label>Headquarters & Delivery Center Address</label>
+              <input id="editHeadquarters" class="modal-input" value="EON Free Zone, Kharadi, Pune, India">
+            </div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+            <button class="btn-outline" onclick="toggleEditCompanyForm(false)">Cancel</button>
+            <button id="saveCompanyBtn" class="btn-primary" style="width:auto; margin:0;" onclick="saveCompanyDetailsFromForm()">Save Company Details</button>
+          </div>
+        </div>
+
+        <!-- Practice Distribution Grid -->
+        <div style="margin-top:16px;">
+          <div style="font-size:0.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;">Pune Delivery Center Practice Breakdown</div>
+          <div class="practice-chips-grid" id="practiceChipsGrid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Client Accounts Grid -->
+    <div class="hub-tab-pane" id="paneCompanies" style="display:none;">
       <div class="hub-grid" id="companiesGrid">
         <!-- Rendered via JS -->
       </div>
     </div>
 
-    <!-- Tab 2: Service Delivery Catalog -->
+    <!-- Tab 3: Service Delivery Catalog -->
     <div class="hub-tab-pane" id="paneServices" style="display:none;">
       <div class="hub-grid" id="servicesGrid">
         <!-- Rendered via JS -->
       </div>
     </div>
 
-    <!-- Tab 3: Rate Cards & Economics -->
+    <!-- Tab 4: Closed Deals & Precedents -->
+    <div class="hub-tab-pane" id="paneDeals" style="display:none;">
+      <div class="deals-summary-banner">
+        <div class="deal-kpi-item">
+          <span>HISTORICAL WIN RATE</span>
+          <strong style="color:#34d399;" id="dealKpiWinRate">74%</strong>
+          <small id="dealKpiWinCounts">53 Won / 19 Lost</small>
+        </div>
+        <div class="deal-kpi-item">
+          <span>TOTAL CLOSED PIPELINE</span>
+          <strong style="color:var(--gold);" id="dealKpiTotalValue">$380M+</strong>
+          <small>Precedent Contracts</small>
+        </div>
+        <div class="deal-kpi-item">
+          <span>AVERAGE WON MARGIN</span>
+          <strong style="color:#38bdf8;" id="dealKpiMargin">31.4%</strong>
+          <small>Across Delivery Hubs</small>
+        </div>
+        <div class="deal-kpi-item">
+          <span>SIMILARITY ENGINE</span>
+          <strong style="color:var(--text);">Jaccard + TF-IDF</strong>
+          <small>Precedent Model</small>
+        </div>
+      </div>
+
+      <div class="modal-filter-row" style="margin-top:14px;">
+        <div class="filter-pills" id="dealsFilterPills">
+          <button class="filter-pill active" onclick="setDealsOutcomeFilter('ALL', this)">All Deals (72)</button>
+          <button class="filter-pill" onclick="setDealsOutcomeFilter('WON', this)">🏆 Closed Won</button>
+          <button class="filter-pill" onclick="setDealsOutcomeFilter('LOST', this)">✗ Closed Lost</button>
+        </div>
+        <div class="deal-count-tag" id="dealsCountTag">Showing 72 Historical Deals</div>
+      </div>
+
+      <div class="modal-table-wrap" style="max-height:360px;">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>Deal ID</th>
+              <th>Customer</th>
+              <th>Service / Program</th>
+              <th>Outcome</th>
+              <th>Contract Value</th>
+              <th>Margin</th>
+              <th>Duration</th>
+              <th>Performance</th>
+            </tr>
+          </thead>
+          <tbody id="historicalDealsTableBody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 5: Rate Cards & Economics -->
     <div class="hub-tab-pane" id="paneEconomics" style="display:none;">
       <div class="economics-layout">
         <div class="econ-card">
@@ -570,6 +768,6 @@
   </div>
 </div>
 
-<script src="/static/control_tower.js?v=6"></script>
+<script src="/static/control_tower.js?v=10"></script>
 </body>
 </html>
