@@ -374,10 +374,69 @@ body::after {
   border-color: rgba(248, 113, 113, 0.4);
   color: #f87171;
 }
-.item-tag .bars { display: inline-flex; gap: 2px; }
+.item-tag .bars { display: inline-flex; align-items: center; gap: 2.5px; height: 11px; }
 .item-tag .bars i { width: 3px; height: 9px; background: rgba(255,255,255,0.2); border-radius: 1px; font-style: normal; }
 .item-tag .bars i.on { background: var(--cyan); }
 .item-tag.risk .bars i.on { background: var(--red); }
+
+/* ANIMATED RUNNING EQUALIZER BARS */
+.item-tag .bars.running-bars i,
+.item-tag .bars i.pulse-bar {
+  display: inline-block;
+  width: 2.5px;
+  height: 10px;
+  background: var(--cyan, #38bdf8);
+  border-radius: 1px;
+  transform-origin: center;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
+  animation: runningBarEqualizer 0.85s ease-in-out infinite alternate;
+}
+
+.item-tag .bars.running-bars i:nth-child(1),
+.item-tag .bars i.pulse-bar:nth-child(1) {
+  animation-delay: 0s;
+  animation-duration: 0.75s;
+}
+
+.item-tag .bars.running-bars i:nth-child(2),
+.item-tag .bars i.pulse-bar:nth-child(2) {
+  animation-delay: 0.22s;
+  animation-duration: 0.65s;
+}
+
+.item-tag .bars.running-bars i:nth-child(3),
+.item-tag .bars i.pulse-bar:nth-child(3) {
+  animation-delay: 0.44s;
+  animation-duration: 0.82s;
+}
+
+@keyframes runningBarEqualizer {
+  0% {
+    transform: scaleY(0.28);
+    opacity: 0.4;
+    background: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 2px rgba(56, 189, 248, 0.3);
+  }
+  50% {
+    transform: scaleY(1.2);
+    opacity: 1;
+    background: #38bdf8;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.95);
+  }
+  100% {
+    transform: scaleY(0.48);
+    opacity: 0.7;
+    background: rgba(56, 189, 248, 0.8);
+    box-shadow: 0 0 4px rgba(56, 189, 248, 0.5);
+  }
+}
+
+.item-tag.running-tag {
+  background: rgba(56, 189, 248, 0.12) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+  color: #38bdf8 !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
 
 @keyframes flipInX3D {
   0% { transform: translate(0, -50%) perspective(600px) rotateX(-90deg); opacity: 0; }

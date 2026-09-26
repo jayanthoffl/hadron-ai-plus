@@ -610,9 +610,9 @@ function drawFannedNodesLoading(startX, startY, side = 'RIGHT') {
         <div class="item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg></div>
         <div class="item-title term-text" id="term-title-${i}" style="color:#38bdf8; font-family: monospace; font-size:0.75rem;">${logs[i]}<span class="blink-cursor">_</span></div>
       </div>
-      <div class="item-tag pulsing-border" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
-        <span class="bars"><i class="on pulse-bar"></i><i class="pulse-bar"></i><i></i></span>
-        <span style="font-family: monospace;">RUNNING</span>
+      <div class="item-tag running-tag pulsing-border">
+        <span class="bars running-bars"><i class="pulse-bar"></i><i class="pulse-bar"></i><i class="pulse-bar"></i></span>
+        <span style="font-family: monospace; font-weight: 600; letter-spacing: 0.8px;">RUNNING</span>
       </div>
     `, endX, y, "node-item", null, nodeOpacity);
     drawLine(`fan-${i}`, startX, startY, lineTargetX, y, true, 1.0, 0, dp);
