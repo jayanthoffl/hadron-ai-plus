@@ -1217,9 +1217,25 @@ window.addEventListener('resize', () => {
   }
 });
 
-// Modal bindings
-if ($("newBtn")) $("newBtn").onclick = () => $("modal").classList.remove("hidden");
-if ($("closeModal")) $("closeModal").onclick = () => $("modal").classList.add("hidden");
+// Modal bindings & reset
+function resetModalInputs() {
+  if ($("fCustomer")) $("fCustomer").value = "";
+  if ($("fService")) $("fService").value = "";
+  if ($("fObjective")) $("fObjective").value = "";
+  if ($("fContext")) $("fContext").value = "";
+}
+
+if ($("newBtn")) $("newBtn").onclick = () => {
+  resetModalInputs();
+  $("modal").classList.remove("hidden");
+  if ($("fCustomer")) $("fCustomer").focus();
+};
+
+if ($("closeModal")) $("closeModal").onclick = () => {
+  $("modal").classList.add("hidden");
+  resetModalInputs();
+};
+
 if ($("createBtn")) $("createBtn").onclick = async () => {
   $("createBtn").textContent = "Creating...";
   $("createBtn").disabled = true;
@@ -1236,6 +1252,7 @@ if ($("createBtn")) $("createBtn").onclick = async () => {
     });
     if(!res.ok) throw new Error("Failed to create");
     const createdReq = await res.json();
+    resetModalInputs();
     $("modal").classList.add("hidden");
     const wasSelected = (graphState === 'SELECTED');
     await loadRequests(wasSelected);

@@ -92,7 +92,7 @@ class ServiceAgent:
             complexity=(max(0.1, min(1.0, estimated_complexity)) if estimated_complexity is not None else None),
             estimated_duration_months=(max(1, estimated_duration) if estimated_duration else None),
             resource_requirements=estimated_resources,
-            value_drivers=[],
+            value_drivers=intent.key_requirements or ["Enterprise Solution Architecture", "Tailored Technical Delivery"],
             evidence=[
                 Evidence(
                     source="Gemini service planning estimate" if has_estimate else "Internal Service Catalog",
