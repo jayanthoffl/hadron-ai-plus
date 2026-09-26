@@ -245,6 +245,13 @@ CUSTOMER INTELLIGENCE            SERVICE INTELLIGENCE             MARKET INTELLI
                    • Automated ServiceNow Record Write-Back
 ```
 
+### 🔑 High-Availability Multi-Key Gemini Pool (Zero-Downtime Architecture)
+Enterprise ServiceNow workflows cannot tolerate LLM rate-limits or daily quota exhaustion (`429 RESOURCE_EXHAUSTED`). HADRON implements an enterprise-grade failover key pool (`gemini_pool.py`):
+- **Multi-Key Quota Pooling**: Supply multiple Gemini API keys via `GEMINI_API_KEYS="key1,key2,key3,key4"`.
+- **Automatic Runtime Failover**: On encountering `429 (Resource Exhausted)`, `400 (Invalid Key)`, `403 (Quota/Permission)`, or `503 (Demand Spike)`, the pool instantly rotates to the next healthy key and retries the request without failing the ServiceNow transaction.
+- **Thread-Safe Key Rotation**: Designed for concurrent flow executions across multiple deals simultaneously.
+- **Deterministic Algorithmic Fallback**: In the catastrophic event that all cloud LLM keys are exhausted or network is interrupted, HADRON automatically switches to deterministic, rule-based executive synthesis—ensuring ServiceNow Flow Designer always receives a valid, mathematically sound intelligence package with 0% downtime.
+
 ---
 
 # 📊 ServiceNow PDI Audit & Reconciliation Matrix
@@ -400,7 +407,10 @@ Edit `.env`:
 SERVICENOW_INSTANCE_URL=https://devXXXXXX.service-now.com
 SERVICENOW_USERNAME=admin
 SERVICENOW_PASSWORD=your_instance_password
-GEMINI_API_KEY=AIzaSy...
+
+# Multi-Key Gemini Failover Pool (comma-separated for zero-downtime key rotation)
+GEMINI_API_KEYS=AIzaSyKey1...,AIzaSyKey2...,AIzaSyKey3...,AIzaSyKey4...
+# Fallback single key: GEMINI_API_KEY=AIzaSy...
 ```
 
 ### 3. Launch the Stack
