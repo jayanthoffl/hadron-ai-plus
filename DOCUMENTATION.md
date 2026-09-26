@@ -1,22 +1,22 @@
-# ⚛️ HADRON AI++ : Enterprise Technical Dossier & Hackathon Judge Briefing
+# HADRON AI++ : Enterprise Technical Dossier & Technical Reference
 ### Autonomous Commercial Pricing Intelligence, Quantum QAOA Optimization & Native ServiceNow Orchestration
 
 ---
 
-## 📌 Document Overview & Executive Summary
+## Document Overview & Executive Summary
 
 | Document Property | Specification |
 | :--- | :--- |
 | **System Name** | **HADRON AI++** (ServiceNow-Native Commercial Pricing Platform) |
 | **Version** | `v2.4.0-Production` |
 | **Live Production URL** | [https://hadron-ai-plus-production.up.railway.app](https://hadron-ai-plus-production.up.railway.app) |
-| **Target Audience** | Hackathon Grand Jury, Enterprise Architects, Chief Commercial Officers (CCO), Delivery VPs |
+| **Target Audience** | Executive Evaluation Panel, Enterprise Architects, Chief Commercial Officers (CCO), Delivery VPs |
 | **Core Innovations** | Deterministic Floor Economics, Qiskit 7-Qubit QUBO Combinatorial Optimization, Document AI Extraction, ServiceNow Bi-directional Roundtrip, Zero-Downtime Gemini Failover Pool |
 | **Status** | **100% Deployed, Audited, and Live in Production** |
 
 ---
 
-# 📑 Table of Contents
+# Table of Contents
 
 1. [Executive Overview & The $2.4T Enterprise Pricing Problem](#1-executive-overview--the-24t-enterprise-pricing-problem)
 2. [The Core Architectural Law: Anti-Hallucination Pricing](#2-the-core-architectural-law-anti-hallucination-pricing)
@@ -28,17 +28,17 @@
 8. [Executive Control Tower UI/UX & RBAC Security](#8-executive-control-tower-uiux--rbac-security)
 9. [High-Availability Multi-Key Gemini Pool Architecture](#9-high-availability-multi-key-gemini-pool-architecture)
 10. [Empirical Validation & Real ServiceNow Deal Telemetry](#10-empirical-validation--real-servicenow-deal-telemetry)
-11. [Hackathon Judge Presentation Playbook & Live Demo Script](#11-hackathon-judge-presentation-playbook--live-demo-script)
+11. [Executive Demonstration Playbook & Technical Review Script](#11-executive-demonstration-playbook--technical-review-script)
 12. [API Specification & Integration Guide](#12-api-specification--integration-guide)
-13. [Comparison Matrix: Why HADRON AI++ Wins](#13-comparison-matrix-why-hadron-ai-wins)
+13. [Comparison Matrix: Enterprise Value Analysis](#13-comparison-matrix-enterprise-value-analysis)
 
 ---
 
 # 1. Executive Overview & The $2.4T Enterprise Pricing Problem
 
-Enterprise IT services, cloud modernizations, and digital transformation contracts represent a **$2.4 Trillion global market**. Yet, the mechanism by which Global System Integrators (GSIs), cloud providers, and enterprise software firms price these multi-million dollar deals remains broken:
+Enterprise IT services, cloud modernizations, and digital transformation contracts represent a **$2.4 Trillion global market**. Yet, the mechanism by which Global System Integrators (GSIs), cloud providers, and enterprise software firms price these multi-million dollar deals remains inefficient and vulnerable to error:
 
-- **The Latency Trap (3 to 4 Weeks per Quote)**: Commercial pricing requires stitching together disparate inputs from Global Delivery Center (GDC) staffing models, onshore architect rates, legacy spreadsheets, sales emails, competitor intelligence, and executive risk memos. Deals stall in approval chains while competitors move.
+- **The Latency Trap (3 to 4 Weeks per Quote)**: Commercial pricing requires synthesizing disparate inputs from Global Delivery Center (GDC) staffing models, onshore architect rates, legacy spreadsheets, sales emails, competitor intelligence, and executive risk memos. Deals stall in approval chains while competitors move.
 - **The Margin Leakage Crisis**: Inexperienced sales teams frequently discount below sustainable margins or miscalculate offshore delivery leverage, resulting in contracts with negative or breakeven EBITDA that erode shareholder value.
 - **The "Blind GenAI" Fallacy**: Organizations attempting to solve this with standard Large Language Models (LLMs) quickly discover that generative models hallucinate arbitrary numbers, miscalculate resource hours, violate margin floors, and expose balance sheets to unacceptable financial liabilities.
 
@@ -51,7 +51,7 @@ HADRON AI++ transforms enterprise commercial pricing into an **instantaneous (<3
 
 HADRON is architected around an uncompromising foundational principle:
 
-> ⚖️ **The HADRON Architectural Axiom:**
+> **The HADRON Architectural Axiom:**
 > *"Generative AI must interpret and explain commercial intelligence — it must NEVER manufacture financial truth."*
 
 ```
@@ -67,7 +67,7 @@ HADRON is architected around an uncompromising foundational principle:
 │ • 108-State Quantum QAOA optimization     │ • Highlights trade-offs & negotiations     │
 │ • Historical deal win/loss calibration    │ • Stamped with UTC audit verification logs │
 │                                           │                                            │
-│   ❌ ZERO LLM INVOLVEMENT IN PRICING      │   ❌ CANNOT OVERRIDE MATHEMATICAL PRICES   │
+│   [STRICT ENFORCEMENT: ZERO LLM PRICING]   │   [DETERMINISTIC GUARDRAIL: NO OVERRIDES]  │
 └───────────────────────────────────────────┴────────────────────────────────────────────┘
 ```
 
@@ -79,11 +79,11 @@ By decoupling numerical calculation from linguistic synthesis, HADRON provides *
 
 HADRON operates as a distributed system uniting the enterprise system of record (**ServiceNow**), a high-performance **Computational & Quantum Engine**, an **Executive 3D Control Tower Cockpit**, and an agentic **Google Gemini Multi-Key Pool**.
 
-### Comprehensive Mermaid Architecture Diagram
+### Architectural Flow Diagram
 
 ```mermaid
 flowchart TB
-    subgraph SN ["🔵 SERVICENOW ENTERPRISE PLATFORM (PDI)"]
+    subgraph SN ["SERVICENOW ENTERPRISE PLATFORM (PDI)"]
         Table[("Table: x_2216687_optimu_0_pricing_request<br/>(36 Custom Enterprise Fields)")]
         Flow["Flow Designer: HADRON Commercial Orchestration<br/>(CRUD Trigger on Record Created)"]
         Action1["Action 1: Run Quantum Pricing<br/>(REST POST /run_quantum_pricing)"]
@@ -98,7 +98,7 @@ flowchart TB
         Policy -.->|Protects| Table
     end
 
-    subgraph INGEST ["📄 PROPOSAL & DOCUMENT INGESTION"]
+    subgraph INGEST ["PROPOSAL AND DOCUMENT INGESTION"]
         Upload["Client RFP / Proposal Upload<br/>(PDF, DOCX, TXT, MD up to 25MB)"]
         Parser["utils/document_parser.py<br/>(PyMuPDF Stream & OpenXML Tree Parser)"]
         FastAI["Fast AI Meta-Extractor<br/>(Gemini: Auto-detects Customer, Service, Objective)"]
@@ -106,7 +106,7 @@ flowchart TB
         Upload --> Parser --> FastAI
     end
 
-    subgraph ENGINE ["⚛️ HADRON COMPUTATIONAL & QUANTUM ENGINE (Port 5000)"]
+    subgraph ENGINE ["HADRON COMPUTATIONAL AND QUANTUM ENGINE (Port 5000)"]
         Orch["HadronOrchestrator<br/>(orchestrator.py)"]
         
         subgraph PILLARS ["6-Pillar Intelligence Pipeline"]
@@ -124,7 +124,7 @@ flowchart TB
         P5 --> P6
     end
 
-    subgraph LLM ["✨ EXECUTIVE AI SYNTHESIS POOL"]
+    subgraph LLM ["EXECUTIVE AI SYNTHESIS POOL"]
         Pool["Gemini Key Failover Pool<br/>(gemini_pool.py: Thread-Safe Key Rotation)"]
         ExecAgent["Executive Agent<br/>(Audited Narrative & Explainability Memo)"]
         Fallback["Deterministic Rule-Based Fallback<br/>(0% Downtime Guarantee)"]
@@ -134,7 +134,7 @@ flowchart TB
         Pool -.->|On Quota / 429 Error| Fallback
     end
 
-    subgraph UI ["🎛️ HADRON CONTROL TOWER COCKPIT (Port 5050 / Live Cloud)"]
+    subgraph UI ["HADRON CONTROL TOWER COCKPIT (Port 5050 / Live Cloud)"]
         Cockpit["Executive 3D Radial Node Graph<br/>(control_tower.js & HTML5 Canvas)"]
         HUD["Dynamic Real-Time HUD Metrics<br/>(Deals, Pipeline Value, Win Prob, Uplift)"]
         RBAC["Multi-User RBAC & Avatar Engine<br/>(admin, admin.user1, admin.user2, admin.user3)"]
@@ -198,11 +198,11 @@ The automated workflow `HADRON Commercial Intelligence Orchestration` executes s
 # 5. The 6-Pillar Deterministic & Quantum Intelligence Engine
 
 ```
-                             📥 INCOMING PROPOSAL CONTEXT
+                             INCOMING PROPOSAL CONTEXT
                                          │
         ┌────────────────────────────────┼────────────────────────────────┐
         ▼                                ▼                                ▼
-  👤 PILLAR 1:                     🧩 PILLAR 2:                     🌎 PILLAR 3:
+  PILLAR 1:                        PILLAR 2:                        PILLAR 3:
 CUSTOMER INTELLIGENCE            SERVICE INTELLIGENCE             MARKET INTELLIGENCE
 • CRM revenue & FTE matching     • Catalog complexity scoring     • Competitor pricing signals
 • Tier 1-3 classification        • FTE delivery pod staffing mix  • Market price dispersion
@@ -210,7 +210,7 @@ CUSTOMER INTELLIGENCE            SERVICE INTELLIGENCE             MARKET INTELLI
         │                                │                                │
         └────────────────────────────────┼────────────────────────────────┘
                                          ▼
-                                  💰 PILLAR 4:
+                                  PILLAR 4:
                             INTERNAL ECONOMICS ENGINE
                    • GDC Pune / Blended labor rate cards ($/hr)
                    • Base operating delivery cost calculation ($C_base)
@@ -218,7 +218,7 @@ CUSTOMER INTELLIGENCE            SERVICE INTELLIGENCE             MARKET INTELLI
                    • Calibration against 72 historical enterprise deals
                                          │
                                          ▼
-                                  ⚛️ PILLAR 5:
+                                  PILLAR 5:
                            QUANTUM QAOA & SCENARIOS
                    • 7-Qubit Qiskit Aer parameterized quantum circuit
                    • 108 Combinatorial commercial configurations
@@ -229,14 +229,14 @@ CUSTOMER INTELLIGENCE            SERVICE INTELLIGENCE             MARKET INTELLI
                      - Premium Offer   (Maximum SLA & high-margin capture)
                                          │
                                          ▼
-                                  🛡️ PILLAR 6:
+                                  PILLAR 6:
                             DETERMINISTIC RISK ENGINE
                    • Market disconnect ratio (Floor vs. Competitor avg)
                    • Delivery staffing feasibility vs. Pune bench capacity
                    • Parametric data-sparse severity penalties
                                          │
                                          ▼
-                                  ✨ EXECUTIVE AGENT
+                                  EXECUTIVE SYNTHESIS AGENT
                          (Gemini 3.8 Flash + Failover Pool)
                    • Audited Executive Decision Memo with UTC Log Stamp
                    • Complete Evidence Chain & Verifiable Confidence Score
@@ -466,37 +466,35 @@ The platform has been audited against real production records in our ServiceNow 
 
 ---
 
-# 11. Hackathon Judge Presentation Playbook & Live Demo Script
+# 11. Executive Demonstration Playbook & Technical Review Script
 
-Follow this step-by-step 5-minute presentation playbook to demonstrate HADRON to judges:
+Follow this structured 5-minute presentation playbook for executive evaluation panels and technical reviewers:
 
-### ⏱️ Act 1: The Hook & The Problem (1 Minute)
-1. **Open the live application**: Navigate to [https://hadron-ai-plus-production.up.railway.app](https://hadron-ai-plus-production.up.railway.app).
-2. **State the core problem**:
-   > *"Judges, enterprise IT deals take 3 to 4 weeks to price across endless spreadsheets and approval chains. When companies use ChatGPT or basic LLMs to price deals, they hallucinate numbers and breach margin floors. We built HADRON AI++ on one core rule: Generative AI must explain commercial intelligence — it must never manufacture financial truth."*
+### Stage 1: Problem Definition and Commercial Value (1 Minute)
+1. **Navigate to**: [https://hadron-ai-plus-production.up.railway.app](https://hadron-ai-plus-production.up.railway.app).
+2. **Contextual Statement**:
+   > *"Enterprise commercial contracts take three to four weeks to price across fragmented spreadsheets and approval chains. When generic large language models are applied to commercial pricing, they hallucinate financial values and violate margin constraints. HADRON AI++ is engineered on a fundamental architectural principle: Generative AI must explain commercial intelligence — it must never manufacture financial truth."*
 
-### ⏱️ Act 2: The Control Tower & 3D Cockpit (1 Minute)
-1. **Show the live dashboard**: Highlight the interactive 3D radial node graph showing active pipeline deals.
-2. **Point out the HUD bar**: Show the real-time metrics: Pipeline Deals, Pipeline Value, Win Probability, and Quantum Uplift.
-3. **Point out User Authentication**: Show the active user badge `[ [AD] admin ]` and the dedicated `Logout` button.
+### Stage 2: Control Tower Interface and Telemetry (1 Minute)
+1. Showcase the **3D interactive radial node network** representing live enterprise pipeline deals.
+2. Highlight the **Floating Executive HUD Bar**: Live pipeline deals, pipeline value, win probability, and quantum margin uplift.
+3. Show the **RBAC Badge** (`AD`) and the dedicated **`Logout`** button.
 
-### ⏱️ Act 3: Live Document Upload & Quantum Analysis (2 Minutes)
-1. Click **`+ New Analysis`** in the top navigation.
-2. **Demonstrate Document AI**:
-   - Drag and drop a sample proposal or RFP (PDF or DOCX).
-   - Show how the document extraction automatically parses text and pre-fills Customer Name, Service Offering, and Commercial Objective.
+### Stage 3: Document Ingestion and Quantum Optimization Execution (2 Minutes)
+1. Click **`+ New Analysis`**.
+2. **Drag & drop a proposal document** (PDF or DOCX). Show how the document extraction engine parses the file and automatically pre-fills the Customer Name, Offering, and Commercial Objective.
 3. Click **`Run Commercial Analysis`**.
-4. **Walk through the Calculation**:
+4. **Explain the Quantum Advantage**:
    - Show the 6-pillar pipeline executing in real-time.
-   - Reveal the **Classical Price ($10.8M)** vs **Quantum QAOA Price ($12.8M)**.
-   - Explain the Quantum Advantage: QAOA sampled 108 combinations of pricing tiers, Pune GDC staffing ratios, and gain-share terms to capture an additional 5.2% in margin without degrading win probability.
-   - Show the 4-tier offer set (Entry, Balanced, Strategic, Premium).
-   - Show the Gemini-synthesized Executive Decision Memorandum complete with UTC audit timestamp.
+   - Reveal the **Classical Cost-Plus Price ($10.8M)** vs the **Qiskit QAOA Quantum Price ($12.8M)**.
+   - Explain how QAOA sampled 108 combinatorial configurations (pricing tiers, Pune GDC staffing leverage, and SLA gain-share terms) to capture an additional 5.2% in margin without degrading win probability.
+   - Point to the 4-tier offer set (Entry, Balanced, Strategic, Premium).
+   - Point to the Gemini-synthesized Executive Decision Memorandum stamped with UTC audit logs.
 
-### ⏱️ Act 4: ServiceNow Roundtrip Proof & Governance (1 Minute)
-1. Show the ServiceNow ticket number generated (e.g. `PRI0001031`).
-2. Explain the **ServiceNow Flow Designer loop**: The record was created in ServiceNow, Flow Designer triggered the quantum calculation, and the results were written back automatically.
-3. Highlight the **Anti-Tampering UI Policy**: ServiceNow locks the calculated pricing fields so sales reps cannot arbitrarily edit quantum outputs.
+### Stage 4: ServiceNow Roundtrip Verification and Governance (1 Minute)
+1. Show the created ServiceNow ticket (e.g. `PRI0001031`).
+2. Explain the **ServiceNow Flow Designer loop**: Record created -> Flow Designer triggers HADRON -> Algorithmic telemetry is calculated -> Automated write-back into ServiceNow table fields.
+3. Highlight the **`Lock Quantum Telemetry` UI Policy**: Once calculated, pricing fields are locked against manual sales tampering.
 4. Conclude:
    > *"From 4 weeks down to 25 seconds. 100% deterministic margin protection. Zero hallucination. Live on ServiceNow."*
 
@@ -598,9 +596,9 @@ Parses attached RFP documents (`.pdf`, `.docx`, `.txt`) and returns extracted te
 
 ---
 
-# 13. Comparison Matrix: Why HADRON AI++ Wins
+# 13. Comparison Matrix: Enterprise Value Analysis
 
-| Evaluation Criteria | Traditional Pricing Process | Standard Generative AI (ChatGPT Wrapper) | HADRON AI++ |
+| Evaluation Criteria | Traditional Pricing Process | Standard Generative AI (Generic Wrapper) | HADRON AI++ |
 | :--- | :--- | :--- | :--- |
 | **Turnaround Time** | 3 to 4 Weeks | Minutes | **< 30 Seconds** (Instantaneous full roundtrip) |
 | **Financial Integrity** | Spreadsheet errors, manual formula bugs | **Catastrophic Hallucination Risk** (Generates arbitrary numbers) | **Deterministic Math Floor**: 30% margin mathematically guaranteed |
@@ -615,8 +613,8 @@ Parses attached RFP documents (`.pdf`, `.docx`, `.txt`) and returns extracted te
 
 <div align="center">
 
-### ⚛️ HADRON AI++
-**Architected for the Google Cloud & ServiceNow Enterprise AI Hackathon**
+### HADRON AI++
+**Architected for Enterprise Deployment with ServiceNow and Google Cloud AI**
 
 *Built with Qiskit QAOA, Google Gemini, ServiceNow Flow Designer, and Flask.*
 
