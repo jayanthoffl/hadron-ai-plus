@@ -735,6 +735,7 @@ async function selectRequest(req, reqX, reqY, side = 'RIGHT', forceRun = false) 
     activeFannedData = req;
     renderGraphFrame();
     populateRightPanel(data);
+    updateMain3DIntelligence(data);
 
   } catch(e) {
     if ($("mainSummary")) $("mainSummary").textContent = "Analysis Failed: " + e.message;
